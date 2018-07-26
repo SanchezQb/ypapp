@@ -69,17 +69,17 @@ export default class DrawerContent extends React.Component {
         <Container>
             <View style={styles.span}>
                 <List style={styles.list}>
-                    <ListItem style={styles.listitem}>
+                    <View style={styles.listitem}>
                         <TouchableOpacity style={styles.dpcont}>
                             {this.userProfile(accountStore.user.avatar)}
                         </TouchableOpacity>
                         <View style={styles.bioCont}>
                            {this.renderName()}
                             <Text style={{color: '#fff', fontSize: 14}}>
-                               {`Ward ${accountStore.user.ward} | ${accountStore.user.lga} LGA`}
+                               {`Ward ${accountStore.user.ward} | ${accountStore.user.lga} LGA | ${accountStore.user.state} State`}
                             </Text>
                         </View>
-                    </ListItem>
+                    </View>
                 </List>
             </View>
             <Content style={styles.content}>
@@ -145,15 +145,17 @@ const styles = StyleSheet.create({
           backgroundColor: '#000',
       },
       dpcont: {
+        marginLeft: 12,
         backgroundColor: '#ccc',
-        height: 90,
-        borderRadius: 45,
-        width: 90,
+        height: 80,
+        borderRadius: 40,
+        width: 80,
+        marginBottom: 10
     },
     dp: {
-        height: 90,
-        borderRadius: 45,
-        width: 90,
+        height: 80,
+        borderRadius: 40,
+        width: 80,
     },
     bioCont: {
         marginLeft: 12

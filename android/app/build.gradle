@@ -152,7 +152,7 @@ android {
 dependencies {
     implementation project(':react-native-youtube')
     implementation project(':react-native-image-crop-picker')
-    compile project(':react-native-linear-gradient')
+    implementation project(':react-native-linear-gradient')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-paystack')

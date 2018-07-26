@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleProvider, Header, Left, Body, Right, Button, Icon, Title, Text, } from 'native-base';
-import { View, StyleSheet, BackHandler, TextInput, ToastAndroid } from 'react-native'
+import { View, StyleSheet, BackHandler, ScrollView } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -80,40 +80,42 @@ export default class Donations extends Component {
                         <Right>
                         </Right>
                     </Header>
-                    <View style={{marginVertical: 30}}>
-                        <Text style={styles.categoryText}>Select your donation type</Text>
-                    </View>
-                    <View style={styles.level}>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#777'}}>Select Level</Text>
-                        <RadioForm
-                            radio_props={level_props}
-                            initial={0}
-                            buttonSize={15}
-                            buttonColor={'#82BE30'}
-                            animation={false}
-                            selectedButtonColor={'#82BE30'}
-                            style={{alignItems: 'flex-start', marginTop: 20}}
-                            onPress={(value) => this.pushToState(value)}
-                            />
-                    </View>
-                    <View style={styles.level}>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', color: '#777'}}>Select Category</Text>
-                        <RadioForm
-                            radio_props={type_props}
-                            initial={0}
-                            buttonSize={15}
-                            buttonColor={'#82BE30'}
-                            animation={false}
-                            selectedButtonColor={'#82BE30'}
-                            style={{alignItems: 'flex-start', marginTop: 20}}
-                            onPress={(value) => this.pushToState(value)}
-                            />
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <Button onPress={() => this.pushToListing()} block>
-                            <Text>Donate</Text>
-                        </Button>
-                    </View>
+                    <ScrollView>
+                        <View style={{marginVertical: 30}}>
+                            <Text style={styles.categoryText}>Select your donation type</Text>
+                        </View>
+                        <View style={styles.level}>
+                            <Text style={{fontSize: 16, fontWeight: 'bold', color: '#777'}}>Select Level</Text>
+                            <RadioForm
+                                radio_props={level_props}
+                                initial={0}
+                                buttonSize={15}
+                                buttonColor={'#82BE30'}
+                                animation={false}
+                                selectedButtonColor={'#82BE30'}
+                                style={{alignItems: 'flex-start', marginTop: 20}}
+                                onPress={(value) => this.pushToState(value)}
+                                />
+                        </View>
+                        <View style={styles.level}>
+                            <Text style={{fontSize: 16, fontWeight: 'bold', color: '#777'}}>Select Category</Text>
+                            <RadioForm
+                                radio_props={type_props}
+                                initial={0}
+                                buttonSize={15}
+                                buttonColor={'#82BE30'}
+                                animation={false}
+                                selectedButtonColor={'#82BE30'}
+                                style={{alignItems: 'flex-start', marginTop: 20}}
+                                onPress={(value) => this.pushToState(value)}
+                                />
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <Button onPress={() => this.pushToListing()} block>
+                                <Text>Donate</Text>
+                            </Button>
+                        </View>
+                    </ScrollView>
                 </View>
             </StyleProvider>
         )

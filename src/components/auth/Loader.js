@@ -20,7 +20,7 @@ export default class Loader extends Component {
                     backgroundColor="#82BE30"
                     barStyle="light-content"
                 />
-                 <ActivityIndicator size="large" color="#82BE30"/>
+                 <ActivityIndicator size="large" color="#fff"/>
             </View>
         )
     }
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff'
+        backgroundColor: '#82BE30'
     }
 })

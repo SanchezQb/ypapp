@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import accountStore from '../../stores/Account';
+import postStore from '../../stores/Post'
+import { observer } from 'mobx-react/native'
+import Modal from 'react-native-modalbox'
 import { 
     StyleProvider, 
     Header, 
@@ -12,16 +15,16 @@ import {
     Title,
     Badge, Text, View,  ListItem, Thumbnail
 } from 'native-base';
-import { StyleSheet, TouchableOpacity, Linking, BackHandler, ActivityIndicator, FlatList, RefreshControl, Dimensions } from 'react-native'
+import { StyleSheet, TouchableOpacity, BackHandler, ActivityIndicator, RefreshControl, Dimensions, FlatList, Image } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
 import moment from 'moment'
-import LinkPreview from 'react-native-link-preview';
-import { YouTubeStandaloneAndroid } from 'react-native-youtube';
+// import {OptimizedFlatList} from 'react-native-optimized-flatlist'
+import MediaHandler from './MediaHandler'
 const { width, height } = Dimensions.get('window')
 
-
+@observer
 export default class Posts extends Component {
     constructor() {
         super()
@@ -46,16 +49,16 @@ export default class Posts extends Component {
         BackHandler.exitApp()
     }
 
-    playContent = (str) => {
-        YouTubeStandaloneAndroid.playVideo({
-            apiKey:"AIzaSyCZNRFr_mF53iI6wLcznjXHjA4KWrQ4eXM",
-            videoId: str.substr(str.length - 11),
-            autoplay: false,
-            startTime: 0,
-          })
-            .then(() => console.log('Standalone Player Exited'))
-            .catch(errorMessage => console.error(errorMessage))
-    }
+    // playContent = (str) => {
+    //     YouTubeStandaloneAndroid.playVideo({
+    //         apiKey:"AIzaSyCZNRFr_mF53iI6wLcznjXHjA4KWrQ4eXM",
+    //         videoId: str.substr(str.length - 11),
+    //         autoplay: false,
+    //         startTime: 0,
+    //       })
+    //         .then(() => console.log('Standalone Player Exited'))
+    //         .catch(errorMessage => console.error(errorMessage))
+    // }
 
     getPosts = async () => {
         await axios({
@@ -92,34 +95,21 @@ export default class Posts extends Component {
             })
         })
     }
-    userProfile = (avatar) => {
-        if(avatar == null || avatar == '') {
-            return (
-                <Thumbnail source={require('../avatar.jpg')}/>
-            )
-        }
-        else {
-            return (
-                <Thumbnail source={{uri: avatar}}/>
-            )
-        }
-    }
-    openURL = (str) => {
-        Linking.openURL(str).catch(err => console.error('An error occurred', err));
-    }
-
-    renderLinks = (links) => {
-        const str = `${links[0]}`
-        return LinkPreview.getPreview(str)
-        .then(data => this.renderData(data))
-    }
-
-    renderData = (data) => {
-        console.log(data)
-        return (
-            <Text>{data.description}</Text>
-        )
-    }
+    // userProfile = (avatar) => {
+    //     if(avatar == null || avatar == '') {
+    //         return (
+    //             <Thumbnail source={require('../avatar.jpg')}/>
+    //         )
+    //     }
+    //     else {
+    //         return (
+    //             <Thumbnail source={{uri: avatar}}/>
+    //         )
+    //     }
+    // }
+    // openURL = (str) => {
+    //     Linking.openURL(str).catch(err => console.error('An error occurred', err));
+    // }
     // renderLinks = (links) => {
     //     const str = `${links[0]}`
     //     if(str.match(/youtu/) && str.match(/be/)) {
@@ -212,12 +202,14 @@ export default class Posts extends Component {
                             </Button>
                             <Button badge transparent>
                                 <Icon name="ios-notifications-outline" style={{color: '#fff'}}/>
-                                <Badge style={{width: 12, height: 12}}><Text></Text></Badge>
+                                <Badge style={{width: 12, height: 12, backgroundColor: '#F0BA00'}}><Text></Text></Badge>
                             </Button>
                         </Right>
                     </Header>
                     <View style={{paddingBottom: 100}}>
                     <FlatList
+                        legacyImplementation
+                        initialNumToRender={10}
                         data={this.state.posts}
                         showsVerticalScrollIndicator={false}
                         refreshControl={
@@ -228,48 +220,81 @@ export default class Posts extends Component {
                               />
                             }
                         renderItem={({item}) =>
-                        <View style={{borderBottomWidth: 1, borderColor: '#ddd'}}>
-                            <ListItem avatar onPress={() => console.log("Pressed")}>
-                                <Left style={{height: '80%'}}>
-                                    <TouchableOpacity onPress={() => Actions.otherprofile({data: item.origin.id})}>
-                                        {this.userProfile(item.origin.avatar)}
-                                    </TouchableOpacity>
-                                </Left>
-                                <Body style={{borderBottomWidth: 0}}>
-                                    <View style={{flexDirection: 'row', marginBottom: 5}}>
-                                        <Text style={{color: '#444', fontWeight: 'bold'}}>
-                                            {`${item.origin.firstname} ${item.origin.lastname}`}
-                                        </Text>
-                                        <Right style={{marginRight: 18}}>
-                                            <Text style={{fontSize: 14, color: '#555'}}>{moment(new Date(item.createdAt)).fromNow()}</Text>
-                                        </Right>
-                                    </View>
-                                    <Text style={{color: '#777'}}>{item.content}
-                                    </Text>
-                                    {this.renderLinks(item.links)}
-                                    <View style={styles.icons}>
-                                        <ListItem style={styles.listitem}>
-                                            <Icon name="md-thumbs-up" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
-                                            <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>{item.likes.count} Likes</Text>
-                                        </ListItem>
-                                        <ListItem style={styles.listitem}>
-                                            <Icon name="md-text" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
-                                            <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>4 Comments</Text>
-                                        </ListItem>
-                                        <ListItem style={styles.listitem}>
-                                            <Icon name="md-share-alt" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
-                                            <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>4 Shares</Text>
-                                        </ListItem>
-                                    </View>
-                                </Body>
-                            </ListItem>
-                        </View>
+                        <PostList item={item} />
                         }
                         keyExtractor={item => item._id}
                         />
                     </View>
+                    <Modal
+                        isOpen={postStore.isOpen} 
+                        onClosed={() => postStore.close()} 
+                        style={{width: '100%', flex: 1, justifyContent: 'center',height: '100%', backgroundColor: 'transparent', alignItems: 'center'}}
+                        position={"center"} 
+                        entry="top"
+                        animationDuration={200}>
+                        <Image
+                            style={{width: 400, height: 400, alignSelf: 'center'}}
+                            source={{uri: postStore.imageToOpen}}
+                        />
+                    </Modal>
                 </View>
             </StyleProvider>
+        )
+    }
+}
+class PostList extends React.PureComponent {
+    userProfile = (avatar) => {
+        if(avatar == null || avatar == '') {
+            return (
+                <Thumbnail source={require('../avatar.jpg')}/>
+            )
+        }
+        else {
+            return (
+                <Thumbnail source={{uri: avatar}}/>
+            )
+        }
+    }
+    render() {
+        const item = this.props.item
+        return (
+            <View style={{borderBottomWidth: 1, borderColor: '#ddd'}}>
+                <ListItem avatar>
+                    <Left style={{height: '80%'}}>
+                        <TouchableOpacity onPress={() => Actions.otherprofile({data: item.origin.id})}>
+                            {this.userProfile(item.origin.avatar)}
+                        </TouchableOpacity>
+                    </Left>
+                    <Body style={{borderBottomWidth: 0}}>
+                        <View style={{flexDirection: 'row', marginBottom: 5}}>
+                            <Text style={{color: '#444', fontWeight: 'bold'}}>
+                                {`${item.origin.firstname} ${item.origin.lastname}`}
+                            </Text>
+                            <Right style={{marginRight: 18}}>
+                                <Text style={{fontSize: 14, color: '#555'}}>{moment(new Date(item.createdAt)).fromNow()}</Text>
+                            </Right>
+                        </View>
+                        <Text style={{color: '#777'}}>{item.content}
+                        </Text>
+                        {/* {this.renderLinks(item.links)} */}
+                        <MediaHandler data={item} />
+                        <View style={styles.icons}>
+                            <ListItem style={styles.listitem}>
+                                <Icon name="md-thumbs-up" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
+                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>{item.likes.count} Likes</Text>
+                            </ListItem>
+                            <ListItem style={styles.listitem}>
+                                <Icon name="md-text" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
+                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>4 Comments</Text>
+                            </ListItem>
+                            <ListItem style={styles.listitem}>
+                                <Icon name="md-share-alt" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
+                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>4 Shares</Text>
+                            </ListItem>
+                        </View>
+                    </Body>
+                </ListItem>
+            </View>
         )
     }
 }

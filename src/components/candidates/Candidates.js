@@ -43,47 +43,47 @@ export default class Candidates extends Component {
                         </Right>
                     </Header>
                     <View style={styles.view}>
-                    <List>
-                        <View style={{paddingTop: 20}}>
-                            <ListItem style={{ marginLeft: 0, }} onPress={() => Actions.aspirants()}>
-                                <Body>
-                                   <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Aspirants</Text>
-                                   <Text note>Click to see approved Aspirants</Text>
-                                </Body>
-                                <Right>
-                                    <TouchableOpacity style={styles.touchable}>
-                                        <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                    </TouchableOpacity>
-                                </Right>
-                            </ListItem>
-                        </View>
-                        <View style={{paddingTop: 20}}>
-                            <ListItem style={{ marginLeft: 0}} onPress={() => Actions.sponsored()}>
-                                <Body>
-                                   <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Sponsored Candidates</Text>
-                                   <Text note>Click to see all sponsored candidates</Text>
-                                </Body>
-                                <Right>
-                                    <TouchableOpacity style={styles.touchable}>
-                                        <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                    </TouchableOpacity>
-                                </Right>
-                            </ListItem>
-                        </View>
-                        <View style={{paddingTop: 20}}>
-                            <ListItem style={{ marginLeft: 0}} onPress={() => Actions.elected()}>
-                                <Body>
-                                   <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Elected Officials</Text>
-                                   <Text note>Click to see all elected officials</Text>
-                                </Body>
-                                <Right>
-                                    <TouchableOpacity style={styles.touchable}>
-                                        <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                    </TouchableOpacity>
-                                </Right>
-                            </ListItem>
-                        </View>
-                    </List>
+                        <List>
+                            <View style={{paddingTop: 20}}>
+                                <ListItem style={{ marginLeft: 0, }} onPress={() => Actions.aspirants()}>
+                                    <Body>
+                                    <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Aspirants</Text>
+                                    <Text note>Click to see approved Aspirants</Text>
+                                    </Body>
+                                    <Right>
+                                        <TouchableOpacity style={styles.touchable}>
+                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
+                                        </TouchableOpacity>
+                                    </Right>
+                                </ListItem>
+                            </View>
+                            <View style={{paddingTop: 20}}>
+                                <ListItem style={{ marginLeft: 0}} onPress={() => Actions.sponsored()}>
+                                    <Body>
+                                    <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Sponsored Candidates</Text>
+                                    <Text note>Click to see all sponsored candidates</Text>
+                                    </Body>
+                                    <Right>
+                                        <TouchableOpacity style={styles.touchable}>
+                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
+                                        </TouchableOpacity>
+                                    </Right>
+                                </ListItem>
+                            </View>
+                            <View style={{paddingTop: 20}}>
+                                <ListItem style={{ marginLeft: 0}} onPress={() => Actions.elected()}>
+                                    <Body>
+                                    <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Elected Officials</Text>
+                                    <Text note>Click to see all elected officials</Text>
+                                    </Body>
+                                    <Right>
+                                        <TouchableOpacity style={styles.touchable}>
+                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
+                                        </TouchableOpacity>
+                                    </Right>
+                                </ListItem>
+                            </View>
+                        </List>
                     </View>
                 </View>
             </StyleProvider>

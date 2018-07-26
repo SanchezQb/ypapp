@@ -5,3 +5,141 @@
             style={{backgroundColor: '#82BE30', borderRadius: 0, height: '100%', width: 50}}>
             <Icon name="ios-send" style={{color: '#fff', alignSelf: 'center'}}/>
           </Button>
+          // import org.apache.tools.ant.taskdefs.condition.Os
+
+          // def config = project.hasProperty("react") ? project.react : [];
+          
+          // def cliPath = config.cliPath ?: "node_modules/react-native/local-cli/cli.js"
+          // def bundleAssetName = config.bundleAssetName ?: "index.android.bundle"
+          // def entryFile = config.entryFile ?: "index.android.js"
+          // def bundleCommand = config.bundleCommand ?: "bundle"
+          // def reactRoot = file(config.root ?: "../../")
+          // def inputExcludes = config.inputExcludes ?: ["android/**", "ios/**"]
+          // def bundleConfig = config.bundleConfig ? "${reactRoot}/${config.bundleConfig}" : null ;
+          
+          
+          // gradle.projectsEvaluated {
+          //     android.applicationVariants.all { def variant ->
+          //         // Create variant and target names
+          //         def targetName = variant.name.capitalize()
+          //         def targetPath = variant.dirName
+          
+          //         // React js bundle directories
+          //         def jsBundleDir = file("$buildDir/generated/assets/react/${targetPath}")
+          //         def resourcesDir = file("$buildDir/generated/res/react/${targetPath}")
+          
+          //         def jsBundleFile = file("$jsBundleDir/$bundleAssetName")
+          
+          //         // Additional node and packager commandline arguments
+          //         def nodeExecutableAndArgs = config.nodeExecutableAndArgs ?: ["node"]
+          //         def extraPackagerArgs = config.extraPackagerArgs ?: []
+          
+          //         def currentBundleTask = tasks.create(
+          //             name: "bundle${targetName}JsAndAssets",
+          //             type: Exec) {
+          //             group = "react"
+          //             description = "bundle JS and assets for ${targetName}."
+          
+          //             // Create dirs if they are not there (e.g. the "clean" task just ran)
+          //             doFirst {
+          //                 jsBundleDir.deleteDir()
+          //                 jsBundleDir.mkdirs()
+          //                 resourcesDir.deleteDir()
+          //                 resourcesDir.mkdirs()
+          //             }
+          
+          //             doLast {
+          //                 def moveFunc = { resSuffix ->
+          //                     File originalDir = file("${resourcesDir}/drawable-${resSuffix}")
+          //                     if (originalDir.exists()) {
+          //                         File destDir = file("${resourcesDir}/drawable-${resSuffix}-v4")
+          //                         ant.move(file: originalDir, tofile: destDir)
+          //                     }
+          //                 }
+          //                 moveFunc.curry("ldpi").call()
+          //                 moveFunc.curry("mdpi").call()
+          //                 moveFunc.curry("hdpi").call()
+          //                 moveFunc.curry("xhdpi").call()
+          //                 moveFunc.curry("xxhdpi").call()
+          //                 moveFunc.curry("xxxhdpi").call()
+          //             }
+          
+          //             // Set up inputs and outputs so gradle can cache the result
+          //             inputs.files fileTree(dir: reactRoot, excludes: inputExcludes)
+          //             outputs.dir jsBundleDir
+          //             outputs.dir resourcesDir
+          
+          //             // Set up the call to the react-native cli
+          //             workingDir reactRoot
+          
+          //             // Set up dev mode
+          //             def devEnabled = !(config."devDisabledIn${targetName}"
+          //                 || targetName.toLowerCase().contains("release"))
+          
+          //             def extraArgs = extraPackagerArgs;
+          
+          //             if (bundleConfig) {
+          //                 extraArgs = extraArgs.clone()
+          //                 extraArgs.add("--config");
+          //                 extraArgs.add(bundleConfig);
+          //             }
+          
+          //             if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+          //                 commandLine("cmd", "/c", *nodeExecutableAndArgs, cliPath, bundleCommand, "--platform", "android", "--dev", "${devEnabled}",
+          //                     "--reset-cache", "--entry-file", entryFile, "--bundle-output", jsBundleFile, "--assets-dest", resourcesDir, *extraArgs)
+          //             } else {
+          //                 commandLine(*nodeExecutableAndArgs, cliPath, bundleCommand, "--platform", "android", "--dev", "${devEnabled}",
+          //                     "--reset-cache", "--entry-file", entryFile, "--bundle-output", jsBundleFile, "--assets-dest", resourcesDir, *extraArgs)
+          //             }
+          
+          //             enabled config."bundleIn${targetName}" ||
+          //                 config."bundleIn${variant.buildType.name.capitalize()}" ?:
+          //                 targetName.toLowerCase().contains("release")
+          //         }
+          
+          //         // Expose a minimal interface on the application variant and the task itself:
+          //         variant.ext.bundleJsAndAssets = currentBundleTask
+          //         currentBundleTask.ext.generatedResFolders = files(resourcesDir).builtBy(currentBundleTask)
+          //         currentBundleTask.ext.generatedAssetsFolders = files(jsBundleDir).builtBy(currentBundleTask)
+          
+          //         variant.registerGeneratedResFolders(currentBundleTask.generatedResFolders)
+          //         variant.mergeResources.dependsOn(currentBundleTask)
+          
+          //         def resourcesDirConfigValue = config."resourcesDir${targetName}"
+          //         if (resourcesDirConfigValue) {
+          //             def currentCopyResTask = tasks.create(
+          //                 name: "copy${targetName}BundledResources",
+          //                 type: Copy) {
+          //                 group = "react"
+          //                 description = "copy bundled resources into custom location for ${targetName}."
+          
+          //                 from resourcesDir
+          //                 into file(resourcesDirConfigValue)
+          
+          //                 dependsOn(currentBundleTask)
+          
+          //                 enabled currentBundleTask.enabled
+          //             }
+          
+          //             variant.packageApplication.dependsOn(currentCopyResTask)
+          //         }
+          
+          //         def currentAssetsCopyTask = tasks.create(
+          //             name: "copy${targetName}BundledJs",
+          //             type: Copy) {
+          //             group = "react"
+          //             description = "copy bundled JS into ${targetName}."
+          
+          //             from jsBundleDir
+          //             into file(config."jsBundleDir${targetName}" ?:
+          //                 "$buildDir/intermediates/assets/${targetPath}")
+          
+          //             // mergeAssets must run first, as it clears the intermediates directory
+          //             dependsOn(variant.mergeAssets)
+          
+          //             enabled currentBundleTask.enabled
+          //         }
+          
+          //         variant.packageApplication.dependsOn(currentAssetsCopyTask)
+          //     }
+          // }

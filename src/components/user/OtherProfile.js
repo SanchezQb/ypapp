@@ -252,7 +252,7 @@ follow = (user) => {
                         </View>
                         <View style={styles.CardItem}>
                             <TouchableOpacity style={styles.touchable} onPress={() => Actions.followers({data: this.state.user.followers})}>
-                                <Text style={{color: '#555', fontSize: 12, textAlign: 'center'}}>{`${this.state.user.friends.length} Followers`}</Text>
+                                <Text style={{color: '#555', fontSize: 12, textAlign: 'center'}}>{`${this.state.user.followers.length} Followers`}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.touchable} onPress={() => Actions.following({data: this.state.user.friends})}>
                                 <Text style={{color: '#555', fontSize: 12, textAlign: 'center'}}>{`${this.state.user.friends.length} Following`}</Text>

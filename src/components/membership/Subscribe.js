@@ -49,7 +49,7 @@ export default class Subscribe extends Component {
   chargeCard = () => {
     ToastAndroid.show('Please wait', ToastAndroid.SHORT)
     if(this.state.formData.valid === false) {
-      ToastAndroid.show('All fields are reuqired', ToastAndroid.SHORT)
+      ToastAndroid.show('All fields are required', ToastAndroid.SHORT)
     }
     else if(accountStore.user.role == 1) {
       ToastAndroid.show('You already have a valid subscription', ToastAndroid.SHORT)

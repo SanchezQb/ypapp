@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import {  Text, ListItem, Thumbnail, Left, Right, Body, Icon, Button } from 'native-base'
 import { View,  StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Dimensions } from 'react-native'
+import MediaHandler from '../feed/MediaHandler'
 import accountStore from '../../stores/Account'
-import { YouTubeStandaloneAndroid } from 'react-native-youtube';
 import moment from 'moment'
 import { Actions } from 'react-native-router-flux'
 
@@ -34,7 +34,7 @@ export default class Userposts extends Component {
       })
       .then(res => {
           this.setState({
-            posts: res.data.data.reverse().filter(post => {
+            posts: res.data.data.filter(post => {
                 return post.destination == null
           }),
               isLoading: false
@@ -51,49 +51,49 @@ export default class Userposts extends Component {
         this.setState(this.baseState)
         this.getPosts()
     }
-    playContent = (str) => {
-        YouTubeStandaloneAndroid.playVideo({
-            apiKey:"AIzaSyCZNRFr_mF53iI6wLcznjXHjA4KWrQ4eXM",
-            videoId: str.substr(str.length - 11),
-            autoplay: false,
-            startTime: 0,
-          })
-            .then(() => console.log('Standalone Player Exited'))
-            .catch(errorMessage => console.error(errorMessage))
-    }
-    renderLinks = (links) => {
-        const str = `${links[0]}`
-        if(str.match(/youtu/) && str.match(/be/)) {
-            return (
-                <TouchableOpacity style={styles.link} onPress={() => this.playContent(str)}>
-                    <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center'}}>
-                        <Icon name="logo-youtube" style={{color: '#ea1b2a'}} />
-                        <Text style={{color: '#0066CC', marginHorizontal: 5}}>{str}</Text>
-                    </View>
-                </TouchableOpacity>
-            )
-        }
-        else if (links.length == 0) {
-            return (
-                 null
-            )
-        }
-        else {
-            const str = `${links[0]}`
-            if(str == "") {
-                return null
-            }
-            else {
-                return (
-                    <TouchableOpacity style={styles.link} onPress={() => Actions.web({data: str})}>
-                        <View>
-                            <Text style={{color: '#0066CC'}}>{str}</Text>
-                        </View>
-                    </TouchableOpacity>
-                )
-            }
-        }
-    }
+    // playContent = (str) => {
+    //     YouTubeStandaloneAndroid.playVideo({
+    //         apiKey:"AIzaSyCZNRFr_mF53iI6wLcznjXHjA4KWrQ4eXM",
+    //         videoId: str.substr(str.length - 11),
+    //         autoplay: false,
+    //         startTime: 0,
+    //       })
+    //         .then(() => console.log('Standalone Player Exited'))
+    //         .catch(errorMessage => console.error(errorMessage))
+    // }
+    // renderLinks = (links) => {
+    //     const str = `${links[0]}`
+    //     if(str.match(/youtu/) && str.match(/be/)) {
+    //         return (
+    //             <TouchableOpacity style={styles.link} onPress={() => this.playContent(str)}>
+    //                 <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center'}}>
+    //                     <Icon name="logo-youtube" style={{color: '#ea1b2a'}} />
+    //                     <Text style={{color: '#0066CC', marginHorizontal: 5}}>{str}</Text>
+    //                 </View>
+    //             </TouchableOpacity>
+    //         )
+    //     }
+    //     else if (links.length == 0) {
+    //         return (
+    //              null
+    //         )
+    //     }
+    //     else {
+    //         const str = `${links[0]}`
+    //         if(str == "") {
+    //             return null
+    //         }
+    //         else {
+    //             return (
+    //                 <TouchableOpacity style={styles.link} onPress={() => Actions.web({data: str})}>
+    //                     <View>
+    //                         <Text style={{color: '#0066CC'}}>{str}</Text>
+    //                     </View>
+    //                 </TouchableOpacity>
+    //             )
+    //         }
+    //     }
+    // }
     userProfile = (avatar) => {
         if(avatar == null || avatar == '') {
             return (
@@ -149,7 +149,8 @@ export default class Userposts extends Component {
                                 </View>
                                 <Text style={{color: '#777'}}>{item.content}
                                 </Text>
-                                {this.renderLinks(item.links)}
+                                {/* {this.renderLinks(item.links)} */}
+                                <MediaHandler data={item} />
                                 <View style={styles.icons}>
                                     <ListItem style={styles.listitem}>
                                         <Icon name="md-thumbs-up" style={{color: '#a6a6a6', fontSize: height * 0.022}} />

@@ -10,7 +10,7 @@ import {
     List, ListItem, Thumbnail, Container, Icon, Text
 } from 'native-base';
 import moment from 'moment'
-import { StyleSheet, UIManager, findNodeHandle, View, BackHandler, ScrollView, Alert } from 'react-native'
+import { StyleSheet, UIManager, findNodeHandle, View, BackHandler, ScrollView, Alert, ActivityIndicator } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
@@ -83,11 +83,42 @@ export default class ChatList extends Component {
             )
         }
     }
+    reset = () => {
+        messagingStore.fetchAllConversations()
+    }
 
     render() {
-        console.log(messagingStore.logs)
+        if (messagingStore.isLoading) {
+            return (
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <ActivityIndicator size="large" color="#82BE30"/>
+              </View>
+            );
+          }
+          else if (messagingStore.error) {
+            return (
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: '#444'}}>Could not load Chats :(</Text>
+                <Text></Text>
+                <Text></Text>
+                <Button style={{backgroundColor: '#82BE30', alignSelf: 'center'}}onPress={() => {this.reset()}}>
+                    <Text>Retry</Text>
+                </Button>
+              </View>
+              
+            )
+        }
+        else if (messagingStore.logs.length == 0) {
+            return (
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{color: '#444'}}>There are no chats to display</Text>
+                    <Text style={{color: '#444'}}>Click the button on the bottom right to start chat</Text>
+                    <Text></Text>
+                </View>
+            )
+        }
         const { labels } = this.props;
-        const logs = messagingStore.logs.reverse().map(data => {
+        const logs = messagingStore.logs.map(data => {
             const title = data.topic ? data.topic : this.generateNameFromMembers(data.members.filter(item => item.id !== accountStore.user.id));
             return (
                 <ListItem 
@@ -102,10 +133,10 @@ export default class ChatList extends Component {
                         <Text style={{color: '#444', fontWeight: 'bold'}}>
                         {title}
                         </Text>
-                        <Text style={{color: '#777'}} >Doing what you like will always keep you happy . .</Text>
+                        {/* <Text style={{color: '#777'}} >Doing what you like will always keep you happy . .</Text> */}
                     </Body>
                     <Right>
-                        <Text note>{moment(new Date(data.createdAt)).fromNow()}</Text>
+                        {/* <Text note>{moment(new Date(data.createdAt)).fromNow()}</Text> */}
                     </Right>
                 </ListItem>
             )

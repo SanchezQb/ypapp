@@ -69,7 +69,7 @@ export default class More extends Component {
         <View style={{borderColor: "#a6a6a6", borderWidth: 0.25, marginVertical: 15}}></View>
         <View style={{justifyContent: 'space-around', flexDirection: 'row'}}>
         {this.state.partyMember == 1 ?
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => Actions.elections()}>
             <View style={{alignItems: 'center', marginTop: 10, width: 50}}>
               <Icon name="md-checkmark-circle-outline" style={{color: '#fff'}}/>
               <Text style={{color: '#fff', fontSize: 10, marginTop: 4}}>Elections</Text>

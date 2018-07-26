@@ -25,6 +25,7 @@ class Account {
         roles: null
     }
     @observable disabled = false
+    @observable color = '#F0BA00'
 
     getUserDataFromStorage(data) {
         this.user = data

@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Button, Icon, Text, Left, Body, Right, Header, Title, StyleProvider, Container } from 'native-base'
-import { View, StyleSheet, BackHandler, ScrollView } from 'react-native'
+import { View, StyleSheet, BackHandler } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 
-export default class Accepted extends Component {
+export default class VoteDone extends Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
@@ -29,25 +29,23 @@ export default class Accepted extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title>Donations</Title>
+                            <Title>Elections</Title>
                         </Body>
                         <Right>
                         </Right>
                     </Header>
-                    <ScrollView>
-                        <View style={styles.container}>
-                            <View style={styles.content}>
-                                <Icon name="ios-checkmark-circle" style={styles.icon}/>
-                                <Text style={styles.text}>Your donation has been accepted</Text>
-                                <Text style={styles.text2}>Thank you for contributing</Text>
-                            </View>
-                            <View style={styles.buttonContainer}>
-                                <Button onPress={() => Actions.home()} style={styles.button}>
-                                    <Text>Proceed to Home Page</Text>
-                                </Button>
-                            </View>
+                    <View style={styles.container}>
+                        <View style={styles.content}>
+                            <Icon name="ios-checkmark-circle" style={styles.icon}/>
+                            <Text style={styles.text}>Your vote has been recorded successfully</Text>
+                            <Text style={styles.text2}>Thank you for participating</Text>
                         </View>
-                    </ScrollView>
+                        <View style={styles.buttonContainer}>
+                            <Button onPress={() => Actions.home()} style={styles.button}>
+                                <Text>Proceed to Home Page</Text>
+                            </Button>
+                        </View>
+                    </View>
                 </Container>
             </StyleProvider>
         )

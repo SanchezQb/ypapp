@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleProvider, Container, Header, Left, Right, Body, Title, Button, Icon } from 'native-base';
-import { View, Text, BackHandler } from 'react-native'
+import { View, Text, BackHandler, ActivityIndicator } from 'react-native'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
@@ -139,9 +139,14 @@ export default class Chat extends Component {
     }
     return string;
 }
-
+  renderLoading() {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#82BE30"/>
+      </View>
+    )
+  }
   renderBubble(props) { 
-    console.log(props.currentMessage)
     if (props.isSameUser(props.currentMessage, props.previousMessage)
      && props.isSameDay(props.currentMessage, props.previousMessage)) {
       return (
@@ -196,7 +201,6 @@ export default class Chat extends Component {
     }
  
   render() {
-    console.log(this.props)
     const title = this.props.data.topic ? this.props.data.topic : this.generateNameFromMembers(this.props.data.members.filter(item => item.id !== accountStore.user.id));
     return (
       <StyleProvider style={getTheme(material)}>
@@ -220,7 +224,7 @@ export default class Chat extends Component {
                   messages={this.state.messages}
                   user={{
                     _id: accountStore.user.id,
-                    name: "Sanch"
+                    name: accountStore.user.firstname
                   }}
                   textInputProps={{
                     style: {backgroundColor: '#fff', width: '90%'}

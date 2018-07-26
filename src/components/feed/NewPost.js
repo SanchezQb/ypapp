@@ -18,6 +18,7 @@ import { Actions } from 'react-native-router-flux'
 import ImagePicker from 'react-native-image-crop-picker';
 import accountStore from '../../stores/Account';
 import axios from 'axios'
+import * as RNCloudinary from 'react-native-cloudinary-x'
 
 export default class NewPost extends Component {
     state = {
@@ -47,12 +48,15 @@ export default class NewPost extends Component {
                ToastAndroid.show('Maximum of 4 images', ToastAndroid.SHORT)
            }
            else {
-               console.log(images)
+              this.setState({images})
            }
           });
     }
 
-    post = () => {
+    handlePost = () => {
+        if(this.state.content.length == 0 && !this.state.images) {
+            return ToastAndroid.show('Cannot send an empty post', ToastAndroid.SHORT)
+        }
         const request = {
             ...this.state
         }
@@ -78,6 +82,39 @@ export default class NewPost extends Component {
             ToastAndroid.show(err.response.data.error, ToastAndroid.SHORT)
         })
     }
+
+    post = () => {
+        if(!this.state.images || !this.state.images.length) {
+            return this.handlePost()
+        }
+        else if(this.state.content.length > 500) {
+            return ToastAndroid.show('Maximum number of characters exceeded', ToastAndroid.SHORT)
+        }
+        this.setState({disabled: true})
+        ToastAndroid.show('Uploading...', ToastAndroid.SHORT)
+        Promise.all([this.SendToCloudinary(this.state.images, 'multiple')])
+        .then((media) => {
+            ToastAndroid.show('Upload Successful, creating post', ToastAndroid.SHORT)
+            console.log(media)
+            this.setState({ media })
+            this.handlePost()
+        })
+        .catch((err) => {
+            this.setState({disabled: false})
+            dispatchNotification(navigator)('Error uploading photos. Please try again.')
+            console.log(err)
+        })
+    }
+    SendToCloudinary = async (data, key) => {
+        const images = [];
+        RNCloudinary.init('741854955822223','0Y6bxC5eCBKjXZLuyOJpm6tcJTM','ddjyel5tz')
+        if (!key) return RNCloudinary.UploadImage(data.path);  
+        for (let i = 0; i < data.length; i++) {
+          const url = await RNCloudinary.UploadImage(data[i].path);
+          images.push(url);
+        }
+        return images;
+      };
 
     setLink = (link) => {
         let arr = []
@@ -127,7 +164,6 @@ export default class NewPost extends Component {
                                     underlineColorAndroid="rgba(0,0,0,0)"
                                     textAlignVertical="top"
                                     multiline
-                                    maxLength = {160}  
                                     style={{borderColor: '#ccc',borderWidth: 1, height: 200,}}
                                     placeholderTextColor="#a6a6a6" 
                                     onChangeText={(content) => this.setState({content})}
@@ -137,6 +173,9 @@ export default class NewPost extends Component {
                                 <Text style={{color: '#82BE30'}}>Add Media</Text>
                                 <Icon style={{color: '#82BE30'}} name='ios-camera-outline' />
                             </Button>
+                            <Text style={{alignSelf: 'flex-end', color: this.state.content.length > 500 ? 'red': '#444'}}>
+                                {this.state.content.length} / 500
+                            </Text>
                             <View style={{marginTop: 30, marginBottom: 20}}>
                                 <TextInput
                                     underlineColorAndroid="rgba(0,0,0,0)"

@@ -4,7 +4,7 @@ import {
     TouchableOpacity, 
     Image, 
     Picker, 
-    ScrollView, ToastAndroid, BackHandler } from 'react-native'
+    ScrollView, ToastAndroid, BackHandler, Linking } from 'react-native'
 import DatePicker from 'react-native-datepicker'
 import { 
     StyleProvider,   
@@ -72,6 +72,9 @@ export default class Register1 extends Component {
             this.setState({image: image.path})
           });
     } 
+    openSite = () => {
+        Linking.openURL('http://voters.inecnigeria.org').catch(err => console.log(err))
+    }
 
     continue = () => {
         if(this.state.fullname == "" || this.state.dob == "" || this.state.residence == "" || this.state.lga == "" || this.state.ward == "" ){
@@ -118,7 +121,7 @@ export default class Register1 extends Component {
                                     mode="date"
                                     placeholder="Click to Select"
                                     format="YYYY-MM-DD"
-                                    minDate="1950-05-01"
+                                    minDate="1900-05-01"
                                     maxDate="2000-01-01"
                                     androidMode="spinner"
                                     confirmBtnText="Confirm"
@@ -178,6 +181,11 @@ export default class Register1 extends Component {
                                     onChangeText={(ward) => this.setState({ward})}/>
                             </Item>
                         </View>
+                        <View style={styles.inec}>
+                            <Text style={{color: '#444', textAlign: 'center'}}>
+                                Check your registration information <Text onPress={() => this.openSite()}style={{color: '#82BE30'}}>here</Text>
+                            </Text>
+                        </View>
                         <View style={styles.buttonContainer}>
                             <Button onPress={() => this.continue()} style={styles.button} block>
                                 <Text>Continue</Text>
@@ -196,9 +204,9 @@ export default class Register1 extends Component {
     setLGAs(){						
 		let selectedLGAs = [];
 		StateData.map((v) => {
-			var state = v['state']['name'];
+			let state = v['state']['name'];
 			if(state == this.state.state){
-				var LGAS = v['state']['locals'];
+				let LGAS = v['state']['locals'];
 				LGAS.map((v,i) => {
 					selectedLGAs.push(<Picker.Item key={i} value={v['name']} label={v['name']} />);
 				});

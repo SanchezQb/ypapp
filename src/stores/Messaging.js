@@ -8,6 +8,8 @@ class Messaging {
     @observable messages = []
     @observable logs = []
     @observable registry = {}
+    @observable isLoading = true
+    @observable error = false
 
     fetchAllConversations() {
         axios({
@@ -18,6 +20,7 @@ class Messaging {
                 "Authorization": `${accountStore.user.token}`
             },
         }).then(res => {
+            this.isLoading = false
             this.logs = res.data.data
             // const registry = res.data.data.reduce((a, b) => {
             //     a[`${b._id}`] = b.messages || [];
@@ -26,6 +29,7 @@ class Messaging {
             // this.registry = registry
         })
         .catch(error => {
+            this.error = true
             ToastAndroid.show(error.response.data.error, ToastAndroid.SHORT)
         })
     }
@@ -55,7 +59,7 @@ class Messaging {
             target.members = users;
             return Actions.chat({ data: target });
         }
-        return this.createNewConversation(users)
+        return this.createNewConversation(users) // check this for duplicate thing
     }
 
     createNewConversation(members) {
@@ -99,10 +103,10 @@ class Messaging {
         return socket.emit('new-message', body);
     }
 
-    joinConversation(id) {
+    joinConversation(item) {
         return axios({
             method: 'PUT',
-            url: `https://ypn-node-service.herokuapp.com/api/v1/convos/join/${id}`,
+            url: `https://ypn-node-service.herokuapp.com/api/v1/convos/join/${item._id}`,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `${accountStore.user.token}`
@@ -113,10 +117,13 @@ class Messaging {
             return Actions.chat({data: res.data.data})
         })
         .catch(err => {
+            console.log(err.response.status)
             if(err.response.status && err.response.status === 401) {
                 ToastAndroid.show('Sorry, you are not allowed to join this conversation', ToastAndroid.SHORT)
             }
-            ToastAndroid.show('Something went wrong, try again', ToastAndroid.SHORT)
+            else if(err.response.status && err.response.status === 409) {
+                Actions.chat({data: item})
+            }
         })
     }
 

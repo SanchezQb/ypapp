@@ -128,7 +128,7 @@ export default class Register2 extends Component {
                         </View>
                         <View style={styles.login}>
                             <Text style={styles.loginText}>
-                        Already a member? Click to <Text style={styles.loginLink}>Log In</Text>
+                                Already a member? Click to <Text onPress={() => Actions.login()}style={styles.loginLink}>Log In</Text>
                             </Text>
                         </View>
                     </ScrollView>

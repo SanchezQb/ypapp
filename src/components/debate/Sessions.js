@@ -134,14 +134,14 @@ export default class Posts extends Component {
                             }
                         renderItem={({item}) =>
                             <View style={{borderBottomWidth: 1, borderColor: '#ddd'}}>
-                                <ListItem avatar onPress={() => messagingStore.joinConversation(item._id)}>
+                                <ListItem avatar onPress={() => messagingStore.joinConversation(item)}>
                                     <Left>
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
                                         <View style={{flexDirection: 'row', marginBottom: 5}}>
                                             <Text style={{color: '#444', fontWeight: 'bold'}}>{item.topic}</Text>
                                             <Right style={{borderBottomWidth: 0, marginRight: 10}}>
-                                                <TouchableOpacity style={styles.touchable}>
+                                                <TouchableOpacity style={styles.touchable} onPress={() => messagingStore.joinConversation(item)}>
                                                     <Text style={{color: '#fff', textAlign: 'center'}}>Join</Text>
                                                 </TouchableOpacity>
                                             </Right>

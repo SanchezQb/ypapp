@@ -28,3 +28,15 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 })
+export const SendToCloudinary = async (data, key) => {
+    const images = [];
+    RNCloudinary.init(config.cloudinaryKey, config.cloudinarySecret, config.cloud);
+    if (!key) return RNCloudinary.UploadImage(data.path);
+  
+  
+    for (let i = 0; i < data.length; i++) {
+      const url = await RNCloudinary.UploadImage(data[i].path);
+      images.push(url);
+    }
+    return images;
+  };
