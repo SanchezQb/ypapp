@@ -44,7 +44,7 @@ export default class Posts extends Component {
     }
     getDebates = async () => {
         await axios({
-          url: `https://ypn-node-service.herokuapp.com/api/v1/convos/type/2`, 
+          url: `https://ypn-node.herokuapp.com/api/v1/convos/type/2`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",

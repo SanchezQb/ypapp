@@ -46,7 +46,7 @@ class Account {
                     }
                 }
                 axios({
-                    url: 'https://ypn-base.herokuapp.com/signup', 
+                    url: 'https://ypn-base-01.herokuapp.com/signup', 
                     method: 'POST', 
                     data: request,
                     headers: {
@@ -76,7 +76,7 @@ class Account {
             }
             this.disabled = true
             axios({
-                url: 'https://ypn-base.herokuapp.com/signup', 
+                url: 'https://ypn-base-01.herokuapp.com/signup', 
                 method: 'POST', 
                 data: request,
                 headers: {
@@ -134,7 +134,7 @@ class Account {
         }
         this.disabled = true
         axios({
-            url: 'https://ypn-base.herokuapp.com/login', 
+            url: 'https://ypn-base-01.herokuapp.com/login', 
             method: 'POST', 
             data: request,
             headers: {
@@ -175,7 +175,7 @@ class Account {
     }
     becomeAPartyMember() {
         axios({
-            url: `https://ypn-base.herokuapp.com/party/member/new/${this.user.id}`, 
+            url: `https://ypn-base-01.herokuapp.com/party/member/new/${this.user.id}`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",

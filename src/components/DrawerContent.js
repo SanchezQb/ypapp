@@ -37,7 +37,7 @@ export default class DrawerContent extends React.Component {
   userProfile = (avatar) => {
     if(avatar == null || avatar == '') {
         return (
-            <Image source={require('./avatar.jpg')} style={styles.dp}/>
+            <Image source={require('./logo.png')} resizeMode="center" style={styles.dp}/>
         )
     }
     else {
@@ -146,16 +146,18 @@ const styles = StyleSheet.create({
       },
       dpcont: {
         marginLeft: 12,
-        backgroundColor: '#ccc',
+        backgroundColor: '#f2f2f2',
         height: 80,
         borderRadius: 40,
         width: 80,
-        marginBottom: 10
+        marginBottom: 10,
+        alignItems: 'center'
     },
     dp: {
-        height: 80,
-        borderRadius: 40,
-        width: 80,
+        height: 70,
+        borderRadius: 35,
+        width: 70,
+        alignSelf: 'center'
     },
     bioCont: {
         marginLeft: 12

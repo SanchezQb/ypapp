@@ -62,7 +62,7 @@ export default class NewPost extends Component {
         }
         this.setState({disabled: true})
         axios({
-            url: 'https://ypn-node-service.herokuapp.com/api/v1/posts', 
+            url: 'https://ypn-node.herokuapp.com/api/v1/posts', 
             method: 'POST', 
             data: request,
             headers: {
@@ -125,7 +125,7 @@ export default class NewPost extends Component {
     userProfile = (avatar) => {
         if(avatar == null || avatar == '') {
             return (
-                <Thumbnail source={require('../avatar.jpg')}/>
+                <Thumbnail source={require('../logo.png')} resizeMode="center"/>
             )
         }
         else {

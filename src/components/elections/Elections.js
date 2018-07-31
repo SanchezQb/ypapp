@@ -28,15 +28,15 @@ export default class Elections extends Component {
     }
     fetchAllCandidates = async () =>  {
         await axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/questions`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/questions`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `${accountStore.user.token}`
             },
         }).then(res => {
+            console.log(res.data.data)
             this.setState({elections: res.data.data, isLoading: false})
-           console.log(this.state)
         })
         .catch(error => {
             ToastAndroid.show(error.response.data.error, ToastAndroid.SHORT)

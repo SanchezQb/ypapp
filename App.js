@@ -95,7 +95,7 @@ export default class App extends Component<Props> {
         />
         <Router uriPrefix={prefix} wrapBy={observer} sceneStyle={{backgroundColor: '#fff'}}>
           <Scene key="root" transitionConfig={() => ({ screenInterpolator: CardStackStyleInterpolator.forFadeFromBottomAndroid })}>
-            {/* <Scene key="loader" component={Loader} title="Loader" hideNavBar={true} />
+            <Scene key="loader" component={Loader} title="Loader" hideNavBar={true} />
             <Scene key="main" component={Main} title="Main" hideNavBar />
             <Scene key="login" component={Login} title="Login" hideNavBar />
             <Scene key="register1" component={Register1} title="Register1" hideNavBar />
@@ -138,7 +138,7 @@ export default class App extends Component<Props> {
             <Scene key="accepted" component={Accepted} title="Accepted" hideNavBar />
             <Scene key="elections" component={Elections} title="Elections" hideNavBar />
             <Scene key="selectCandidate" component={SelectCandidate} title="Select Candidate" hideNavBar />
-            <Scene key="file" component={FileData} title="Constitution" hideNavBar /> */}
+            <Scene key="file" component={FileData} title="Constitution" hideNavBar />
             <Scene key="addComment" component={AddComment} title="Add Comment" hideNavBar />
           </Scene>
         </Router>

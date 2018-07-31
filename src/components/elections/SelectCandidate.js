@@ -65,7 +65,7 @@ export default class SelectCandidate extends Component {
       voteHandler = (data) => {
         this.setState({disabled: true})
         axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/questions/respond`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/questions/respond`, 
             method: 'PUT', 
             data,
             headers: {
@@ -86,7 +86,7 @@ export default class SelectCandidate extends Component {
     }
     results = () => {
         axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/questions/${this.state.id}`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/questions/${this.state.id}`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",

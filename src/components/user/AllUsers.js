@@ -32,7 +32,7 @@ export default class AllUsers extends Component {
     }
     fetchFollowsforUser = async () => {
        await axios({
-            url: `https://ypn-base.herokuapp.com/users`, 
+            url: `https://ypn-base-01.herokuapp.com/users`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",

@@ -9,7 +9,7 @@ class Elections {
     
     vote(data) {
         axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/questions/respond`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/questions/respond`, 
             method: 'PUT', 
             data,
             headers: {

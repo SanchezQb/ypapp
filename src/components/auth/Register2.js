@@ -41,7 +41,7 @@ export default class Register2 extends Component {
     userProfile = () => {
         if(!this.state.image) {
             return (
-                <Image source={require('../avatar.jpg')} style={styles.dp}/>
+                <Image source={require('../logo.png')} resizeMode="center" style={styles.dp}/>
             )
         }
         else {
@@ -143,20 +143,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#82BE30',    
     },
     dpcont: {
-        backgroundColor: 'red',
-        height: 110,
-        borderRadius: 55,
-        width: 110,
+        backgroundColor: '#f2f2f2',
+        height: 90,
+        borderRadius: 45,
+        width: 90,
         alignSelf: 'center',
         position: 'absolute',
         top: 90,
-        zIndex: 200
+        zIndex: 200,
+        alignItems: 'center'
     },
     dp: {
-        height: 110,
-        borderRadius: 55,
-        width: 110,
-        zIndex: 200
+        height: 80,
+        borderRadius: 40,
+        width: 80,
+        zIndex: 200,
+        alignSelf: 'center'
     },
     form: {
         width: '85%',

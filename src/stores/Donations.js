@@ -24,7 +24,7 @@ class Donations {
             date: Date.now()
         }
         axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/donations/donate/${id}`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/donations/donate/${id}`, 
             method: 'PUT', 
             data: request,
             headers: {

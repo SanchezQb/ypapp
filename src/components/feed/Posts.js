@@ -62,7 +62,7 @@ export default class Posts extends Component {
 
     getPosts = async () => {
         await axios({
-          url: `https://ypn-node-service.herokuapp.com/api/v1/posts/`, 
+          url: `https://ypn-node.herokuapp.com/api/v1/posts/`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",
@@ -246,7 +246,7 @@ class PostList extends React.PureComponent {
     userProfile = (avatar) => {
         if(avatar == null || avatar == '') {
             return (
-                <Thumbnail source={require('../avatar.jpg')}/>
+                <Thumbnail source={require('../logo.png')} resizeMode="center"/>
             )
         }
         else {

@@ -37,7 +37,7 @@ export default class DonationListing extends Component {
 
     fetchAllDonations = async () => {
         await axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/donations`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/donations`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -127,7 +127,7 @@ export default class DonationListing extends Component {
                     style={{paddingVertical: 15}}
                     onPress={() => Actions.donationDetail({data: donation})}>
                     <Left>
-                        <Thumbnail source={require('../avatar.jpg')} />
+                        <Thumbnail source={require('../logo.png')} resizeMode="center" />
                     </Left>
                     <Body>
                         <Text style={{color: '#444', fontWeight: 'bold'}}>

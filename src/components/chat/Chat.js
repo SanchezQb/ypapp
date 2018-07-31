@@ -20,7 +20,7 @@ export default class Chat extends Component {
     this.state = {
       messages: []
     }
-    this.socket = io(`https://ypn-notification-api.herokuapp.com/conversation`, { query: { convoID: this.props.data._id } });
+    this.socket = io(`https://ypn-notification.herokuapp.com/conversation`, { query: { convoID: this.props.data._id } });
     this.registerEvents();
   }
  
@@ -47,7 +47,7 @@ export default class Chat extends Component {
   }
   updateConversation(id) {
     axios({
-        url: `https://ypn-node-service.herokuapp.com/api/v1/convos/${id}`, 
+        url: `https://ypn-node.herokuapp.com/api/v1/convos/${id}`, 
         method: 'GET',
         headers: {
             "Content-Type": "application/json",

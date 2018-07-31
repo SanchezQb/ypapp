@@ -13,7 +13,7 @@ class Messaging {
 
     fetchAllConversations() {
         axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/convos`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/convos`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -64,7 +64,7 @@ class Messaging {
 
     createNewConversation(members) {
         axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/convos?type=1`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/convos?type=1`, 
             method: 'POST',
             data: { members }, 
             headers: {
@@ -106,7 +106,7 @@ class Messaging {
     joinConversation(item) {
         return axios({
             method: 'PUT',
-            url: `https://ypn-node-service.herokuapp.com/api/v1/convos/join/${item._id}`,
+            url: `https://ypn-node.herokuapp.com/api/v1/convos/join/${item._id}`,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `${accountStore.user.token}`
@@ -132,7 +132,7 @@ class Messaging {
         currentLogs = currentLogs.filter(item => item.id !== id)
         this.logs = currentLogs
         return axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/convos/leave/${id}`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/convos/leave/${id}`, 
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",

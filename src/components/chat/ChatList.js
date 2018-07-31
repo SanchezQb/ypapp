@@ -9,7 +9,6 @@ import {
     Title, 
     List, ListItem, Thumbnail, Container, Icon, Text
 } from 'native-base';
-import moment from 'moment'
 import { StyleSheet, UIManager, findNodeHandle, View, BackHandler, ScrollView, Alert, ActivityIndicator } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
@@ -74,7 +73,7 @@ export default class ChatList extends Component {
         }
         else if(data.members[0].avatar == null || data.members[0].avatar == '') {
             return (
-                <Thumbnail source={require('../avatar.jpg')}/>
+                <Thumbnail source={require('../logo.png')} resizeMode="center"/>
             )
         }
         else {

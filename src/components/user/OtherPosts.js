@@ -24,7 +24,7 @@ export default class Userposts extends Component {
     }
     getPosts = async () => {
         await axios({
-          url: `https://ypn-node-service.herokuapp.com/api/v1/posts/all/${this.props.userId}`, 
+          url: `https://ypn-node.herokuapp.com/api/v1/posts/all/${this.props.userId}`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export default class Userposts extends Component {
     userProfile = (avatar) => {
         if(avatar == null || avatar == '') {
             return (
-                <Thumbnail source={require('../avatar.jpg')} />
+                <Thumbnail source={require('../logo.png')} resizeMode="center"/>
             )
         }
         else {

@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
 import { StyleProvider, Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
-import ScrollableTabView from 'react-native-scrollable-tab-view'
 import EventList from './EventList'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
-import { BackHandler } from 'react-native'
+import { BackHandler, ToastAndroid } from 'react-native'
+import accountStore from '../../stores/Account'
+import axios from 'axios'
 
 
 export default class Events extends Component {
+    state = {
+        isLoading: false,
+        events: [],
+        error: false,
+        refreshing: false
+    }
     componentDidMount() {
+        this.fetchEvents()
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
     componentWillUnmount () {
@@ -19,6 +27,22 @@ export default class Events extends Component {
     onBackPress () {
         Actions.pop()
         return true;
+    }
+    fetchEvents = () => {
+        axios({
+            url: `https://ypn-node-service.herokuapp.com/api/v1/events`, 
+            method: 'GET', 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${accountStore.user.token}`
+            },
+        }).then(res => {
+            console.log(res.data.data)
+            this.setState({events: res.data.data, isLoading: false})
+        })
+        .catch(error => {
+           console.log(error)
+        })
     }
     render() {
         return (
@@ -39,17 +63,7 @@ export default class Events extends Component {
                             </Button>
                         </Right>
                     </Header>
-                    <ScrollableTabView 
-                        tabBarUnderlineStyle={{backgroundColor: '#82BE30'}}
-                        tabBarBackgroundColor="#f2f2f2"
-                        tabBarInactiveTextColor="#777"
-                        tabBarActiveTextColor="#82BE30"
-                        activeTabStyle={{ backgroundColor: 'red' }}
-                        tabBarTextStyle={{fontSize: 15}}
-                        >
-                        <EventList tabLabel="Events" />
-                        <EventList tabLabel="Townhall" />
-                    </ScrollableTabView>
+                        <EventList />
                 </React.Fragment>
             </StyleProvider>
             

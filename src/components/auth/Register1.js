@@ -27,10 +27,12 @@ export default class Register1 extends Component {
     state = {
         fullname: '',
         dob: '',
-        state: 'Select State',
-        lga: 'Aba South',
+        state: '',
+        lga: '',
+        lgaArray: [],
         ward: '',
-        selectedLGAs: []
+        selectedLGAs: [],
+        selectedWards: []
     }
     constructor(){
 		super();
@@ -51,7 +53,7 @@ export default class Register1 extends Component {
     userProfile = () => {
         if(!this.state.image) {
             return (
-                <Image source={require('../avatar.jpg')} style={styles.dp}/>
+                <Image source={require('../logo.png')} resizeMode="center" style={styles.dp}/>
             )
         }
         else {
@@ -77,7 +79,7 @@ export default class Register1 extends Component {
     }
 
     continue = () => {
-        if(this.state.fullname == "" || this.state.dob == "" || this.state.residence == "" || this.state.lga == "" || this.state.ward == "" ){
+        if(this.state.fullname == "" || this.state.dob == "" || this.state.residence == "" || this.state.lga == "" || this.state.ward == "" || !this.state.ward || !this.state.lga ){
             ToastAndroid.show('All fields are required', ToastAndroid.SHORT)
         }
         else {
@@ -87,6 +89,7 @@ export default class Register1 extends Component {
      
 
     render() {
+        console.log(this.state)
         return (
             <StyleProvider style={getTheme(material)}>
                 <React.Fragment>
@@ -166,20 +169,29 @@ export default class Register1 extends Component {
                                 </Picker>
                             </View>
                             <View style={styles.picker}>
-                                <Label style={{color: '#444'}}>LGA</Label>
+                                <Label style={{color: '#444'}}>LGA OF REGISTRATION</Label>
                                 <Picker
                                     selectedValue={this.state.lga}
-                                    onValueChange={(lga) => this.setState({lga})}
+                                    onValueChange={(lga) => {
+                                        this.setState({lga}, () => {
+                                            this.setWards()
+                                        })
+                                    }}
                                     mode='dropdown'>
+                                    <Picker.Item  label="Select LGA" />
                                     {this.state.selectedLGAs}
                                 </Picker>
                             </View>
-                            <Item stackedLabel style={styles.item}>
-                                <Label style={{color: '#444'}}>WARD</Label>
-                                <Input 
-                                    style={{ paddingVertical: 0}} 
-                                    onChangeText={(ward) => this.setState({ward})}/>
-                            </Item>
+                            <View style={styles.picker}>
+                                <Label style={{color: '#444'}}>WARD OF REGISTRATION</Label>
+                                <Picker
+                                    selectedValue={this.state.ward}
+                                    onValueChange={(ward) => this.setState({ward})}
+                                    mode='dropdown'>
+                                    <Picker.Item label="Select Ward" />
+                                    {this.state.selectedWards}
+                                </Picker>
+                            </View>
                         </View>
                         <View style={styles.inec}>
                             <Text style={{color: '#444', textAlign: 'center'}}>
@@ -204,10 +216,11 @@ export default class Register1 extends Component {
     setLGAs(){						
 		let selectedLGAs = [];
 		StateData.map((v) => {
-			let state = v['state']['name'];
+            let state = v['state']['name'];
 			if(state == this.state.state){
-				let LGAS = v['state']['locals'];
+                let LGAS = v['state']['locals'];
 				LGAS.map((v,i) => {
+                    this.setState({lgaArray: LGAS})
 					selectedLGAs.push(<Picker.Item key={i} value={v['name']} label={v['name']} />);
 				});
 			}
@@ -215,7 +228,20 @@ export default class Register1 extends Component {
 		this.setState({
 			selectedLGAs
 		});
-	}
+    }
+
+    setWards = () => {
+        let selectedWards = []
+        this.state.lgaArray.map(lga => {
+            if(lga.name == this.state.lga) {
+                let wards = lga.wards
+                wards.map((ward, i) => {
+                    selectedWards.push(<Picker.Item key={i} value={ward} label={ward} />)
+                })
+            }
+        })
+        this.setState({selectedWards})
+    }
 }
 const styles = StyleSheet.create({
     span: {
@@ -223,19 +249,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#82BE30',    
     },
     dpcont: {
-        backgroundColor: '#ccc',
+        backgroundColor: '#f2f2f2',
         height: 90,
         borderRadius: 45,
         width: 90,
         alignSelf: 'center',
         position: 'absolute',
         top: 90,
-        zIndex: 200
+        zIndex: 200,
+        alignItems: 'center'
     },
     dp: {
-        height: 90,
-        borderRadius: 45,
-        width: 90,
+        height: 80,
+        borderRadius: 40,
+        width: 80,
+        alignSelf: 'center'
     },
     form: {
         width: '85%',

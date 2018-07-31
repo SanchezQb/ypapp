@@ -93,7 +93,7 @@ export default class Profile extends Component {
   };
   getUserProfile = async () => {
     await axios({
-      url: `https://ypn-base.herokuapp.com/profile/${accountStore.user.id}`, 
+      url: `https://ypn-base-01.herokuapp.com/profile/${accountStore.user.id}`, 
       method: 'GET', 
       headers: {
           "Content-Type": "application/json",
@@ -114,7 +114,7 @@ export default class Profile extends Component {
   userProfile = (avatar) => {
     if(avatar == null || avatar == '') {
         return (
-            <Image source={require('../avatar.jpg')} style={styles.dp}/>
+            <Image source={require('../logo.png')} resizeMode="center" style={styles.dp}/>
         )
     }
     else {
@@ -276,15 +276,17 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       padding: 20,
   },
-  dpcont: { 
+  dpcont: {
+      backgroundColor: '#f2f2f2', 
       height: 70,
       borderRadius: 35,
       width: 70
   },
   dp: {
-      height: 70,
-      borderRadius: 35,
-      width: 70
+      height: 60,
+      borderRadius: 30,
+      width: 60,
+      alignSelf: 'center'
   },
   profile: {
       marginLeft: 10,
