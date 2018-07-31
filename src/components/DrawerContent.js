@@ -93,11 +93,11 @@ export default class DrawerContent extends React.Component {
                         <Icon name="md-people" style={{color: '#000'}} />
                         <Text style={styles.link}>Groups</Text>
                     </ListItem>
-                    <ListItem style={styles.listitem}>
+                    <ListItem onPress={() => Actions.pdfView({data: 'Constitution'})}style={styles.listitem}>
                         <Icon name="ios-paper-outline" style={{color: '#000'}} />
                         <Text style={styles.link}>Constitution</Text>
                     </ListItem>
-                    <ListItem style={styles.listitem}>
+                    <ListItem onPress={() => Actions.about()} style={styles.listitem}>
                         <Icon name="md-information-circle" style={{color: '#000'}} />
                         <Text style={styles.link}>About Us</Text>
                     </ListItem>

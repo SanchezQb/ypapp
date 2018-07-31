@@ -3,6 +3,8 @@ package com.youthparty;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import org.wonday.pdf.RCTPdfView;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -29,6 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFetchBlobPackage(),
+            new RCTPdfView(),
             new ReactNativeYouTube(),
             new PickerPackage(),
             new LinearGradientPackage(),

@@ -52,7 +52,8 @@ import Elections from './src/components/elections/Elections'
 import SelectCandidate from './src/components/elections/SelectCandidate'
 import PartyMember from './src/components/membership/PartyMember'
 import OtherProfile from './src/components/user/OtherProfile'
-import FileData from './src/components/about/file'
+import About from './src/components/about/About'
+import PdfView from './src/components/about/PdfView'
 import AddComment from './src/components/feed/AddComment'
 // import Constitution from './src/components/Constitution'
 
@@ -138,7 +139,8 @@ export default class App extends Component<Props> {
             <Scene key="accepted" component={Accepted} title="Accepted" hideNavBar />
             <Scene key="elections" component={Elections} title="Elections" hideNavBar />
             <Scene key="selectCandidate" component={SelectCandidate} title="Select Candidate" hideNavBar />
-            <Scene key="file" component={FileData} title="Constitution" hideNavBar />
+            <Scene key="about" component={About} title="About" hideNavBar />
+            <Scene key="pdfView" component={PdfView} title="View PDF" hideNavBar />
             <Scene key="addComment" component={AddComment} title="Add Comment" hideNavBar />
           </Scene>
         </Router>
