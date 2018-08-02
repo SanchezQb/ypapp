@@ -25,12 +25,12 @@ export default class Main extends Component {
                     </View>
                     <Text style={styles.text2}>Seeking to serve and unite Nigerians</Text> 
                     <View style={styles.buttonContainer}>
-                        <Button onPress={() => Actions.login()} block>
+                        <Button style={{backgroundColor: '#F0BA00'}}onPress={() => Actions.login()} block>
                             <Text>Log In</Text>
                         </Button>
                     </View>
                     <View style={styles.buttonContainer}>
-                        <Button  style={{backgroundColor: '#82BE30'}} onPress={() => Actions.register1()} block>
+                        <Button style={{backgroundColor: '#82BE30'}} onPress={() => Actions.register1()} block>
                             <Text>Sign Up</Text>
                         </Button>
                     </View>

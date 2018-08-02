@@ -112,7 +112,7 @@ export default class Register1 extends Component {
                     <ScrollView keyboardShouldPersistTaps="always">
                         <View style={styles.form}>
                             <Item stackedLabel style={styles.item}>
-                                <Label style={{color: '#444'}}>FULL NAME</Label>
+                                <Label style={{color: '#444'}}>FULL NAME (Firstname Lastname)</Label>
                                 <Input
                                     style={{ paddingVertical: 0}} 
                                     onChangeText={(fullname) => this.setState({fullname})}/>
@@ -192,6 +192,12 @@ export default class Register1 extends Component {
                                     {this.state.selectedWards}
                                 </Picker>
                             </View>
+                            <Item stackedLabel style={styles.item}>
+                                <Label style={{color: '#444'}}>VIN (Voters Identification Number)</Label>
+                                <Input
+                                    style={{ paddingVertical: 0}} 
+                                    onChangeText={(fullname) => this.setState({fullname})}/>
+                            </Item>
                         </View>
                         <View style={styles.inec}>
                             <Text style={{color: '#444', textAlign: 'center'}}>

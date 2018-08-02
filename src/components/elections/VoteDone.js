@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Icon, Text, Left, Body, Right, Header, Title, StyleProvider, Container } from 'native-base'
-import { View, StyleSheet, BackHandler } from 'react-native'
+import { View, StyleSheet, BackHandler, ScrollView } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
@@ -34,6 +34,7 @@ export default class VoteDone extends Component {
                         <Right>
                         </Right>
                     </Header>
+                    <ScrollView>
                     <View style={styles.container}>
                         <View style={styles.content}>
                             <Icon name="ios-checkmark-circle" style={styles.icon}/>
@@ -46,6 +47,7 @@ export default class VoteDone extends Component {
                             </Button>
                         </View>
                     </View>
+                    </ScrollView>
                 </Container>
             </StyleProvider>
         )

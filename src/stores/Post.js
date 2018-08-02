@@ -3,6 +3,8 @@ import { observable } from 'mobx'
 class Post {
     @observable imageToOpen = null
     @observable isOpen = false
+    @observable commentModalIsOpen = false
+    @observable postToComment = null
 
     openModal(image) {
         this.imageToOpen = image
@@ -10,6 +12,13 @@ class Post {
     }
     close() {
         this.isOpen = false
+    }
+    openCommentModal(post) {
+        this.commentModalIsOpen = true
+        this.postToComment = {...post}
+    }
+    closeCommentModal() {
+        this.commentModalIsOpen = false
     }
 }
 

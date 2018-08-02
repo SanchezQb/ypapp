@@ -55,7 +55,6 @@ import OtherProfile from './src/components/user/OtherProfile'
 import About from './src/components/about/About'
 import PdfView from './src/components/about/PdfView'
 import AddComment from './src/components/feed/AddComment'
-// import Constitution from './src/components/Constitution'
 
 import accountStore from './src/stores/Account'
 

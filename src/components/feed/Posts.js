@@ -4,6 +4,7 @@ import accountStore from '../../stores/Account';
 import postStore from '../../stores/Post'
 import { observer } from 'mobx-react/native'
 import Modal from 'react-native-modalbox'
+import AddComment from './AddComment'
 import { 
     StyleProvider, 
     Header, 
@@ -15,7 +16,7 @@ import {
     Title,
     Badge, Text, View,  ListItem, Thumbnail
 } from 'native-base';
-import { StyleSheet, TouchableOpacity, BackHandler, ActivityIndicator, RefreshControl, Dimensions, FlatList, Image } from 'react-native'
+import { StyleSheet, TouchableOpacity, BackHandler, ActivityIndicator, RefreshControl, Dimensions, FlatList, Image, ToastAndroid } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -70,8 +71,9 @@ export default class Posts extends Component {
           },
       })
       .then(res => {
+          console.log(res.data.data)
           this.setState({
-              posts: res.data.data.reverse(),
+              posts: res.data.data,
               isLoading: false
           })
       })
@@ -95,54 +97,6 @@ export default class Posts extends Component {
             })
         })
     }
-    // userProfile = (avatar) => {
-    //     if(avatar == null || avatar == '') {
-    //         return (
-    //             <Thumbnail source={require('../avatar.jpg')}/>
-    //         )
-    //     }
-    //     else {
-    //         return (
-    //             <Thumbnail source={{uri: avatar}}/>
-    //         )
-    //     }
-    // }
-    // openURL = (str) => {
-    //     Linking.openURL(str).catch(err => console.error('An error occurred', err));
-    // }
-    // renderLinks = (links) => {
-    //     const str = `${links[0]}`
-    //     if(str.match(/youtu/) && str.match(/be/)) {
-    //         return (
-    //             <TouchableOpacity style={styles.link} onPress={() => this.playContent(str)}>
-    //                 <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center'}}>
-    //                     <Icon name="logo-youtube" style={{color: '#ea1b2a'}} />
-    //                     <Text style={{color: '#0066CC', marginHorizontal: 5}}>{str}</Text>
-    //                 </View>
-    //             </TouchableOpacity>
-    //         )
-    //     }
-    //     else if (links.length == 0) {
-    //         return (
-    //              null
-    //         )
-    //     }
-    //     else {
-    //         const str = `${links[0]}`
-    //         if(str == "") {
-    //             return null
-    //         }
-    //         else {
-    //             return (
-    //                 <TouchableOpacity style={styles.link} onPress={() => this.openURL(str)}>
-    //                     <View>
-    //                         <Text style={{color: '#0066CC'}}>{str}</Text>
-    //                     </View>
-    //                 </TouchableOpacity>
-    //             )
-    //         }
-    //     }
-    // }
     fetchFollowsforUser = () => {
         Actions.allusers()
     }
@@ -237,12 +191,22 @@ export default class Posts extends Component {
                             source={{uri: postStore.imageToOpen}}
                         />
                     </Modal>
+                    <AddComment />
                 </View>
             </StyleProvider>
         )
     }
 }
 class PostList extends React.PureComponent {
+    state = {
+        likeColor: '#a6a6a6',
+        likeData: this.props.item.likes.data,
+        likeCount: this.props.item.likes.count,
+    }
+
+    componentDidMount() {
+        this.generateLike()
+    }
     userProfile = (avatar) => {
         if(avatar == null || avatar == '') {
             return (
@@ -255,6 +219,43 @@ class PostList extends React.PureComponent {
             )
         }
     }
+    handleLike = () => {
+        if(!this.state.likeData.map(item => item.id).includes(accountStore.user.id)) {
+            this.setState({likeColor: '#E74C3C', likeCount: this.state.likeCount + 1, likeData: [...this.state.likeData, accountStore.user] })
+            return this.likePost(this.props.item._id, 0)
+        }
+        this.setState({likeColor: '#a6a6a6', likeCount: this.state.likeCount - 1,likeData: this.state.likeData.filter(item => item.id !== accountStore.user.id)})
+        this.likePost(this.props.item._id, 1)
+    }
+    generateLike = () => {
+        if(this.state.likeData.map(item => item.id).includes(accountStore.user.id)) {
+            return this.setState({likeColor: '#E74C3C'})
+        }
+    }
+    likePost = (id, key) => {
+        console.log(id, key)
+        axios({
+            url: `https://ypn-node.herokuapp.com/api/v1/posts/like/${id}?type=${key}`, 
+            method: 'PUT', 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${accountStore.user.token}`
+            },
+        }).then(res => {
+            if(key === 0) {
+                ToastAndroid.show('Liked', ToastAndroid.SHORT)
+            }
+            else {
+                ToastAndroid.show('Unliked', ToastAndroid.SHORT)
+            }
+        })
+    }
+    openModal = () => {
+        this.setState({modalIsOpen: true})
+    }
+    closeModal = () => {
+        this.setState({modalIsOpen: false})
+    } 
     render() {
         const item = this.props.item
         return (
@@ -279,16 +280,18 @@ class PostList extends React.PureComponent {
                         {/* {this.renderLinks(item.links)} */}
                         <MediaHandler data={item} />
                         <View style={styles.icons}>
-                            <ListItem style={styles.listitem}>
-                                <Icon name="md-thumbs-up" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
-                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>{item.likes.count} Likes</Text>
+                            <ListItem onPress={() => this.handleLike()}style={styles.listitem}>
+                                <Icon name="md-thumbs-up" style={{color: this.state.likeColor, fontSize: height * 0.028}} />
+                                <Text style={{color: this.state.likeColor, fontSize: height * 0.02, marginLeft: 5}}>
+                                { `${this.state.likeCount} ${this.state.likeCount === 1 ? 'like' : 'likes'}`}
+                                </Text>
                             </ListItem>
-                            <ListItem style={styles.listitem}>
-                                <Icon name="md-text" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
+                            <ListItem onPress={() => postStore.openCommentModal(item)} style={styles.listitem}>
+                                <Icon name="md-text" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
                                 <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>4 Comments</Text>
                             </ListItem>
                             <ListItem style={styles.listitem}>
-                                <Icon name="md-share-alt" style={{color: '#a6a6a6', fontSize: height * 0.02}} />
+                                <Icon name="md-share-alt" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
                                 <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>4 Shares</Text>
                             </ListItem>
                         </View>

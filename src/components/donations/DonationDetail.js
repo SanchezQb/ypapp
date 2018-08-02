@@ -40,7 +40,7 @@ export default class DonationDetail extends Component {
         const fill = Math.round((this.props.data.amount / this.props.data.target) * 100)
         return (
             <StyleProvider style={getTheme(material)}>
-                <View>
+                <View style={{flex: 1}}>
                     <Header>
                         <Left>
                             <Button transparent onPress={() => Actions.pop()}>
@@ -55,43 +55,45 @@ export default class DonationDetail extends Component {
                     </Header>
                     <ScrollView>
                         <View>
-                            <View style={styles.meter}>
-                                <AnimatedCircularProgress
-                                    size={160}
-                                    width={10}
-                                    fill={fill}
-                                    tintColor="#82BE30"
-                                    backgroundColor="#F0BA00">
-                                    {
-                                        (fill) => (
-                                        <Text style={styles.gaugeText}>
-                                            { `${Math.ceil(fill)}%` }
-                                        </Text>
-                                        )
-                                    }
-                                </AnimatedCircularProgress>
+                            <View>
+                                <View style={styles.meter}>
+                                    <AnimatedCircularProgress
+                                        size={160}
+                                        width={10}
+                                        fill={fill}
+                                        tintColor="#82BE30"
+                                        backgroundColor="#F0BA00">
+                                        {
+                                            (fill) => (
+                                            <Text style={styles.gaugeText}>
+                                                { `${Math.ceil(fill)}%` }
+                                            </Text>
+                                            )
+                                        }
+                                    </AnimatedCircularProgress>
+                                </View>
                             </View>
-                        </View>
-                        <View style={styles.amountDetails}>
-                            <View style={styles.box1}></View>
-                            <Text>Amount Donated: </Text>
-                            {this.renderTarget(this.props.data.amount)}
-                        </View>
-                        <View style={styles.amountDetails}>
-                            <View style={styles.box2}></View>
-                            <Text>Target: </Text>
-                            {this.renderTarget(this.props.data.target)}
-                        </View>
-                        <View style={{width: '85%', alignSelf: 'center', marginTop: 30}}>
-                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#555', marginVertical: 10}}>Description</Text>
-                            <Text style={{fontSize: 16, color: '#555'}}>
-                                {this.props.data.description}
-                            </Text>
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            <Button style={styles.button} onPress={() => Actions.donate({data: this.props.data._id})} block>
-                                <Text>donate now</Text>
-                            </Button>
+                            <View style={styles.amountDetails}>
+                                <View style={styles.box1}></View>
+                                <Text>Amount Donated: </Text>
+                                {this.renderTarget(this.props.data.amount)}
+                            </View>
+                            <View style={styles.amountDetails}>
+                                <View style={styles.box2}></View>
+                                <Text>Target: </Text>
+                                {this.renderTarget(this.props.data.target)}
+                            </View>
+                            <View style={{width: '85%', alignSelf: 'center', marginTop: 30}}>
+                                <Text style={{fontSize: 18, fontWeight: 'bold', color: '#555', marginVertical: 10}}>Description</Text>
+                                <Text style={{fontSize: 16, color: '#555'}}>
+                                    {this.props.data.description}
+                                </Text>
+                            </View>
+                            <View style={styles.buttonContainer}>
+                                <Button style={styles.button} onPress={() => Actions.donate({data: this.props.data._id})} block>
+                                    <Text>donate now</Text>
+                                </Button>
+                            </View>
                         </View>
                     </ScrollView>
                 </View>
@@ -111,7 +113,8 @@ const styles = StyleSheet.create({
     buttonContainer: {
         width: '85%',
         alignSelf: 'center',
-        marginTop: 70
+        marginTop: 70,
+        marginBottom: 30
     },
     button: {
         backgroundColor: '#82BE30',
