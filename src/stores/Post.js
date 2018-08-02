@@ -15,7 +15,7 @@ class Post {
     }
     openCommentModal(post) {
         this.commentModalIsOpen = true
-        this.postToComment = {...post}
+        this.postToComment = post
     }
     closeCommentModal() {
         this.commentModalIsOpen = false
