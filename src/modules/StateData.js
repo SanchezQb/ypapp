@@ -2900,7 +2900,7 @@ export const StateData = [
           ]
         },
         {
-          name: "Kala/Balge",
+          name: "Kala Balge",
           id: 14,
           wards: [
             "BALGE",

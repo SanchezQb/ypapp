@@ -106,7 +106,7 @@ export default class Register1 extends Component {
                     </Header>
                     <View style={styles.span}>
                     </View>
-                    <TouchableOpacity  onPress={() => this.selectImage()} style={styles.dpcont}>
+                    <TouchableOpacity onPress={() => this.selectImage()} style={styles.dpcont}>
                         {this.userProfile()}
                     </TouchableOpacity>
                     <ScrollView keyboardShouldPersistTaps="always">
@@ -125,8 +125,8 @@ export default class Register1 extends Component {
                                     placeholder="Click to Select"
                                     format="YYYY-MM-DD"
                                     minDate="1900-05-01"
-                                    maxDate="2000-01-01"
-                                    androidMode="spinner"
+                                    maxDate="2008-01-01"
+                                    androidMode="calendar"
                                     confirmBtnText="Confirm"
                                     cancelBtnText="Cancel"
                                     showIcon={false}
@@ -137,7 +137,6 @@ export default class Register1 extends Component {
                                             justifyContent:'flex-start',
                                         },
                                     dateInput: {
-                                        // marginLeft: 36,
                                         borderWidth: null,
                                         borderBottomWidth: 1,
                                         borderColor: '#fff'
@@ -145,7 +144,6 @@ export default class Register1 extends Component {
                                     dateText:{
                                         justifyContent: 'flex-start'
                                     }
-                                    // ... You can check the source to find the other keys.
                                     }}
                                     onDateChange={(date) => {this.setState({dob: date})}}
                                 />
@@ -192,12 +190,6 @@ export default class Register1 extends Component {
                                     {this.state.selectedWards}
                                 </Picker>
                             </View>
-                            <Item stackedLabel style={styles.item}>
-                                <Label style={{color: '#444'}}>VIN (Voters Identification Number)</Label>
-                                <Input
-                                    style={{ paddingVertical: 0}} 
-                                    onChangeText={(fullname) => this.setState({fullname})}/>
-                            </Item>
                         </View>
                         <View style={styles.inec}>
                             <Text style={{color: '#444', textAlign: 'center'}}>

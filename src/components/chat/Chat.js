@@ -20,7 +20,7 @@ export default class Chat extends Component {
     this.state = {
       messages: []
     }
-    this.socket = io(`https://ypn-notification.herokuapp.com/conversation`, { query: { convoID: this.props.data._id } });
+    this.socket = io(`https://yon-notification.herokuapp.com/conversation`, { query: { convoID: this.props.data._id } });
     this.registerEvents();
   }
  

@@ -35,7 +35,7 @@ export default class Contact extends Component {
         Linking.openURL('tel:08032345678').catch(err => console.error('An error occurred', err));
     }
     mail = () => {
-        Linking.openURL('mailto:hello@youthparty.com').catch(err => console.error('An error occurred', err));
+        Linking.openURL('mailto:info@youthpartyng.com').catch(err => console.error('An error occurred', err));
     }
     geo = () => {
         Linking.openURL('geo:37.484847,-122.148386').catch(err => console.error('An error occurred', err));
@@ -63,7 +63,7 @@ export default class Contact extends Component {
                             <Text style={{color: '#222', marginLeft: 10, fontSize: 18 }}>Youth Party Nigeria, Wuse, Abuja</Text>
                         </Button>
                         <Button transparent iconRight onPress={() => this.mail()}>
-                            <Text uppercase={false} style={{color: '#555', marginRight: 10,marginBottom: 10}}>hello@youthparty.com</Text>
+                            <Text uppercase={false} style={{color: '#555', marginRight: 10,marginBottom: 10}}>info@youthpartyng.com</Text>
                             <Icon name='md-mail' style={{color: '#82BE30', marginBottom: 10}} />
                         </Button>
                     </View>

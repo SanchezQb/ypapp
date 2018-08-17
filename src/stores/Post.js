@@ -1,6 +1,9 @@
 import { observable } from 'mobx'
+import accountStore from './Account'
+import axios from 'axios'
 
 class Post {
+    @observable commentCount = 0
     @observable imageToOpen = null
     @observable isOpen = false
     @observable commentModalIsOpen = false
@@ -19,6 +22,11 @@ class Post {
     }
     closeCommentModal() {
         this.commentModalIsOpen = false
+    }
+
+    commentCounter(count) {
+        console.log(count)
+        this.commentCount = count
     }
 }
 

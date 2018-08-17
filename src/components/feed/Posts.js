@@ -50,17 +50,6 @@ export default class Posts extends Component {
         BackHandler.exitApp()
     }
 
-    // playContent = (str) => {
-    //     YouTubeStandaloneAndroid.playVideo({
-    //         apiKey:"AIzaSyCZNRFr_mF53iI6wLcznjXHjA4KWrQ4eXM",
-    //         videoId: str.substr(str.length - 11),
-    //         autoplay: false,
-    //         startTime: 0,
-    //       })
-    //         .then(() => console.log('Standalone Player Exited'))
-    //         .catch(errorMessage => console.error(errorMessage))
-    // }
-
     getPosts = async () => {
         await axios({
           url: `https://ypn-node.herokuapp.com/api/v1/posts/`, 
@@ -71,13 +60,13 @@ export default class Posts extends Component {
           },
       })
       .then(res => {
-          console.log(res.data.data)
           this.setState({
               posts: res.data.data,
               isLoading: false
           })
       })
       .catch(error => {
+          console.log(error.response.data)
           this.setState({
               isLoading: false,
               error: true
@@ -174,7 +163,7 @@ export default class Posts extends Component {
                               />
                             }
                         renderItem={({item}) =>
-                        <PostList item={item} />
+                        <PostList item={item} refresh={this.getPosts}/>
                         }
                         keyExtractor={item => item._id}
                         />
@@ -191,13 +180,14 @@ export default class Posts extends Component {
                             source={{uri: postStore.imageToOpen}}
                         />
                     </Modal>
-                    <AddComment />
+                    <AddComment refresh={this.getPosts} />
                 </View>
             </StyleProvider>
         )
     }
 }
-class PostList extends React.PureComponent {
+
+export const PostList = class PostList extends React.Component {
     state = {
         likeColor: '#a6a6a6',
         likeData: this.props.item.likes.data,
@@ -221,7 +211,7 @@ class PostList extends React.PureComponent {
     }
     handleLike = () => {
         if(!this.state.likeData.map(item => item.id).includes(accountStore.user.id)) {
-            this.setState({likeColor: '#E74C3C', likeCount: this.state.likeCount + 1, likeData: [...this.state.likeData, accountStore.user] })
+            this.setState({likeColor: '#F0BA00', likeCount: this.state.likeCount + 1, likeData: [...this.state.likeData, accountStore.user] })
             return this.likePost(this.props.item._id, 0)
         }
         this.setState({likeColor: '#a6a6a6', likeCount: this.state.likeCount - 1,likeData: this.state.likeData.filter(item => item.id !== accountStore.user.id)})
@@ -229,11 +219,10 @@ class PostList extends React.PureComponent {
     }
     generateLike = () => {
         if(this.state.likeData.map(item => item.id).includes(accountStore.user.id)) {
-            return this.setState({likeColor: '#E74C3C'})
-        }
+            return this.setState({likeColor: '#F0BA00'})
+    }
     }
     likePost = (id, key) => {
-        console.log(id, key)
         axios({
             url: `https://ypn-node.herokuapp.com/api/v1/posts/like/${id}?type=${key}`, 
             method: 'PUT', 
@@ -249,6 +238,7 @@ class PostList extends React.PureComponent {
                 ToastAndroid.show('Unliked', ToastAndroid.SHORT)
             }
         })
+        this.props.refresh()
     }
     openModal = () => {
         this.setState({modalIsOpen: true})
@@ -260,7 +250,7 @@ class PostList extends React.PureComponent {
         const item = this.props.item
         return (
             <View style={{borderBottomWidth: 1, borderColor: '#ddd'}}>
-                <ListItem avatar>
+                <ListItem avatar onPress={() => Actions.post({item: item})}>
                     <Left style={{height: '80%'}}>
                         <TouchableOpacity onPress={() => Actions.otherprofile({data: item.origin.id})}>
                             {this.userProfile(item.origin.avatar)}
@@ -283,16 +273,18 @@ class PostList extends React.PureComponent {
                             <ListItem onPress={() => this.handleLike()}style={styles.listitem}>
                                 <Icon name="md-thumbs-up" style={{color: this.state.likeColor, fontSize: height * 0.028}} />
                                 <Text style={{color: this.state.likeColor, fontSize: height * 0.02, marginLeft: 5}}>
-                                { `${this.state.likeCount} ${this.state.likeCount === 1 ? 'like' : 'likes'}`}
+                                { `${this.state.likeCount} ${this.state.likeCount === 1 ? 'Like' : 'Likes'}`}
                                 </Text>
                             </ListItem>
                             <ListItem onPress={() => postStore.openCommentModal(item)} style={styles.listitem}>
                                 <Icon name="md-text" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
-                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>4 Comments</Text>
+                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>
+                                    { `${item.commentCount} ${item.commentCount === 1 ? 'Comment' : 'Comments'}`}
+                                </Text>
                             </ListItem>
                             <ListItem style={styles.listitem}>
                                 <Icon name="md-share-alt" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
-                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>4 Shares</Text>
+                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>Share</Text>
                             </ListItem>
                         </View>
                     </Body>

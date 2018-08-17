@@ -58,7 +58,7 @@ export default class Benefits extends Component {
                     </View>
                         <ScrollView style={{paddingBottom: 10}}>
                         <View style={styles.card}>
-                            <Text style={{marginLeft: 20, marginTop: 20, color: '#82BE30', fontSize: 24}}>N600</Text>
+                            <Text style={{marginLeft: 20, marginTop: 20, color: '#444', fontSize: 24}}>N600</Text>
                             <Text style={{marginLeft: 20, fontSize: 18, color: '#fff'}}>For 3 months</Text>
                             <View>
                                 <CardDots />
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#82BE30',
     },
     card: {
-        backgroundColor: '#5214A3',
+        backgroundColor: '#82BE30',
         width: 320,
         height: 203,
         alignSelf: 'center',

@@ -150,6 +150,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-document-picker')
     compile project(':rn-fetch-blob')
     compile project(':react-native-pdf')
     implementation project(':react-native-youtube')

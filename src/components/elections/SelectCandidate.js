@@ -29,6 +29,8 @@ export default class SelectCandidate extends Component {
         Actions.pop()
         return true
     }
+
+
     selectCandidate = (target) => {
         if(this.state.target == null) {
             return ToastAndroid.show('Please select a candidate', ToastAndroid.SHORT)
@@ -39,11 +41,13 @@ export default class SelectCandidate extends Component {
             `Are you sure you want to vote for ${target}?`,
             [
               {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'CANCEL'},
-              {text: 'YES', onPress: () => this.voteHandler(this.state)},
+              {text: 'YES', onPress: () => this.checkUnique(this.props.data._id, this.state)},
             ],
             { cancelable: false }
           )
     }
+
+
     generateReasonsAndResponses = () => {
         let ref = {};
         Object.keys(this.props.data.questions).forEach(q => {
@@ -55,14 +59,39 @@ export default class SelectCandidate extends Component {
         // { id: 65755859993, reasons: [ { 0: '}], responses: [{ 0: '' }]}
     
       }
-      handleSelect = target => {
+
+
+    handleSelect = target => {
         let ref = {}
         this.setState({ target })
         ref['0'] = target
         const response = [ref]
         this.setState({ responses: response })
-      }
-      voteHandler = (data) => {
+        console.log(this.state)
+    }
+
+      
+    checkUnique = (id, data) => {
+        if(accountStore.user.role < 1) return ToastAndroid.show('You need to be a party member to participate', ToastAndroid.SHORT)
+        if(!accountStore.user.vin) return ToastAndroid.show('You need to verify your VIN to participate', ToastAndroid.SHORT)
+        this.setState({disabled: true})
+        axios({
+            url: `https://ypn-election-02.herokuapp.com/api/check/${id}`, 
+            method: 'POST', 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${accountStore.user.token}`
+            },
+        }).then(() => {
+          this.voteHandler(data)
+        }).catch(err => {
+            this.setState({disabled: false})
+            ToastAndroid.show(err.response.data.message, ToastAndroid.SHORT)
+        })
+    }
+
+
+    voteHandler = (data) => {
         this.setState({disabled: true})
         axios({
             url: `https://ypn-node.herokuapp.com/api/v1/questions/respond`, 
@@ -96,7 +125,6 @@ export default class SelectCandidate extends Component {
     }
 
     render() {
-        console.log(this.state)
         const candidates = this.props.data.meta.candidates.map((candidate, i) => {
             return (
                 <ListItem

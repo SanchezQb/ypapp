@@ -13,7 +13,7 @@ import NewPost from './feed/NewPost'
 import Profile from './user/Profile'
 import More from './More'
 import { observer } from 'mobx-react/native'
-import messagingStore from '../stores/Messaging'
+
 
 import type { Route, NavigationState } from 'react-native-tab-view/types';
 

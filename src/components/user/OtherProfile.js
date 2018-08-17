@@ -245,9 +245,8 @@ follow = (user) => {
                     </View>
                       <View style={{top: 30, backgroundColor: '#fff'}}>
                         <View style={styles.bio}>
-                            <Text style={{fontSize: 14, color: '#555'}}>Philosopher | Human Rights Activist.
-                            I believe in an urgent restoration of active and participatory democracy, social justice
-                            and good leadership
+                            <Text style={{fontSize: 14, color: '#555'}}>
+                            {this.state.user.data.bio}
                             </Text>
                         </View>
                         <View style={styles.CardItem}>
@@ -336,6 +335,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   dpcont: { 
+    justifyContent: 'center',
     backgroundColor: '#f2f2f2',
     height: 70,
     borderRadius: 35,

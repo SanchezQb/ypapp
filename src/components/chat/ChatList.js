@@ -111,13 +111,13 @@ export default class ChatList extends Component {
             return (
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={{color: '#444'}}>There are no chats to display</Text>
-                    <Text style={{color: '#444'}}>Click the button on the bottom right to start chat</Text>
+                    <Text style={{color: '#444'}}>Click the button on the top right to start chat</Text>
                     <Text></Text>
                 </View>
             )
         }
         const { labels } = this.props;
-        const logs = messagingStore.logs.map(data => {
+        const logs = messagingStore.logs.reverse().map(data => {
             const title = data.topic ? data.topic : this.generateNameFromMembers(data.members.filter(item => item.id !== accountStore.user.id));
             return (
                 <ListItem 
@@ -154,12 +154,6 @@ export default class ChatList extends Component {
                             <Title>Chat</Title>
                         </Body>
                         <Right>
-                            <Button transparent>
-                                <Icon
-                                    name="md-add"
-                                    style={{color: 'white' }}
-                                />
-                            </Button>
                             <Button transparent  onPress={() => this.onMenuPressed(labels)}>
                                 <View style={{flexDirection: 'row'}}>
                                     <View>
@@ -172,7 +166,7 @@ export default class ChatList extends Component {
                                             }}
                                         />
                                         <Icon
-                                            name="md-more"
+                                            name="md-add"
                                             style={{color: 'white', fontSize: 28 }}
                                         />
                                     </View>

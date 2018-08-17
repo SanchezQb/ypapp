@@ -137,8 +137,7 @@ export default class NewPost extends Component {
     render() {
         return (
             <StyleProvider style={getTheme(material)}>
-                <ScrollView keyboardShouldPersistTaps="always">
-                    <View style={{backgroundColor: `#fff`}}>
+                    <View style={{backgroundColor: `#fff`, flex: 1}}>
                         <Header>
                             <Left>
                                 <Button onPress={() => Actions.drawerOpen()}transparent>
@@ -150,6 +149,7 @@ export default class NewPost extends Component {
                             </Body>
                             <Right></Right>
                         </Header>
+                        <ScrollView keyboardShouldPersistTaps="always">
                         <View style={styles.textareaView}>
                             <CardItem>
                                 <Left>
@@ -188,9 +188,9 @@ export default class NewPost extends Component {
                             <Button disabled={this.state.disabled} onPress={() => this.post()} block>
                                 <Text>Post</Text>
                             </Button>
-                        </View>       
+                        </View>   
+                        </ScrollView>    
                     </View>
-                </ScrollView>
             </StyleProvider>
         )
     }

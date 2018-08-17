@@ -26,6 +26,7 @@ export default class Elections extends Component {
         Actions.pop()
         return true
     }
+    
     fetchAllCandidates = async () =>  {
         await axios({
             url: `https://ypn-node.herokuapp.com/api/v1/questions`, 
@@ -35,8 +36,7 @@ export default class Elections extends Component {
                 "Authorization": `${accountStore.user.token}`
             },
         }).then(res => {
-            console.log(res.data.data)
-            this.setState({elections: res.data.data, isLoading: false})
+            this.setState({elections: res.data.data.filter(item => item.meta.type !== "Opinion"), isLoading: false})
         })
         .catch(error => {
             ToastAndroid.show(error.response.data.error, ToastAndroid.SHORT)

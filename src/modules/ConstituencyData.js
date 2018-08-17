@@ -3,6 +3,34 @@ export const ConstituencyData = [
     state: {
       name: "Abia",
       id: 1,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["UMUNNEOCHI", "ISUKWUATO", "OHAFIA", "AROCHUKWU", "BENDE"]
+        },
+        {
+          id: 2,
+          locals: [
+            "UMUAHIA NORTH",
+            "UMUAHIA SOUTH",
+            "IKWUANO",
+            "ISIALA NGWA NORTH",
+            "ISIALA NGWA SOUTH"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "ABA NORTH",
+            "ABA SOUTH",
+            "UGWUNAGBO",
+            "OBINGWA",
+            "UKWA EAST",
+            "UKWA WEST",
+            "OSISIOMA"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -43,6 +71,30 @@ export const ConstituencyData = [
     state: {
       name: "Adamawa",
       id: 2,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["MADAGALI", "MAIHA", "MICHIKA", "MUBI NORTH", "MUBI SOUTH"]
+        },
+        {
+          id: 2,
+          locals: [
+            "DEMSA",
+            "GANYE",
+            "GUYUK",
+            "JADA",
+            "MAYO BELWA",
+            "NUMAN",
+            "SHELLENG",
+            "TOUNGO",
+            "LAMURDE"
+          ]
+        },
+        {
+          id: 3,
+          locals: ["HONG", "FUFORE", "SONG", "YOLA NORTH", "YOLA SOUTH", "GRIE"]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -83,6 +135,55 @@ export const ConstituencyData = [
     state: {
       name: "Akwa Ibom",
       id: 3,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ETINAN",
+            "IBESIKPO ASUTAN",
+            "IBIONO IBOM",
+            "ITU",
+            "NSIT ATAI",
+            "NSIT IBOM",
+            "NSIT UBIUM",
+            "URUAN",
+            "UYO"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "ABAK",
+            "ESSIEN UDIM",
+            "ETIM EKPO",
+            "IKA",
+            "IKONO",
+            "IKOT EKPENE",
+            "INI",
+            "OBOT AKARA",
+            "ORUK ANAM",
+            "UKANAFUN"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "EASTERN OBOLO",
+            "EKET",
+            "ESIT EKET",
+            "IBENO",
+            "IKOT ABASI",
+            "MBO",
+            "MKPAT ENIN",
+            "OKOBO",
+            "ONNA",
+            "ORON",
+            "UDUNG UKO",
+            "URUE OFFONG",
+            "ORUKU"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -131,6 +232,39 @@ export const ConstituencyData = [
     state: {
       name: "Anambra",
       id: 4,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ONITSHA NORTH",
+            "ONITSHA SOUTH",
+            "OYI",
+            "OGBARU",
+            "ANAMBRA EAST",
+            "ANAMBRA WEST",
+            "AYAMELUM"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "AWKA NORTH, AWKA SOUTH, NJIKOKA, ANAOCHA, IDEMILI NORTH, IDEMILI SOUTH, DUNUKOFIA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "IHIALA",
+            "NNEWI NORTH",
+            "NNEWI SOUTH",
+            "ORUMBA SOUTH",
+            "ORUMBA",
+            "NORTH",
+            "AGUATA",
+            "EKWUSIGO"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -183,6 +317,36 @@ export const ConstituencyData = [
     state: {
       name: "Bauchi",
       id: 5,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ALKALERI",
+            "KIRFI",
+            "BAUCHI",
+            "TAFAWA BALEWA",
+            "BOGORO",
+            "DASS",
+            "TORO"
+          ]
+        },
+        {
+          id: 2,
+          locals: ["NINGI", "WARJI", "DARAZO", "GANJUWA", "MISAU", "DAMBAN"]
+        },
+        {
+          id: 3,
+          locals: [
+            "ZAKI",
+            "GAMAWA",
+            "JAMA’ARE",
+            "ITAS-GADAU",
+            "SHIRA",
+            "GIADE",
+            "KATAGUM"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -239,6 +403,20 @@ export const ConstituencyData = [
     state: {
       name: "Bayelsa",
       id: 6,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["BRASS", "NEMBE", "OGBIA"]
+        },
+        {
+          id: 2,
+          locals: ["KOLOKUMA/OPOKUMA", "SOUTHERN IJAW", "YENAGOA"]
+        },
+        {
+          id: 3,
+          locals: ["EKEREMOR", "SAGBAMA"]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -267,6 +445,45 @@ export const ConstituencyData = [
     state: {
       name: "Benue",
       id: 7,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "KATSINA ALA",
+            "KONSHISHA",
+            "KWANDE",
+            "LOGO",
+            "UKUM",
+            "USHONGO",
+            "VANDEIKYA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "BURUKU",
+            "GBOKO",
+            "GUMA",
+            "GWER-EAST",
+            "GWER-WEST",
+            "MARKURDI, TARKA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "ADO",
+            "AGATU",
+            "APA",
+            "OBI",
+            "OGBADIBO",
+            "OHIMINI",
+            "OJU",
+            "OKPOKWU",
+            "OTUKPO"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -319,6 +536,50 @@ export const ConstituencyData = [
     state: {
       name: "Borno",
       id: 8,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ABADAM",
+            "GUBIO",
+            "GUZAMALA",
+            "KUKAWA",
+            "MAGUMERI",
+            "MARTE",
+            "MOBBAR",
+            "NGANZA",
+            "MOGUNO"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "DIKWA",
+            "JERE",
+            "KALA BALGE",
+            "MAFA",
+            "MAIDUGURI",
+            "NGALA",
+            "KONDUGA",
+            "BAMA",
+            "KAGA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "ASKIRA/UBA",
+            "BAYO",
+            "BIU",
+            "CHIBOK",
+            "DAMABOA",
+            "GWOZA",
+            "HAWUL",
+            "KWAYA",
+            "SHANI"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -367,6 +628,27 @@ export const ConstituencyData = [
     state: {
       name: "Cross River",
       id: 9,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["BEKWARRA", "OBANLIKU", "OBUDU", "OGOJA", "YALA", "BIASE"]
+        },
+        {
+          id: 2,
+          locals: ["ABI", "BOKI", "ETUNG", "IKOM", "OBUBRA", "YAKURR"]
+        },
+        {
+          id: 3,
+          locals: [
+            "CALABAR MUNICIPAL",
+            "CALABAR SOUTH",
+            "AKAMKPA",
+            "AKPABUYO",
+            "BAKASSI",
+            "ODUKPANI"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -407,6 +689,48 @@ export const ConstituencyData = [
     state: {
       name: "Delta",
       id: 10,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ETHIOPE EAST",
+            "ETHIOPE WEST",
+            "OKPE",
+            "SAPELE",
+            "UDU",
+            "UGHELLI NORTH",
+            "UGHELI SOUTH",
+            "UVWIE"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "ANIOCHA NORTH",
+            "ANIOCHA SOUTH",
+            "IKA NORTH-EAST",
+            "IKA SOUTH",
+            "NDOKWA EAST",
+            "NDOKWA WEST",
+            "OSHIMILI NORTH",
+            "OSHIMILI SOUTH",
+            "UKWUANI"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "BOMADI",
+            "BURUTU",
+            "ISOKO NORTH",
+            "ISOKO SOUTH",
+            "PATANI",
+            "WARRI NORTH",
+            "WARRI SOUTH",
+            "WARRI SOUTH WEST"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -463,6 +787,20 @@ export const ConstituencyData = [
     state: {
       name: "Ebonyi",
       id: 11,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["ABAKALIKI", "EBONYI", "IZZI", "OHAUKWU"]
+        },
+        {
+          id: 2,
+          locals: ["EZZA NORTH", "EZZA SOUTH", "IKWO", "ISHIELU"]
+        },
+        {
+          id: 3,
+          locals: ["AFIKPO NORTH", "AFIKPO SOUTH", "IVO", "OHAOZARA", "ONICHA"]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -495,6 +833,41 @@ export const ConstituencyData = [
     state: {
       name: "Edo",
       id: 12,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ESAN CENTRAL",
+            "ESAN NORTH EAST",
+            "ESAN SOUTH EAST",
+            "ESAN WEST",
+            "IGUEBEN"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "AKOKO EDO",
+            "ETSAKO EAST",
+            "ETSAKO CENTRAL",
+            "ETSAKO WEST",
+            "OWAN EAST",
+            "OWAN WEST"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "OREDO",
+            "ORHIONMWON",
+            "OVIA NORTH EAST",
+            "OVIA SOUTH WEST",
+            "EGOR",
+            "UHUNMWODE",
+            "IKPOBA OKHA"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -539,6 +912,33 @@ export const ConstituencyData = [
     state: {
       name: "Ekiti",
       id: 13,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["IDO OSI", "ILEJEMEJE", "MOBA", "IKOLE", "OYE"]
+        },
+        {
+          id: 2,
+          locals: [
+            "ADO EKITI",
+            "IREPODUN/IFELODUN",
+            "IJERO",
+            "EKITI WEST",
+            "EFON"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "EKITI SOUTH WEST",
+            "IKERE",
+            "ISE ORUN",
+            "EMURE",
+            "GBONYIN",
+            "EKITI EAST"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -571,6 +971,34 @@ export const ConstituencyData = [
     state: {
       name: "Enugu",
       id: 14,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ENUGU EAST",
+            "ISI UZO",
+            "ENUGU NORTH",
+            "ENUGU SOUTH",
+            "NKANU EAST",
+            "NKANU WEST"
+          ]
+        },
+        {
+          id: 2,
+          locals: ["ANINRI", "AWGU", "OJI RIVER", "EZEAGU", "UDI"]
+        },
+        {
+          id: 3,
+          locals: [
+            "IGBO ETITI",
+            "UZO UWANI",
+            "IGBO EZE NORTH",
+            "UDENU",
+            "NSUKKA",
+            "IGBO EZE SOUTH"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -611,6 +1039,20 @@ export const ConstituencyData = [
     state: {
       name: "Gombe",
       id: 15,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["AKKO", "YAMALTU", "DEBA"]
+        },
+        {
+          id: 2,
+          locals: ["BALANGA", "BILLIRI", "KALTUNGO", "SHONGOM"]
+        },
+        {
+          id: 3,
+          locals: ["FUNAKAYE", "NAFADA", "GOMBE", "KWAMI", " DUKKU"]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -643,6 +1085,50 @@ export const ConstituencyData = [
     state: {
       name: "Imo",
       id: 16,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ABOH MBAISE",
+            "NGOR OKPALA",
+            "AHIAZU MBAISE",
+            "EZINIHITTE",
+            "MBAITOLI",
+            "IKEDURU",
+            "OWERRI MUNICIPAL",
+            "OWERRI NORTH",
+            "OWERRI WEST"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "IDEATO NORTH",
+            "IDEATO SOUTH",
+            "NKWERRE",
+            "ISU",
+            "NWANGELE",
+            "NJABA",
+            "OHAJI EGBEMA",
+            "OGUTA",
+            "ORU WEST",
+            "ORLU",
+            "ORSU",
+            "ORU EAST"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "EHIME MBANO",
+            "IHITTE/UBOMA",
+            "OBOWO",
+            "ONUIMO",
+            "OKIGWE",
+            "ISIALA MBANO"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -691,6 +1177,50 @@ export const ConstituencyData = [
     state: {
       name: "Jigawa",
       id: 17,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "BIRNIN KUDU",
+            "BUJI",
+            "GWARAM",
+            "JAHUN",
+            "MIGA",
+            "DUTSE",
+            "KIYAWA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "BIRNIWA",
+            "GURI",
+            "KIRI KASAMMA",
+            "HADEJIA",
+            "AUYO",
+            "KAFIN HAUSA",
+            "MALAM MADORI",
+            "KAUGAMA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "BIRNIN KUDU",
+            "BUJI",
+            "GUMEL",
+            "MAIGATARI",
+            "SULE TANKARKAR",
+            "GAGARAWA",
+            "KAZAURE",
+            "RONI",
+            "GWIWA",
+            "YANKWASHI",
+            "RINGIM",
+            "TAURA"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -743,6 +1273,46 @@ export const ConstituencyData = [
     state: {
       name: "Kaduna",
       id: 18,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ZARIA",
+            "SOBA",
+            "IKARA",
+            "KUBAU",
+            "MAKARFI",
+            "KUDAN",
+            "LERE",
+            "SABON GARI"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "KADUNA NORTH",
+            "IGABI",
+            "KAJURU",
+            "CHIKUN",
+            "BIRNIN GWARI",
+            "GIWA",
+            "KADUNA SOUTH"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "KACHIA",
+            "KAGARKO",
+            "JEMA’A",
+            "SANGA",
+            "KAURA",
+            "KAURU",
+            "JABA",
+            "ZANGON KATAF"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -815,6 +1385,63 @@ export const ConstituencyData = [
     state: {
       name: "Kano",
       id: 19,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "DALA",
+            "GWALE",
+            "DAWAKINKUDU",
+            "WARAWA",
+            "GEZAWA",
+            "KANO MUNICIPAL",
+            "TARAUNI",
+            "KUMBOTSO",
+            "MADOBI",
+            "NASSARAWA",
+            "FAGGE",
+            "UNGOGO",
+            "GARUN MALLAM",
+            "KURA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "BICHI",
+            "SHANONO",
+            "BAGWAI",
+            "DANBATTA",
+            "MAKODA",
+            "DAWAKIN TOFA, GABASAWA, GWARZO",
+            "KABO",
+            "RIMIN GADO",
+            "TOFA",
+            "TSANYAWA, KUNCHI",
+            "KARAYE"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "ALBASU",
+            "BEBEJI",
+            "BUNKURE",
+            "DOGUWA",
+            "GAYA",
+            "KIRU",
+            "RANO",
+            "TAKAI",
+            "AJINGI",
+            "ROGO",
+            "KIBIYA",
+            "TUDUN WADA",
+            "GARKO",
+            "WUDIL",
+            "SUMAILA"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -919,6 +1546,57 @@ export const ConstituencyData = [
     state: {
       name: "Katsina",
       id: 20,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "DAURA",
+            "ZANGO",
+            "MAIADUA",
+            "MASHI",
+            "MANI",
+            "INGAWA",
+            "BINDAWA",
+            "SANDAMU",
+            "DUTSI",
+            "KANKIA",
+            "KUSADA",
+            "BAURE"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "FUNTUA",
+            "FASKARI",
+            "DANJA",
+            "DANDUME",
+            "BAKORI",
+            "KANKARA",
+            "MALUMEFASHI",
+            "KAFUR",
+            "MUSAWA",
+            "MATAZU",
+            "SABUWA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "KATSINA",
+            "KAITA",
+            "JIBIA",
+            "BATSARI",
+            "SAFANA",
+            "DUTSIN-MA",
+            "KURFI",
+            "BATAGARAWA",
+            "RIMI",
+            "CHARANCHI",
+            "DANMUSA"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -987,6 +1665,44 @@ export const ConstituencyData = [
     state: {
       name: "Kebbi",
       id: 21,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "AREWA",
+            "ARGUNGU",
+            "AUGIE",
+            "BAGUDO",
+            "DANDI",
+            "SURU",
+            "JEGA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "ALEIRO",
+            "BIRNIN KEBBI",
+            "BUNZA",
+            "GWANDU",
+            "KALGO",
+            "KOKO BESSE",
+            "MAIYAMA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "FAKAI",
+            "NGASKI",
+            "SAKABA",
+            "SHANGA",
+            "WASAGU/DANKO",
+            "YAURI",
+            "ZURU"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1027,6 +1743,38 @@ export const ConstituencyData = [
     state: {
       name: "Kogi",
       id: 22,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["ADAVI", "AJAOKUTA", "OGORI/MAGONGO", "OKEHI", "OKENE"]
+        },
+        {
+          id: 2,
+          locals: [
+            "ANKPA",
+            "BASSA",
+            "DEKINA",
+            "IBAJI",
+            "IDAH",
+            "IGALAMELA-ODOLU",
+            "OFU",
+            "OLAMABORO",
+            "OMALA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "IJUMU",
+            "KABBA",
+            "KOGI",
+            "LOKOJA",
+            "MOPAMURO",
+            "YAGBA EAST",
+            "YAGBA WEST"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1071,6 +1819,20 @@ export const ConstituencyData = [
     state: {
       name: "Kwara",
       id: 23,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["BARUTEN", "EDU", "PATIGI", "KAIAMA", "MORO"]
+        },
+        {
+          id: 2,
+          locals: ["ASA", "ILORIN EAST", "ILORIN SOUTH", "ILORIN WEST", "OFFA"]
+        },
+        {
+          id: 3,
+          locals: ["EKITI", "OKE ERO", "IFELODUN", "IREPODUN", "ISIN", "OYUN"]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1103,6 +1865,38 @@ export const ConstituencyData = [
     state: {
       name: "Lagos",
       id: 24,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "LAGOS ISLAND",
+            "LAGOS",
+            "MAINLAND",
+            "SURULERE",
+            "APAPA",
+            "ETI-OSA"
+          ]
+        },
+        {
+          id: 2,
+          locals: ["SHOMOLU", "KOSOFE", "EPE", "IBEJU-LEKKI", "IKORODU"]
+        },
+        {
+          id: 3,
+          locals: [
+            "AGEGE",
+            " FAKO IJAYE",
+            "ALIMOSHO",
+            "BADAGRY",
+            "OJO",
+            "AJEROMI/IFELODUN",
+            "AMUWO ODOFIN",
+            "OSHODI ISOLO",
+            "IKEJA",
+            "MUSHIN"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1207,6 +2001,20 @@ export const ConstituencyData = [
     state: {
       name: "Nasarawa",
       id: 25,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["AKWANGA", "NASARAWA EGGON", "WAMBA"]
+        },
+        {
+          id: 2,
+          locals: ["KEFFI", "KARU", "KOKONA", "LAFIA", "NASARAWA", "TOTO"]
+        },
+        {
+          id: 3,
+          locals: ["AWE", "DOMA", "KEANA", "OBI"]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1235,6 +2043,49 @@ export const ConstituencyData = [
     state: {
       name: "Niger",
       id: 26,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "BOSSO",
+            "CHANCHAGA",
+            "PAIKORO",
+            "GURARA",
+            "SULEJA",
+            "TAFA",
+            "SHIRORO",
+            "RAFI",
+            "MUNYA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "RIJAU",
+            "KONTAGORA",
+            "WUSHISHI",
+            "MARIGA",
+            "MASHEGU",
+            "AGWARA",
+            "BORGU",
+            "MAGAMA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "KATCHA",
+            "GBAKO",
+            "BATAGI",
+            "BIDA",
+            "EDATI",
+            "LAVUN",
+            "MOKWA",
+            "AGAIE",
+            "LAPAI"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1283,6 +2134,45 @@ export const ConstituencyData = [
     state: {
       name: "Ogun",
       id: 27,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ABEOKUTA NORTH",
+            "OBAFEMI OWODE",
+            "ABEOKUTA SOUTH",
+            "ODEDA",
+            "IFO",
+            "EWEKORO"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "REMO NORTH",
+            "SAGAMU",
+            "OGUN WATERSIDE",
+            "IJEBU ODE",
+            "IJEBU NORTH",
+            "IJEBU EAST",
+            "IJEBU NORTH EAST",
+            "ODOGBOLU",
+            "IKENNE"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "ADO ODO/OTA",
+            "EGBADO NORTH",
+            "IMEKO AFON",
+            "EGBADO SOUTH",
+            "IPOKIA",
+            "ILEOLUJI OKEIGBO",
+            "ODIGBO"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1331,6 +2221,41 @@ export const ConstituencyData = [
     state: {
       name: "Ondo",
       id: 28,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "AKOKO NORTH EAST",
+            "AKOKO NORTH WEST",
+            "AKOKO SOUTH EAST",
+            "AKOKO SOUTH WEST",
+            "OWO",
+            "OSE"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "AKURE NORTH",
+            "AKURE SOUTH",
+            "IDANRE",
+            "IFEDORE",
+            "ONDO EAST",
+            "ONDO WEST"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "ILEOLUJI /OKEIBO",
+            "ODIGBO",
+            "OKITIPUPA",
+            "IRELE",
+            "ESEODO",
+            "ILAJE"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1375,6 +2300,53 @@ export const ConstituencyData = [
     state: {
       name: "Osun",
       id: 29,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "IREPODUN",
+            "OLORUNDA",
+            "OSOGBO",
+            "OROLU",
+            "ODO OTIN",
+            "IFELODUN",
+            "BORIPE",
+            "BOLUWADURO",
+            "IFEDAYO",
+            "ILA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "ATAKUNMOSA EAST",
+            "ATAKUNMOSA WEST",
+            "ILESA EAST",
+            "ILESA WEST",
+            "OBOKUN",
+            "ORIADE",
+            "IFE CENTRAL",
+            "IFE EAST",
+            "IFE NORTH",
+            "IFE SOUTH"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "AYEDIRE",
+            "IWO",
+            "OLA OLUWA",
+            "AYEDAADE",
+            "IREWOLE",
+            "ISOKAN",
+            "EDE NORTH",
+            "EDE SOUTH",
+            "EGBEDORE",
+            "EJIGBO"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1424,6 +2396,56 @@ export const ConstituencyData = [
     state: {
       name: "Oyo",
       id: 30,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "AFIJIO",
+            "ATIBA",
+            "OYO EAST",
+            "OYO WEST",
+            "AKINYELE",
+            "LAGELU",
+            "EGBEDA",
+            "ONA ARA",
+            "OLUYOLE",
+            "SURULERE",
+            "OGO OLUWA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "SAKI EAST",
+            "SAKI WEST",
+            "ATIGBO",
+            "IREPO",
+            "OLORUNSOGO",
+            "ISEYIN",
+            "KAJOLA",
+            "IWAJOWA",
+            "OGBOMOSO NORTH",
+            "OGBOMOSO SOUTH",
+            "ORIIRE",
+            "ITESIWAJU",
+            "ORELOPE"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "IBARAPA CENTRAL",
+            "IBARAPA NORTH",
+            "IBARAPA EAST",
+            "IDO",
+            "IBADAN NORTH EAST",
+            "IBADAN SOUTH EAST",
+            "IBADAN SOUTH WEST",
+            "IBADAN NORTH WEST",
+            "IBADAN NORTH"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1468,6 +2490,34 @@ export const ConstituencyData = [
     state: {
       name: "Plateau",
       id: 31,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "WASE",
+            "LANGTANG NORTH",
+            "LANGTANG SOUTH",
+            "SHENDAM",
+            "MIKANG",
+            "QUA'AN PAN"
+          ]
+        },
+        {
+          id: 2,
+          locals: ["MANGU", "BOKKOS", "PANKSHIN", "KANKE", "KANAM"]
+        },
+        {
+          id: 3,
+          locals: [
+            "BASSA",
+            "JOS NORTH",
+            "JOS SOUTH",
+            "JOS EAST",
+            "BARIKINLADI",
+            "RIYOM"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1508,6 +2558,49 @@ export const ConstituencyData = [
     state: {
       name: "Rivers",
       id: 32,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ETCHE",
+            "OMUMA",
+            "OBIO/AKPOR",
+            "PORT HARCOURT I",
+            "PORT HARCOURT II",
+            "OKRIKA",
+            "OGU",
+            "BOLO",
+            "EMOHUA",
+            "IKWERRE"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "OPOBO/NKORO",
+            "ANDONI",
+            "ELEME",
+            "OYIGBO",
+            "TAI",
+            "GOKANA",
+            "KHANA"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "AHOADA EAST",
+            "ABUA ODUAL",
+            "OGBA",
+            "EBGEMA/NDONI",
+            "AHOADA WEST",
+            "DEGEMA",
+            "BONNY",
+            "AKUKU-TORU",
+            "ASARI-TORU"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1568,6 +2661,46 @@ export const ConstituencyData = [
     state: {
       name: "Sokoto",
       id: 33,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ISA",
+            "SABON BIRNI",
+            "GORONYO",
+            "GADA",
+            "WURNO",
+            "RABAH",
+            "ILLELA",
+            "GWADABAWA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "TANGAZA",
+            "GUDU",
+            "BINJI",
+            "SILAME",
+            "KWARE",
+            "WAMAKKO",
+            "SOKOTO NORTH",
+            "SOKOTO SOUTH"
+          ]
+        },
+        {
+          id: 3,
+          locals: [
+            "DANGE SHUNI",
+            "BODINGA",
+            "TURETA",
+            "YABO",
+            "SHAGARI",
+            "KEBBE",
+            "TAMBUWAL"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1620,6 +2753,27 @@ export const ConstituencyData = [
     state: {
       name: "Taraba",
       id: 34,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: ["DONGA", "USSA", "TAKUM", "IBI", "WUKARI"]
+        },
+        {
+          id: 2,
+          locals: ["BALI", "GASSOL", "GASHAKA", "KURMI", "SARDAUNA"]
+        },
+        {
+          id: 3,
+          locals: [
+            "JALINGO",
+            "YORRO",
+            "ZING",
+            "LAU",
+            "KARIM LAMIDO",
+            "ARDO KOLA"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1652,6 +2806,34 @@ export const ConstituencyData = [
     state: {
       name: "Yobe",
       id: 35,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "BURSARI",
+            "GEIDAM",
+            "YUNUSARI",
+            "GUJBA",
+            "GULANI",
+            "TARMUWA"
+          ]
+        },
+        {
+          id: 2,
+          locals: [
+            "BADE",
+            "JAKUSKO",
+            "MACHINA",
+            "NGURU",
+            "KARASUWA",
+            "YUSUFARI"
+          ]
+        },
+        {
+          id: 3,
+          locals: ["FIKA", "FUNE", "DAMATURU", "NANGERE", "POTISKUM"]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1684,6 +2866,26 @@ export const ConstituencyData = [
     state: {
       name: "Zamfara",
       id: 36,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "KAURA NAMODA",
+            "BIRNIN MAGAJI",
+            "SHINKAFI",
+            "ZURMI",
+            "TALATA MAFARA"
+          ]
+        },
+        {
+          id: 2,
+          locals: ["GUSAU", "TSAFE", "BUNGUDU", "MARU"]
+        },
+        {
+          id: 3,
+          locals: ["ANKA", "BAKURA", "MARADUN", "GUMMI", "BUKKUYUM"]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
@@ -1720,15 +2922,28 @@ export const ConstituencyData = [
     state: {
       name: "FCT",
       id: 37,
+      stateConstituency: [
+        {
+          id: 1,
+          locals: [
+            "ABAJI",
+            "GWAGWALADA",
+            "KUJE",
+            "KWALI",
+            "MUNICIPAL AREA COUNCIL",
+            "BWARI"
+          ]
+        }
+      ],
       federalConstituency: [
         {
           id: 1,
-          locals: ["ABAJI", "GWAGWALADA", "KUJE", "KWALI",],
+          locals: ["ABAJI", "GWAGWALADA", "KUJE", "KWALI"]
         },
         {
           id: 2,
-          locals: ["MUNICIPAL AREA COUNCIL", "BWARI",],
-        },
+          locals: ["MUNICIPAL AREA COUNCIL", "BWARI"]
+        }
       ]
     }
   }

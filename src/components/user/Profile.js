@@ -4,6 +4,7 @@ import {Body, Header, ScrollableTab, Tab, Icon, TabHeading, Tabs, StyleProvider,
 import UserPosts from './UserPosts'
 import { Actions } from 'react-native-router-flux'
 import accountStore from '../../stores/Account';
+import { observer } from 'mobx-react/native'
 import axios from 'axios'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
@@ -16,6 +17,7 @@ const SCROLL_HEIGHT = IMAGE_HEIGHT - HEADER_HEIGHT;
 const THEME_COLOR = "#82BE30";
 const FADED_THEME_COLOR = "rgb(130,190,48)";
 
+@observer
 export default class Profile extends Component {
   nScroll = new Animated.Value(0);
   scroll = new Animated.Value(0);
@@ -86,7 +88,7 @@ export default class Profile extends Component {
         () => {},
         (result, index) => {
         if (index == 0) {
-          Actions.drawerOpen()
+          Actions.editProfile()
         }
       },
     );
@@ -176,7 +178,7 @@ export default class Profile extends Component {
                   style={{height: IMAGE_HEIGHT, width: "100%", opacity: this.imgOpacity}}>
                   <View style={{backgroundColor: '#fff', marginTop: 10, height: 300, borderColor: '#f2f2f2', borderBottomWidth: 2}}>
                     <View style={styles.dpView}>
-                      <TouchableOpacity style={styles.dpcont}>
+                      <TouchableOpacity onPress={() => Actions.editProfile()}style={styles.dpcont}>
                           {this.userProfile(accountStore.user.avatar)}
                       </TouchableOpacity>
                       <View style={styles.profile}>
@@ -193,9 +195,8 @@ export default class Profile extends Component {
                     </View>
                       <View style={{top: 30, backgroundColor: '#fff'}}>
                         <View style={styles.bio}>
-                            <Text style={{fontSize: 14, color: '#555'}}>Philosopher | Human Rights Activist.
-                            I believe in an urgent restoration of active and participatory democracy, social justice
-                            and good leadership
+                            <Text style={{fontSize: 14, color: '#555'}}>
+                              {accountStore.user.bio}
                           </Text>
                         </View>
                         <View style={styles.CardItem}>
@@ -277,15 +278,16 @@ const styles = StyleSheet.create({
       padding: 20,
   },
   dpcont: {
+      justifyContent: 'center',
       backgroundColor: '#f2f2f2', 
       height: 70,
       borderRadius: 35,
       width: 70
   },
   dp: {
-      height: 60,
-      borderRadius: 30,
-      width: 60,
+      height: 65,
+      borderRadius: 32.5,
+      width: 65,
       alignSelf: 'center'
   },
   profile: {

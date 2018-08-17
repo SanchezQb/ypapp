@@ -29,7 +29,6 @@ export default class PdfView extends Component {
     }
   
   render() {
-    console.log(this.state)
     let yourPDFURI = {uri:`bundle-assets://pdf/${this.props.data}.pdf`, cache: true};
     return (
       <StyleProvider style={getTheme(material)}>

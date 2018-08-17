@@ -12,6 +12,7 @@ import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
 
+
 export default class Candidates extends Component {
 
     componentDidMount() {
@@ -25,6 +26,7 @@ export default class Candidates extends Component {
         Actions.pop()
         return true;
     }
+
     render() {
         return (
             <StyleProvider style={getTheme(material)}>

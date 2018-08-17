@@ -97,6 +97,10 @@ export default class DrawerContent extends React.Component {
                         <Icon name="ios-paper-outline" style={{color: '#000'}} />
                         <Text style={styles.link}>Constitution</Text>
                     </ListItem>
+                    <ListItem onPress={() => Actions.eligibility()}style={styles.listitem}>
+                        <Icon name="ios-checkmark-circle" style={{color: '#000'}} />
+                        <Text style={styles.link}>Voter Eligibility</Text>
+                    </ListItem>
                     <ListItem onPress={() => Actions.about()} style={styles.listitem}>
                         <Icon name="md-information-circle" style={{color: '#000'}} />
                         <Text style={styles.link}>About Us</Text>
@@ -145,6 +149,7 @@ const styles = StyleSheet.create({
           backgroundColor: '#000',
       },
       dpcont: {
+        justifyContent: 'center',
         marginLeft: 12,
         backgroundColor: '#f2f2f2',
         height: 80,
@@ -154,9 +159,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     dp: {
-        height: 70,
-        borderRadius: 35,
-        width: 70,
+        height: 75,
+        borderRadius: 37.5,
+        width: 75,
         alignSelf: 'center'
     },
     bioCont: {

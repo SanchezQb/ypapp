@@ -30,7 +30,7 @@ export default class Followers extends Component {
     userProfile = (avatar) => {
         if(avatar == null || avatar == '') {
             return (
-                <Thumbnail source={require('../avatar.jpg')}/>
+                <Thumbnail source={require('../logo.png')}/>
             )
         }
         else {

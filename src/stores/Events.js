@@ -4,11 +4,10 @@ import accountStore from './Account'
 
 class Events {
     @observable events = null
-    @observable isOpen = false
 
     async fetchAllEvents(){
         await axios({
-            url: `https://ypn-node-service.herokuapp.com/api/v1/events`, 
+            url: `https://ypn-node.herokuapp.com/api/v1/events`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -52,7 +51,7 @@ class Events {
           })
           .catch((err) => {
             if (err.response && err.response.status) {
-              dispatchNotification("You're attending this event already. Thank you!");
+              dispatchNotification("You're attending this event already");
               return Actions.pop();
             }
             dispatchNotification('Something went wrong. Try again?');

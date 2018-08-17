@@ -7,15 +7,37 @@ import {
     Right, 
     Button, 
     Title, 
-    List, ListItem, Thumbnail, Container, Icon, Text
+    ListItem, Thumbnail, Container, Icon, Text
 } from 'native-base';
-import { StyleSheet, TouchableOpacity, View, ScrollView, Picker, BackHandler } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Picker, BackHandler, FlatList, ToastAndroid, ActivityIndicator } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
+import accountStore from '../../stores/Account'
+import { StateData } from '../../modules/StateData'
+import axios from 'axios'
+
 
 export default class Excos extends Component {
+
+    constructor() {
+        super()
+        this.state = {
+            excos: [],
+            items: [],
+            isLoading: true,
+            error: false,
+            filterBy: '',
+            state: '',
+            lga: '',
+            selectedLGAs: [],
+            position: ''
+        }
+        this.baseState = this.state
+    }
+
     componentDidMount() {
+        this.fetchExcos()
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
     componentWillUnmount () {
@@ -26,8 +48,97 @@ export default class Excos extends Component {
         Actions.pop()
         return true;
     }
+
+    fetchExcos = async () => {
+        await axios({
+            url: 'https://ypn-election-02.herokuapp.com/api/excos', 
+            method: 'GET', 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${accountStore.user.token}`
+            },
+        })
+        .then(res => {
+            const { meta } = res.data.data;
+            const payload = Object.keys(res.data.data.meta).map(item => {
+                const ref = {}
+                ref.position = item
+                ref.value = meta[`${item}`]
+                return ref
+            })
+            this.setState({excos: payload})
+        }).then(() => {
+            this.setState({items: this.state.excos, isLoading: false})
+        })
+        .catch(err => {
+            this.setState({error: true, isLoading: false})
+            ToastAndroid.show(err.response.data.error, ToastAndroid.SHORT)
+        })
+    }
+    reset = () => {
+        this.setState(this.baseState)
+        this.fetchexcos()
+    }
+    setLGAs = () => {						
+		let selectedLGAs = [];
+		StateData.map((v) => {
+            let state = v['state']['name'];
+			if(state == this.state.state){
+                let LGAS = v['state']['locals'];
+				LGAS.map((v,i) => {
+					selectedLGAs.push(<Picker.Item key={i} value={v['name']} label={v['name']} />);
+				});
+			}
+		});
+		this.setState({
+			selectedLGAs
+		});
+    }
+    filterList = (text) => {
+        let updatedList = this.state.excos
+        updatedList = updatedList.filter(v => {
+            return v.location.toLowerCase().search(
+                text.toLowerCase()) !== -1;
+        })
+        this.setState({
+            items: updatedList
+        })
+    }
     
     render() {
+        console.log(this.state.items)
+        if (this.state.isLoading) {
+            return (
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <ActivityIndicator size="large" color="#82BE30"/>
+              </View>
+            );
+          }
+          else if (this.state.error) {
+            return (
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: '#444'}}>Could not load excos :(</Text>
+                <Text></Text>
+                <Text></Text>
+                <Button style={{backgroundColor: '#82BE30', alignSelf: 'center'}}onPress={() => {this.reset()}}>
+                    <Text>Retry</Text>
+                </Button>
+              </View>
+              
+            )
+        }
+        else if (this.state.excos.length == 0) {
+            return (
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{color: '#444'}}>There are no excos to display</Text>
+                    <Text></Text>
+                    <Text></Text>
+                    <Button style={{backgroundColor: '#82BE30', alignSelf: 'center', marginTop: 5}}onPress={() => {this.reset()}}>
+                        <Text>refresh</Text>
+                    </Button>
+              </View>
+            )
+        }
         return (
             <StyleProvider style={getTheme(material)}>
                 <Container>
@@ -41,34 +152,100 @@ export default class Excos extends Component {
                             <Title>Excos</Title>
                         </Body>
                         <Right>
-                            <Button transparent>
-                                <Icon
-                                    name="md-search"
-                                    style={{color: 'white' }}
-                                />
-                            </Button>
+                           
                         </Right>
                     </Header>
                     <View>
-                    <View>
+                    <View style={styles.pickerView}>
                         <Picker
+                            selectedValue={this.state.filterBy}
+                            onValueChange={(value) => {
+                                this.setState({
+                                    filterBy: value
+                                })
+                            }}
                             style={styles.picker}
-                            mode='dropdown'>
-                            <Picker.Item label="Federal" value="federal" />
-                            <Picker.Item label="State" />
-                            <Picker.Item label="Local" />
+                            mode='dialog'>
+                            <Picker.Item label="Federal" value="Federal" />
+                            <Picker.Item label="State" value = "State" />
+                            <Picker.Item label="Local" value="Local" />
                         </Picker>
+                        {this.state.filterBy == 'State'? 
+                            <Picker
+                                style={styles.picker}
+                                selectedValue={this.state.state}
+                                onValueChange={(state) => {
+                                    this.setState({state}, () => {
+                                        this.setLGAs()
+                                        this.filterList(state)
+                                    })
+                                }}
+                                mode='dialog'>
+                            {
+                                    StateData.map((item, index) => {
+                                        let state = item['state']['name'];
+                                        return <Picker.Item key={index} value={state} label={state} />;
+                                    })
+                                }
+                            </Picker> :
+                            null
+                        }
+                        {this.state.filterBy == 'Local'?
+                            <View>
+                                <Picker
+                                    style={styles.picker}
+                                    selectedValue={this.state.state}
+                                    onValueChange={(state) => {
+                                        this.setState({state}, () => {
+                                            this.setLGAs()
+                                            this.filterList(state)
+                                        })
+                                    }}
+                                    mode='dialog'>
+                                {
+                                        StateData.map((item, index) => {
+                                            let state = item['state']['name'];
+                                            return <Picker.Item key={index} value={state} label={state} />;
+                                        })
+                                    }
+                                </Picker>
+                                <Picker
+                                    style={styles.picker}
+                                    selectedValue={this.state.lga}
+                                    onValueChange={(lga) => {
+                                        this.setState({lga})
+                                        this.filterList(lga)
+                                    }}
+                                    mode='dialog'>
+                                    <Picker.Item  label="Select LGA" />
+                                    {this.state.selectedLGAs}
+                                </Picker>
+                            </View> 
+                         :
+                            null
+                        }
                     </View>
-                    <ScrollView>
-                        <List>
+                    <View style={{paddingBottom: 100}}>
+                    {
+                        this.state.items.length == 0 ?
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{fontSize: 18}}>No aspirants to display</Text>
+                        </View>
+                        :
+                        <FlatList
+                        legacyImplementation
+                        initialNumToRender={10}
+                        data={this.state.items}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({item}) =>
                             <View style={styles.listitem}>
                                 <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
                                     <Left>
                                         <Thumbnail source={require('../profile.png')} />
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
-                                        <Text>Hasstrup Ezekiel</Text>
-                                        <Text style={{color: '#82BE30'}}>House of Rep.</Text>
+                                        <Text>{`${item.value.firstname} ${item.value.lastname}`}</Text>
+                                        <Text style={{color: '#82BE30'}}>{item.position}</Text>
                                     </Body>
                                     <Right style={{borderBottomWidth: 0, marginRight: 0}}>
                                         <TouchableOpacity style={styles.touchable}>
@@ -80,46 +257,11 @@ export default class Excos extends Component {
                                     </Right>
                                 </ListItem>
                             </View>
-                            <View style={styles.listitem}>
-                                <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
-                                    <Left>
-                                        <Thumbnail source={require('../profile.png')} />
-                                    </Left>
-                                    <Body style={{borderBottomWidth: 0}}>
-                                        <Text>Hasstrup Ezekiel</Text>
-                                        <Text style={{color: '#82BE30'}}>House of Rep.</Text>
-                                    </Body>
-                                    <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                        <TouchableOpacity style={styles.touchable}>
-                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                        </TouchableOpacity>
-                                        <View style={{width: 60, marginTop: 10}}>
-                                            <Text note>Ikwere, Rivers State</Text>
-                                        </View>
-                                    </Right>
-                                </ListItem>
-                            </View>
-                            <View style={styles.listitem}>
-                                <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
-                                    <Left>
-                                        <Thumbnail source={require('../profile.png')} />
-                                    </Left>
-                                    <Body style={{borderBottomWidth: 0}}>
-                                        <Text>Hasstrup Ezekiel</Text>
-                                        <Text style={{color: '#82BE30'}}>House of Rep.</Text>
-                                    </Body>
-                                    <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                        <TouchableOpacity style={styles.touchable}>
-                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                        </TouchableOpacity>
-                                        <View style={{width: 60, marginTop: 10}}>
-                                            <Text note>Ikwere, Rivers State</Text>
-                                        </View>
-                                    </Right>
-                                </ListItem>
-                            </View>
-                        </List>
-                        </ScrollView>
+                        }
+                        keyExtractor={item => item.values.id.toString()}
+                        />
+                    }
+                    </View>
                     </View>   
                 </Container>
             </StyleProvider>
@@ -141,5 +283,6 @@ const styles = StyleSheet.create({
     listitem: {
         borderBottomWidth: 1,
         borderColor: '#ddd',
-    }
+    },
+    
 })

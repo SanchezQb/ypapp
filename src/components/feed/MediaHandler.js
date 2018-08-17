@@ -4,6 +4,7 @@ import LinkPreview from 'react-native-link-preview'
 import postStore from '../../stores/Post'
 import { observer } from 'mobx-react/native'
 import { YouTubeStandaloneAndroid } from 'react-native-youtube';
+import { Actions } from 'react-native-router-flux'
 
 const { width, height } = Dimensions.get('window')
 
@@ -46,9 +47,9 @@ class MediaHandler extends Component {
           horizontal
           data={uri}
           showsHorizontalScrollIndicator={false}
-          renderItem={({item}) =>  
+          renderItem={({item, index}) =>  
           <TouchableOpacity onPress={() => {
-              postStore.openModal(item)
+             Actions.imageSwiper({data: uri, index})
             }}>
              <Image 
               style={{ marginHorizontal: 5, height: this.__calculateHeight(data), width: width * 0.34 }} source={{ uri: item }}/>

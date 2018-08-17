@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import {  Text, ListItem, Thumbnail, Left, Right, Body, Icon } from 'native-base'
-import { View,  StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Dimensions } from 'react-native'
+import { View,  StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
 import accountStore from '../../stores/Account'
 import MediaHandler from '../feed/MediaHandler'
 import moment from 'moment'
+import { Actions } from 'react-native-router-flux'
 
 const { width, height } = Dimensions.get('window')
 
@@ -62,49 +63,7 @@ export default class Userposts extends Component {
             )
         }
     }
-    // playContent = (str) => {
-    //     YouTubeStandaloneAndroid.playVideo({
-    //         apiKey:"AIzaSyCZNRFr_mF53iI6wLcznjXHjA4KWrQ4eXM",
-    //         videoId: str.substr(str.length - 11),
-    //         autoplay: false,
-    //         startTime: 0,
-    //       })
-    //         .then(() => console.log('Standalone Player Exited'))
-    //         .catch(errorMessage => console.error(errorMessage))
-    // }
-    // renderLinks = (links) => {
-    //     const str = `${links[0]}`
-    //     if(str.match(/youtu/) && str.match(/be/)) {
-    //         return (
-    //             <TouchableOpacity style={styles.link} onPress={() => this.playContent(str)}>
-    //                 <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center'}}>
-    //                     <Icon name="logo-youtube" style={{color: '#ea1b2a'}} />
-    //                     <Text style={{color: '#0066CC', marginHorizontal: 5}}>{str}</Text>
-    //                 </View>
-    //             </TouchableOpacity>
-    //         )
-    //     }
-    //     else if (links.length == 0) {
-    //         return (
-    //              null
-    //         )
-    //     }
-    //     else {
-    //         const str = `${links[0]}`
-    //         if(str == "") {
-    //             return null
-    //         }
-    //         else {
-    //             return (
-    //                 <TouchableOpacity style={styles.link} onPress={() => Actions.web({data: str})}>
-    //                     <View>
-    //                         <Text style={{color: '#0066CC'}}>{str}</Text>
-    //                     </View>
-    //                 </TouchableOpacity>
-    //             )
-    //         }
-    //     }
-    // }
+
     render() {
         if (this.state.isLoading) {
             return (
@@ -133,7 +92,7 @@ export default class Userposts extends Component {
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
                     <View style={{borderBottomWidth: 1, borderColor: '#ddd'}}>
-                        <ListItem avatar onPress={() => console.log("Pressed")}>
+                        <ListItem avatar onPress={() => Actions.post({item})}>
                             <Left style={{height: '80%'}}>
                                 {this.userProfile(item.origin.avatar)}
                             </Left>

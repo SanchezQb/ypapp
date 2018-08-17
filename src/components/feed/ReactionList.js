@@ -1,25 +1,15 @@
 import React, { Component } from 'react'
 import { Button, Icon, Text, Left, Body, Right, Header, Title, StyleProvider, Container, ListItem, Thumbnail } from 'native-base'
-import { View, StyleSheet, BackHandler, FlatList, ActivityIndicator } from 'react-native'
+import { View, StyleSheet, BackHandler, FlatList } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
-import accountStore from '../../stores/Account'
-import axios from 'axios'
 
-export default class AllUsers extends Component {
-    constructor() {
-        super()
-        this.state = {
-            isLoading: true,
-            error: false,
-            users: [],
-            follow: 'Follow'
-        }
-        this.baseState = this.state
-    }
+
+export default class ReactionList extends Component {
+
+
     componentDidMount() {
-        this.fetchFollowsforUser()
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
     componentWillUnmount () {
@@ -30,37 +20,11 @@ export default class AllUsers extends Component {
         Actions.pop()
         return true
     }
-    fetchFollowsforUser = async () => {
-       await axios({
-            url: `https://ypn-base-01.herokuapp.com/users`, 
-            method: 'GET', 
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `${accountStore.user.token}`
-            },
-        }).then(res => {
-            console.log(res)
-           this.setState({
-               isLoading: false,
-               users: res.data.data.reverse()
-           })
-        })
-        .catch(err => {
-            this.setState({
-                isLoading: false,
-                error: true
-            })
-        })
-    }
-    reset = () => {
-        this.setState(this.baseState)
-        this.fetchFollowsforUser()
-    }
 
     userProfile = (avatar) => {
         if(avatar == null || avatar == '') {
             return (
-                <Thumbnail source={require('../logo.png')}/>
+                <Thumbnail resizeMode="center" source={require('../logo.png')}/>
             )
         }
         else {
@@ -86,27 +50,9 @@ export default class AllUsers extends Component {
         }
     }
 
+
     render() {
-        if (this.state.isLoading) {
-            return (
-              <View style={{flex: 1, justifyContent: 'center'}}>
-                <ActivityIndicator size="large" color="#82BE30"/>
-              </View>
-            );
-          }
-          else if (this.state.error) {
-            return (
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: '#444'}}>Could not load Users :(</Text>
-                <Text></Text>
-                <Text></Text>
-                <Button style={{backgroundColor: '#82BE30', alignSelf: 'center'}}onPress={() => {this.reset()}}>
-                    <Text>Retry</Text>
-                </Button>
-              </View>
-              
-            )
-        }
+        const item = this.props.data
         return (
             <StyleProvider style={getTheme(material)}>
                 <Container>
@@ -117,14 +63,14 @@ export default class AllUsers extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title>Follow Users</Title>
+                            <Title>Liked by</Title>
                         </Body>
-                        <Right>
+                        <Right> 
                         </Right>
                     </Header>
                     <View style={styles.container}>
                     <FlatList
-                        data={this.state.users}
+                        data={item}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
                         <ListItem 
@@ -136,7 +82,6 @@ export default class AllUsers extends Component {
                             </Left>
                             <Body>
                                 {this.renderName(item)}
-                                <Text style={{color: '#82Be30'}}>User</Text>
                             </Body>
                             <Right style={{marginRight: 10}}>
                                 {/* <TouchableOpacity style={styles.touchable} onPress={() => this.follow(item)}>

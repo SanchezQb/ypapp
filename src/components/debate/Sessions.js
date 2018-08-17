@@ -117,7 +117,7 @@ export default class Posts extends Component {
                             </Button>
                             <Button badge transparent>
                                 <Icon name="ios-notifications-outline" style={{color: '#fff'}}/>
-                                <Badge style={{width: 12, height: 12}}><Text></Text></Badge>
+                                <Badge style={{width: 12, height: 12, backgroundColor: '#F0BA00'}}><Text></Text></Badge>
                             </Button>
                         </Right>
                     </Header>

@@ -5,7 +5,7 @@ const dots = ['\u2022', '\u2022', '\u2022', '\u2022']
 
 const dotsets = dots.map((dotset, index) => {
     return (
-        <Text key={index} style={{color: '#fff', fontSize: 36, marginRight: 3}}>{dotset}</Text>
+        <Text key={index} style={{color: '#444', fontSize: 36, marginRight: 3}}>{dotset}</Text>
     )
 })
 
