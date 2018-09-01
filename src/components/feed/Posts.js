@@ -21,7 +21,6 @@ import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
 import moment from 'moment'
-// import {OptimizedFlatList} from 'react-native-optimized-flatlist'
 import MediaHandler from './MediaHandler'
 const { width, height } = Dimensions.get('window')
 
@@ -89,19 +88,11 @@ export default class Posts extends Component {
     fetchFollowsforUser = () => {
         Actions.allusers()
     }
-       
 
-    render() {
-        if (this.state.isLoading) {
+    renderSome = () => {
+        if (this.state.error) {
             return (
-              <View style={{flex: 1, justifyContent: 'center'}}>
-                <ActivityIndicator size="large" color="#82BE30"/>
-              </View>
-            );
-          }
-          else if (this.state.error) {
-            return (
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{height, justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={{color: '#444'}}>Could not load Posts :(</Text>
                 <Text></Text>
                 <Text></Text>
@@ -114,7 +105,7 @@ export default class Posts extends Component {
         }
         else if (this.state.posts.length == 0) {
             return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{height, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={{color: '#444'}}>There are no posts to display</Text>
                     <Text></Text>
                     <Text></Text>
@@ -127,28 +118,9 @@ export default class Posts extends Component {
               </View>
             )
         }
-        return (
-            <StyleProvider style={getTheme(material)}>
-                <View>
-                    <Header>
-                        <Left>
-                            <Button transparent onPress={() => Actions.drawerOpen()}>
-                                <Icon name="md-menu" style={{color: '#fff'}}/>
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Title>Home</Title>
-                        </Body>
-                        <Right>
-                            <Button transparent onPress={() => Actions.allusers()}>
-                                <Icon name="ios-search" style={{color: '#fff'}}/>
-                            </Button>
-                            <Button badge transparent>
-                                <Icon name="ios-notifications-outline" style={{color: '#fff'}}/>
-                                <Badge style={{width: 12, height: 12, backgroundColor: '#F0BA00'}}><Text></Text></Badge>
-                            </Button>
-                        </Right>
-                    </Header>
+        else {
+            return (
+                <React.Fragment>
                     <View style={{paddingBottom: 100}}>
                     <FlatList
                         legacyImplementation
@@ -181,6 +153,45 @@ export default class Posts extends Component {
                         />
                     </Modal>
                     <AddComment refresh={this.getPosts} />
+                </React.Fragment>
+            )
+        }
+    }
+       
+
+    render() {
+        if (this.state.isLoading) {
+            return (
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <ActivityIndicator size="large" color="#82BE30"/>
+              </View>
+            );
+        }
+        return (
+            <StyleProvider style={getTheme(material)}>
+                <View>
+                    <Header>
+                        <Left>
+                            <Button transparent onPress={() => Actions.drawerOpen()}>
+                                <Icon name="md-menu" style={{color: '#fff'}}/>
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title>Home</Title>
+                        </Body>
+                        <Right>
+                            <Button transparent onPress={() => Actions.allusers()}>
+                                <Icon name="ios-search" style={{color: '#fff'}}/>
+                            </Button>
+                            <Button onPress={() => Actions.notifications()}badge transparent>
+                                <Icon name="ios-notifications-outline" style={{color: '#fff'}}/>
+                                <Badge style={{width: 12, height: 12, backgroundColor: '#F0BA00'}}><Text></Text></Badge>
+                            </Button>
+                        </Right>
+                    </Header>
+                    <React.Fragment>
+                    {this.renderSome()}
+                    </React.Fragment>
                 </View>
             </StyleProvider>
         )
@@ -261,6 +272,11 @@ export const PostList = class PostList extends React.Component {
                             <Text style={{color: '#444', fontWeight: 'bold'}}>
                                 {`${item.origin.firstname} ${item.origin.lastname}`}
                             </Text>
+                            {item.origin.role == 5 ? 
+                                <View style={{borderWidth: 1,marginLeft: '2%', borderColor: '#82BE30', padding: '0.5%'}}>
+                                    <Text note style={{color: '#82BE30'}}>Verified</Text>
+                                </View> 
+                            : null}
                             <Right style={{marginRight: 18}}>
                                 <Text style={{fontSize: 14, color: '#555'}}>{moment(new Date(item.createdAt)).fromNow()}</Text>
                             </Right>
@@ -282,7 +298,7 @@ export const PostList = class PostList extends React.Component {
                                     { `${item.commentCount} ${item.commentCount === 1 ? 'Comment' : 'Comments'}`}
                                 </Text>
                             </ListItem>
-                            <ListItem style={styles.listitem}>
+                            <ListItem style={styles.listitem} onPress={() => Actions.shareTo({data: item})}>
                                 <Icon name="md-share-alt" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
                                 <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>Share</Text>
                             </ListItem>

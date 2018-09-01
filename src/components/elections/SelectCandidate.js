@@ -73,7 +73,9 @@ export default class SelectCandidate extends Component {
       
     checkUnique = (id, data) => {
         if(accountStore.user.role < 1) return ToastAndroid.show('You need to be a party member to participate', ToastAndroid.SHORT)
-        if(!accountStore.user.vin) return ToastAndroid.show('You need to verify your VIN to participate', ToastAndroid.SHORT)
+        if(!accountStore.user.vin) {
+           return Actions.eligibility()
+        }
         this.setState({disabled: true})
         axios({
             url: `https://ypn-election-02.herokuapp.com/api/check/${id}`, 

@@ -3,6 +3,10 @@ import { View, StyleSheet, Image } from 'react-native'
 import { Button, Text ,Item, Input } from 'native-base'
 
 export default class Forgot extends Component {
+
+    state = {
+        email: ''
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -13,7 +17,8 @@ export default class Forgot extends Component {
                 <Text style={styles.text2}>Enter your registered email address 
                 to receive password reset instructions</Text> 
                 <Item style={styles.item}>
-                    <Input 
+                    <Input
+                        onChangeText={(email) => this.setState({email})} 
                         placeholderTextColor="#ccc"
                         placeholder="Email Address" />
                 </Item>

@@ -39,11 +39,11 @@ export default class ChatList extends Component {
             () => {},
             (result, index) => {
             if (index == 0) {
-              Actions.drawerOpen()
+              Actions.newChat()
             }
           },
         );
-      };
+    };
     generateNameFromMembers = (members) => {
         let string = members.reduce((a, b) => `${a} ${b.firstname} ${b.lastname} `, '');
         string = string.trim().slice(0, (string.length - 2));
@@ -68,7 +68,17 @@ export default class ChatList extends Component {
       userProfile = (data) => {
         if(data.type == 2) {
             return (
-                <Thumbnail source={require('../microphone.png')}/>
+                // <Thumbnail source={require('../microphone.png')}/>
+                <View style={{width: 60, height: 60, borderRadius: 30, backgroundColor: '#F2F3F4', justifyContent: 'center', alignItems: 'center'}}>
+                    <Icon name="ios-microphone-outline" style={{fontSize: 32, color: '#82BE30', fontWeight: 'bold'}} />
+                </View>
+            )
+        }
+        else if(data.type == 3) {
+            return (
+                <View style={{width: 60, height: 60, borderRadius: 30, backgroundColor: '#F2F3F4', justifyContent: 'center', alignItems: 'center'}}>
+                    <Icon name="md-megaphone" style={{fontSize: 32, color: '#82BE30'}} />
+                </View>
             )
         }
         else if(data.members[0].avatar == null || data.members[0].avatar == '') {
@@ -117,7 +127,7 @@ export default class ChatList extends Component {
             )
         }
         const { labels } = this.props;
-        const logs = messagingStore.logs.reverse().map(data => {
+        const logs = messagingStore.logs.map(data => {
             const title = data.topic ? data.topic : this.generateNameFromMembers(data.members.filter(item => item.id !== accountStore.user.id));
             return (
                 <ListItem 

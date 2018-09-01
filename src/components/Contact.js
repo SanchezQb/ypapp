@@ -41,6 +41,10 @@ export default class Contact extends Component {
         Linking.openURL('geo:37.484847,-122.148386').catch(err => console.error('An error occurred', err));
     }
 
+    openLink = (url) => {
+        Linking.openURL(url).catch(err => console.error('An error occurred', err));
+    }
+
     render() {
         return (
             <StyleProvider style={getTheme(material)}>
@@ -99,10 +103,9 @@ export default class Contact extends Component {
                     <View style={styles.social}>
                         <Text style={{textAlign: 'center', fontSize: 15}}>Follow us @YouthPartyNg</Text>
                         <View style={styles.icons}>
-                            <MaterialIcon name="instagram-with-circle" style={{ fontSize: 24 }} />
-                            <MaterialIcon name="facebook-with-circle" style={{ fontSize: 24 }}/>
-                            <MaterialIcon name="twitter-with-circle" style={{ fontSize: 24 }}/>
-                            <MaterialIcon name="google--with-circle" style={{ fontSize: 24 }} />
+                            <MaterialIcon onPress={() => this.openLink('https://www.instagram.com/youthparty_nigeria/')} name="instagram-with-circle" style={{ fontSize: 24 }} />
+                            <MaterialIcon onPress={() => this.openLink('https://www.facebook.com/YouthPartyNG')} name="facebook-with-circle" style={{ fontSize: 24 }}/>
+                            <MaterialIcon onPress={() => this.openLink('https://twitter.com/youthparty_ng')} name="twitter-with-circle" style={{ fontSize: 24 }}/>
                         </View>
                     </View>
                 </View>

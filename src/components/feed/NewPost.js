@@ -42,6 +42,7 @@ export default class NewPost extends Component {
 
     selectImage = () => {
         ImagePicker.openPicker({
+            mediaType: "photo",
             multiple: true
           }).then(images => {
            if(images.length > 4) {

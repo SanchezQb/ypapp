@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { StyleProvider, Container, Header, Left, Right, Body, Title, Button, Icon } from 'native-base';
-import { View, Text, BackHandler, ActivityIndicator } from 'react-native'
+import { StyleProvider, Container, Header, Left, Right, Body, Title, Button, Icon, Subtitle } from 'native-base';
+import { View, Text, BackHandler, ActivityIndicator, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
@@ -18,7 +18,8 @@ export default class Chat extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      messages: []
+      messages: [],
+      content: ''
     }
     this.socket = io(`https://yon-notification.herokuapp.com/conversation`, { query: { convoID: this.props.data._id } });
     this.registerEvents();
@@ -41,8 +42,10 @@ export default class Chat extends Component {
       return true;
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.updateConversation(this.props.data._id)
+  }
+  componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
   updateConversation(id) {
@@ -55,12 +58,14 @@ export default class Chat extends Component {
         },
     })
     .then(response => {
+      console.log(response.data.data.messages)
       const res = [];
       response.data.data.messages.map((message, index) => {
       const obj = {
           _id: uuidv3(`${index}`, uuidv3.DNS),
           text: message.content,
           createdAt: message.createdAt,
+          reference: message.referenceObject,
           user: {
             _id: message.origin.id,
             name: message.origin.firstname,
@@ -71,11 +76,29 @@ export default class Chat extends Component {
         messages: GiftedChat.append(previousState.messages, obj)
       }))
       })
+      if(this.props.reference) {
+        this.handleReference(this.props.reference)
+      }
     })
     .catch(err => {
         ToastAndroid.show('Something went wrong, could not fetch messages', ToastAndroid.SHORT)
     })
 }
+
+ handleReference = (reference) => {
+   let obj = {
+    content: `shared a post by ${reference.origin.firstname}`,
+    origin: accountStore.user,
+    type: 2,
+    destination: this.props.data._id,
+    createdAt: Date.now(),
+    referenceObject: reference,
+    referenceID: reference._id
+
+  }
+  messagingStore.sendMessage({...obj, token: accountStore.user.token}, this.socket)
+  this.storeRefMessage(obj)
+ }
 
   //formatToSendMessage
   formatMessage = (messages) => {
@@ -90,6 +113,35 @@ export default class Chat extends Component {
         } 
       })
       return obj
+  }
+  storeRefMessage = (message = []) => {
+    if(Array.isArray(message)){
+      this.setState((previousState) => {
+        return {
+          messages: GiftedChat.append(previousState.messages, message),
+        };
+      });
+    }
+    else {
+      let res = []
+      let obj = {
+        _id: Math.floor(Math.random() * 20),
+        text: `${message.content}`,
+        reference: message.referenceObject,
+        createdAt: message.createdAt,
+        user: {
+          _id: message.origin.id,
+          name: message.origin.firstname
+        }
+      }
+      res.unshift(obj)
+      console.log(res)
+      this.setState((previousState) => {
+        return {
+          messages: GiftedChat.append(previousState.messages, res),
+        };
+      });
+    }
   }
 
   onSend(messages = []) {
@@ -117,11 +169,11 @@ export default class Chat extends Component {
   }
   formatoSaveMessage(message){
     let res = []
-    console.log({message: message.date})
     let obj = {
       _id: Math.floor(Math.random() * 20),
       text: message.content,
       createdAt: message.createdAt,
+      reference: message.referenceObject,
       user: {
         _id: message.origin.id,
         name: message.origin.firstname
@@ -146,11 +198,29 @@ export default class Chat extends Component {
       </View>
     )
   }
-  renderBubble(props) { 
+
+  renderText = (messages) => {
+    console.log(messages)
+  }
+
+  renderChatFooter(props) {
+    console.log(props)
+    if(props.currentMessage.reference) {
+      return (
+        <TouchableOpacity onPress={() => Actions.post({item: props.currentMessage.reference})} style={{backgroundColor: '#edf5e0', minHeight: 40, borderWidth: 2,  borderColor: '#ccc'}}>
+          <Text style={{margin: 5}}>{props.currentMessage.reference.content}</Text>
+        </TouchableOpacity>
+      )
+    }
+    else {
+      return null
+    }
+  }
+  renderBubble(props) {
     if (props.isSameUser(props.currentMessage, props.previousMessage)
      && props.isSameDay(props.currentMessage, props.previousMessage)) {
       return (
-        <View style={{marginVertical: 3}}> 
+        <View style={{marginVertical: 7}}> 
           <Bubble
             {...props} 
             wrapperStyle={{
@@ -168,8 +238,37 @@ export default class Chat extends Component {
         </View>
     );
     }
+    else if(this.props.data.focus && ( props.currentMessage.user._id === this.props.data.focus.user.id)) {
+      return (
+        <View style={{marginVertical: 7}}> 
+          <Text 
+            style={{ 
+              color: '#F0BA00',
+              fontWeight: 'bold', 
+              alignSelf:'flex-start',
+              marginBottom: 5
+              }}>
+              {props.currentMessage.user.name}
+          </Text>  
+          <Bubble
+            {...props} 
+            wrapperStyle={{
+                left: {
+                  backgroundColor: 'rgba(240,186,0,0.5)',
+                  borderRadius: 5
+                  
+                },
+                right: {
+                  backgroundColor: '#82BE30',
+                  borderRadius: 5
+                }
+              }}
+          />
+        </View>
+      )
+    }
     return ( 
-      <View style={{marginVertical: 3}}>
+      <View style={{marginVertical: 7}}>
         {props.currentMessage.user._id === props.user._id ? 
         <Text></Text>
          : 
@@ -218,6 +317,9 @@ export default class Chat extends Component {
                 </Right>
             </Header>
             <View style={{flex: 1}}>
+              <View style={{backgroundColor: '#444'}}>
+                { this.props.data.type == 3 ? <Text style={styles.topicTitle}><Text style={{color: '#F0BA00'}}>Delegate:</Text> {this.props.data.focus.user.name}</Text> : null }
+              </View>
               <GiftedChat
                   renderAvatar={null}
                   onSend={messages => this.onSend(messages)}
@@ -231,6 +333,7 @@ export default class Chat extends Component {
                   }}
                   isAnimated
                   renderBubble={this.renderBubble.bind(this)}
+                  renderCustomView={this.renderChatFooter.bind(this)}
               />
             </View>
           </Container>
@@ -238,3 +341,11 @@ export default class Chat extends Component {
     )
   }
 }
+const styles = StyleSheet.create({
+  topicTitle: {
+    color: '#fff',
+    alignSelf: 'center',
+    fontSize: (( Dimensions.get('window').height) * 0.02),
+    padding: '6%'
+  },
+})

@@ -84,10 +84,10 @@ export default class Followers extends Component {
                         </Right>
                     </Header>
                     <View>
-                    <ScrollView>
-                        <List>
-                            {followers}
-                        </List>
+                        <ScrollView>
+                            <List>
+                                {followers}
+                            </List>
                         </ScrollView>
                     </View>   
                 </Container>

@@ -14,7 +14,30 @@ import { Actions } from 'react-native-router-flux'
 
 export default class CandidateProfile extends Component {
 
+    renderLocation = () => {
+        const loc = this.props.data
+        if(loc.value.level == 'Federal') {
+            return <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>Federal</Text>
+        }
+        else if(loc.value.level == 'state') {
+            return (
+                <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.state} State</Text>
+            )
+        }
+        else {
+            return (
+                <React.Fragment>
+                     <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.local} LGA</Text>
+                    <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.state} State</Text>
+                </React.Fragment>
+            )
+        }
+    }
+
+    
+
     render() {
+        const item = this.props.data
         return (
             <StyleProvider style={getTheme(material)}>
                 <View>
@@ -25,7 +48,7 @@ export default class CandidateProfile extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title>Femi Bukola</Title>
+                            <Title>{item.value.firstname} {item.value.lastname}</Title>
                         </Body>
                         <Right>
                         </Right>
@@ -33,27 +56,20 @@ export default class CandidateProfile extends Component {
                     <ScrollView>
                         <View style={styles.view}>
                             <View>
-                                <Thumbnail large source={require('../profile.png')} style={{alignSelf: 'center'}} />
-                                <Text style={{color: '#777', fontSize: 18, textAlign: 'center', marginTop: 10}}>House of Rep</Text>
-                                <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>Ilorin East, Kwara State</Text>
-                                <Text style={{color: '#C8C8C8', fontSize: 18, textAlign: 'center'}}>Age: 42</Text>
+                                {item.value.avatar ? 
+                                    <Thumbnail large source={item.value.avatar} resizeMode="center" style={{alignSelf: 'center'}} />
+                                :
+                                    <Thumbnail large source={require('../logo.png')} resizeMode="center" style={{alignSelf: 'center'}} />
+                                }
+                                <Text style={{color: '#777', fontSize: 18, textAlign: 'center', marginTop: 10}}>{item.position}</Text>
+                                {this.renderLocation()}
                             </View>
                         </View>
                         <View style={{width: '93%', alignSelf: 'center', marginTop: 30}}>
-                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#555', marginVertical: 10}}>Femi Bukola's Bio:</Text>
+                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#555', marginVertical: 10}}>{item.value.firstname} {item.value.lastname}'s Bio:</Text>
                             <Text style={{fontSize: 16, color: '#555'}}>
-                            Philosopher | Human Rights Activist.
-                            I believe in an urgent restoration of active and participatory democracy, social justice
-                            and good leadership
-                            Philosopher | Human Rights Activist.
-                            I believe in an urgent restoration of active and participatory democracy, social justice
-                            and good leadership
+                           {item.value.bio}
                             </Text>
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            <Button style={styles.button} block>
-                                <Text>follow</Text>
-                            </Button>
                         </View>
                     </ScrollView>
                 </View>

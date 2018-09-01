@@ -46,7 +46,7 @@ export default class Careers extends Component {
                         tabBarTextStyle={{fontSize: 15}}
                         >
                         <Vacancies tabLabel="Vacancies" />
-                        <Vacancies tabLabel="Voluntary" />
+                        <Vacancies tabLabel="Volunteer" />
                     </ScrollableTabView>
                 </React.Fragment>
             </StyleProvider>

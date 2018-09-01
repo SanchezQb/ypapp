@@ -73,7 +73,7 @@ export default class Survey extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title>Elections</Title>
+                            <Title>Survey</Title>
                         </Body>
                         <Right>
                         </Right>

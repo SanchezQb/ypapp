@@ -28,7 +28,7 @@ export default class More extends Component {
               <Text style={{color: '#fff', fontSize: 10, marginTop: 4}}>Careers</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => Actions.townhalls()}>
             <View style={{alignItems: 'center', marginTop: 20, width: 60}}>
               <Icon name="md-megaphone" style={{color: '#fff'}}/>
               <Text style={{color: '#fff', fontSize: 9.5, marginTop: 4}}>Town Hall</Text>

@@ -26,7 +26,7 @@ export default class PartyMember extends Component {
                     <Button style={styles.button}>Proceed to Home Page</Button> */}
                 <View style={styles.content}>
                     <Icon name="ios-checkmark-circle" style={styles.icon}/>
-                    <Text style={styles.text}>Subscription successful</Text>
+                    <Text style={styles.text}>You are a party member</Text>
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button onPress={() => Actions.home()} style={styles.button}>

@@ -56,6 +56,7 @@ export default class Events extends Component {
                 "Authorization": `${accountStore.user.token}`
             },
         }).then(res => {
+            console.log(res.data.data)
             this.setState({
                 events: res.data.data,
             })

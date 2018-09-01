@@ -42,7 +42,7 @@ export default class AllUsers extends Component {
             console.log(res)
            this.setState({
                isLoading: false,
-               users: res.data.data.reverse()
+               users: res.data.data.filter(item => item.id !== accountStore.user.id)
            })
         })
         .catch(err => {

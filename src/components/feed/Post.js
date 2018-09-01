@@ -95,6 +95,7 @@ export default class Post extends React.Component {
     }
     render() {
         const item = this.props.item
+        console.log(this.props.item.origin.role)
         return (
             <StyleProvider style={getTheme(material)}>
                 <View>
@@ -123,6 +124,11 @@ export default class Post extends React.Component {
                                         <Text style={{color: '#444', fontWeight: 'bold'}}>
                                             {`${item.origin.firstname} ${item.origin.lastname}`}
                                         </Text>
+                                        {item.origin.role === 5 ? 
+                                            <View style={{borderWidth: 1,marginLeft: '2%', borderColor: '#82BE30', padding: '2%'}}>
+                                                <Text note style={{color: '#82BE30', textAlign: 'center'}}>Verified</Text>
+                                            </View> 
+                                        : null}
                                         <Right style={{marginRight: 18}}>
                                             <Text style={{fontSize: 14, color: '#555'}}>{moment(new Date(item.createdAt)).fromNow()}</Text>
                                         </Right>
@@ -143,6 +149,7 @@ export default class Post extends React.Component {
                             <ActivityIndicator size="large" color="#82BE30"/>
                         </View> 
                         :
+                        <View style={{paddingBottom: 100}}>
                          <FlatList
                             data={this.state.comments}
                             showsVerticalScrollIndicator={false}
@@ -171,6 +178,7 @@ export default class Post extends React.Component {
                             }
                             keyExtractor={item => `${item._id}`}
                         /> 
+                        </View>
                         }  
                     </ScrollView>
                 </View>

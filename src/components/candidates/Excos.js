@@ -27,7 +27,7 @@ export default class Excos extends Component {
             items: [],
             isLoading: true,
             error: false,
-            filterBy: '',
+            filterBy: 'All',
             state: '',
             lga: '',
             selectedLGAs: [],
@@ -59,6 +59,7 @@ export default class Excos extends Component {
             },
         })
         .then(res => {
+            console.log(res.data.data)
             const { meta } = res.data.data;
             const payload = Object.keys(res.data.data.meta).map(item => {
                 const ref = {}
@@ -77,7 +78,7 @@ export default class Excos extends Component {
     }
     reset = () => {
         this.setState(this.baseState)
-        this.fetchexcos()
+        this.fetchExcos()
     }
     setLGAs = () => {						
 		let selectedLGAs = [];
@@ -95,14 +96,49 @@ export default class Excos extends Component {
 		});
     }
     filterList = (text) => {
+        if(text == "All") {
+            return this.setState({items: this.state.excos})
+        }
+        else if(text == 'Federal') {
+            return this.setState({items: this.state.excos.filter(item => item.value.level == text)})
+        }
         let updatedList = this.state.excos
         updatedList = updatedList.filter(v => {
-            return v.location.toLowerCase().search(
+            return v.value.state.toLowerCase().search(
                 text.toLowerCase()) !== -1;
         })
         this.setState({
             items: updatedList
         })
+    }
+    filterList2 = (text) => {
+        let updatedList = this.state.excos
+        updatedList = updatedList.filter(v => {
+            return v.value.local.toLowerCase().search(
+                text.toLowerCase()) !== -1;
+        })
+        this.setState({
+            items: updatedList
+        })
+    }
+
+    renderLocation = (item) => {
+        if(item.value.level == 'Federal') {
+            return <Text note>Federal</Text>
+        }
+        else if(item.value.level == 'state') {
+            return (
+                <Text note>{item.value.state} State</Text>
+            )
+        }
+        else {
+            return (
+                <React.Fragment>
+                     <Text note>{item.value.local} LGA</Text>
+                    <Text note>{item.value.state} State</Text>
+                </React.Fragment>
+            )
+        }
     }
     
     render() {
@@ -161,11 +197,15 @@ export default class Excos extends Component {
                             selectedValue={this.state.filterBy}
                             onValueChange={(value) => {
                                 this.setState({
-                                    filterBy: value
+                                    filterBy: value,
+                                    state: 'Select State',
+                                    lga: 'Select LGA'
                                 })
+                                this.filterList(value)
                             }}
                             style={styles.picker}
                             mode='dialog'>
+                            <Picker.Item label="All" value="All" />
                             <Picker.Item label="Federal" value="Federal" />
                             <Picker.Item label="State" value = "State" />
                             <Picker.Item label="Local" value="Local" />
@@ -214,7 +254,7 @@ export default class Excos extends Component {
                                     selectedValue={this.state.lga}
                                     onValueChange={(lga) => {
                                         this.setState({lga})
-                                        this.filterList(lga)
+                                        this.filterList2(lga)
                                     }}
                                     mode='dialog'>
                                     <Picker.Item  label="Select LGA" />
@@ -229,36 +269,37 @@ export default class Excos extends Component {
                     {
                         this.state.items.length == 0 ?
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{fontSize: 18}}>No aspirants to display</Text>
+                            <Text style={{fontSize: 18}}>No excos to display</Text>
                         </View>
                         :
                         <FlatList
-                        legacyImplementation
-                        initialNumToRender={10}
-                        data={this.state.items}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({item}) =>
-                            <View style={styles.listitem}>
-                                <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
-                                    <Left>
-                                        <Thumbnail source={require('../profile.png')} />
-                                    </Left>
-                                    <Body style={{borderBottomWidth: 0}}>
-                                        <Text>{`${item.value.firstname} ${item.value.lastname}`}</Text>
-                                        <Text style={{color: '#82BE30'}}>{item.position}</Text>
-                                    </Body>
-                                    <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                        <TouchableOpacity style={styles.touchable}>
-                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                        </TouchableOpacity>
-                                        <View style={{width: 60, marginTop: 10}}>
-                                            <Text note>Ikwere, Rivers State</Text>
-                                        </View>
-                                    </Right>
-                                </ListItem>
-                            </View>
-                        }
-                        keyExtractor={item => item.values.id.toString()}
+                            style={{ marginBottom: 80 }} 
+                            legacyImplementation
+                            initialNumToRender={10}
+                            data={this.state.items}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({item}) =>
+                                <View style={styles.listitem}>
+                                    <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => Actions.cp({data: item})}>
+                                        <Left>
+                                            <Thumbnail source={require('../logo.png')} resizeMode="center" />
+                                        </Left>
+                                        <Body style={{borderBottomWidth: 0}}>
+                                            <Text>{`${item.value.firstname} ${item.value.lastname}`}</Text>
+                                            <Text style={{color: '#82BE30'}}>{item.position}</Text>
+                                        </Body>
+                                        <Right style={{borderBottomWidth: 0, marginRight: 0}}>
+                                            <TouchableOpacity style={styles.touchable}>
+                                                <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
+                                            </TouchableOpacity>
+                                            <View style={{width: 60, marginTop: 10}}>
+                                                {this.renderLocation(item)}
+                                            </View>
+                                        </Right>
+                                    </ListItem>
+                                </View>
+                            }
+                            keyExtractor={item => item.value.id.toString()}
                         />
                     }
                     </View>

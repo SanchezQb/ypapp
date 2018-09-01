@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux'
 import accountStore from '../../stores/Account';
 import messagingStore from '../../stores/Messaging'
 import OtherPosts from './OtherPosts'
+import OtherEvents from './OtherEvents'
 import axios from 'axios'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
@@ -110,7 +111,8 @@ export default class OtherProfile extends Component {
           user: res.data,
           isLoading: false
       })
-  })
+  }).then(() => this.checkFollows())
+  .then(() => this.checkFollowing())
   .catch(error => {
       console.log(error.response.data)
       this.setState({
@@ -118,6 +120,18 @@ export default class OtherProfile extends Component {
           error: true
       })
   })
+}
+
+checkFollowing = () => {
+  if(this.state.user.followers.map(item => item.id).includes(accountStore.user.id)) {
+    this.setState({text: 'Following'})
+  }
+}
+
+checkFollows = () => {
+  if(this.state.user.friends.map(item => item.id).includes(accountStore.user.id)) {
+    this.setState({isAFollower: true})
+  }
 }
 reset = () => {
     this.setState(this.baseState)
@@ -308,17 +322,22 @@ follow = (user) => {
                     <OtherPosts userId={this.state.user.data.id}/>
                 </Tab>
                 <Tab heading="Events">
-                    <OtherPosts userId={this.state.user.data.id}/>
+                    <OtherEvents userId={this.state.user.data.id}/>
                 </Tab>
               </Tabs>
           </Animated.ScrollView>
         </View>
+        {this.state.isAFollower ? 
         <Fab
             style={{ backgroundColor: '#82BE30' }}
             position="bottomRight"
             onPress={() => messagingStore.startPersonalConversation([this.state.user.data])}>
             <Icon name="mail" />
           </Fab>
+        :
+        null  
+        }
+        
         </React.Fragment>
       </StyleProvider>
     )
@@ -342,9 +361,9 @@ const styles = StyleSheet.create({
     width: 70
   },
   dp: {
-      height: 60,
-      borderRadius: 30,
-      width: 60,
+      height: 65,
+      borderRadius: 32.5,
+      width: 65,
       alignSelf: 'center'
   },
   profile: {

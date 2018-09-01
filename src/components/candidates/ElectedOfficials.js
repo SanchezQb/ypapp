@@ -53,7 +53,7 @@ export default class ElectedOfficials extends Component {
                             <View style={styles.listitem}>
                                 <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
                                     <Left>
-                                        <Thumbnail source={require('../profile.png')} />
+                                        <Thumbnail source={require('../logo.png')} />
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
                                         <Text>Hasstrup Ezekiel</Text>
@@ -72,7 +72,7 @@ export default class ElectedOfficials extends Component {
                             <View style={styles.listitem}>
                                 <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
                                     <Left>
-                                        <Thumbnail source={require('../profile.png')} />
+                                        <Thumbnail source={require('../logo.png')} />
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
                                         <Text>Hasstrup Ezekiel</Text>
@@ -91,7 +91,7 @@ export default class ElectedOfficials extends Component {
                             <View style={styles.listitem}>
                                 <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
                                     <Left>
-                                        <Thumbnail source={require('../profile.png')} />
+                                        <Thumbnail source={require('../logo.png')} />
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
                                         <Text>Hasstrup Ezekiel</Text>

@@ -9,7 +9,7 @@ import { Actions } from 'react-native-router-flux'
 
 const { width, height } = Dimensions.get('window')
 
-export default class Userposts extends Component {
+export default class OtherPosts extends Component {
     constructor() {
         super()
         this.state = {

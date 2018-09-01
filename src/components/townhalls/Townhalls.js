@@ -10,7 +10,7 @@ import {
     Title,
     Badge, Text, View, ListItem
 } from 'native-base';
-import { StyleSheet, TouchableOpacity,  BackHandler, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
+import { StyleSheet, TouchableOpacity, BackHandler, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -19,19 +19,19 @@ import messagingStore from '../../stores/Messaging';
 import accountStore from '../../stores/Account'
 import axios from 'axios'
 
-export default class Sessions extends Component {
+export default class TownHalls extends Component {
     constructor() {
         super()
         this.state = {
             isLoading: true,
             refreshing: false,
             error: false,
-            debates: []
+            townhalls: []
         }
         this.baseState = this.state
     }
     componentDidMount() {
-        this.getDebates()
+        this.getTownhalls()
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
     componentWillUnmount () {
@@ -42,9 +42,9 @@ export default class Sessions extends Component {
         Actions.pop()
         return true;
     }
-    getDebates = async () => {
+    getTownhalls = async () => {
         await axios({
-          url: `https://ypn-node.herokuapp.com/api/v1/convos/type/2`, 
+          url: `https://ypn-node.herokuapp.com/api/v1/convos/type/3`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",
@@ -52,8 +52,9 @@ export default class Sessions extends Component {
           },
       })
       .then(res => {
+          console.log(res)
           this.setState({
-              debates: res.data.data.reverse(),
+              townhalls: res.data.data.reverse(),
               isLoading: false
           })
       })
@@ -66,12 +67,12 @@ export default class Sessions extends Component {
     }
     reset = () => {
         this.setState(this.baseState)
-        this.getDebates()
+        this.getTownhalls()
       }
 
     _onRefresh() {
         this.setState({refreshing: true})
-        this.getDebates().then(() => {
+        this.getTownhalls().then(() => {
             this.setState({
                 refreshing: false
             })
@@ -89,7 +90,7 @@ export default class Sessions extends Component {
           else if (this.state.error) {
             return (
               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: '#444'}}>Could not fetch Debates :(</Text>
+                <Text style={{color: '#444'}}>Could not fetch Town Halls :(</Text>
                 <Text></Text>
                 <Text></Text>
                 <Button style={{backgroundColor: '#82BE30', alignSelf: 'center'}}onPress={() => {this.reset()}}>
@@ -109,15 +110,21 @@ export default class Sessions extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title>Debates</Title>
+                            <Title>Town Hall</Title>
                         </Body>
                         <Right>
-                         
+                            <Button transparent>
+                                <Icon name="ios-search" style={{color: '#fff'}}/>
+                            </Button>
+                            <Button badge transparent>
+                                <Icon name="ios-notifications-outline" style={{color: '#fff'}}/>
+                                <Badge style={{width: 12, height: 12, backgroundColor: '#F0BA00'}}><Text></Text></Badge>
+                            </Button>
                         </Right>
                     </Header>
                     <View style={{paddingBottom: 100}}>
                     <FlatList
-                        data={this.state.debates}
+                        data={this.state.townhalls}
                         showsVerticalScrollIndicator={false}
                         refreshControl={
                             <RefreshControl
@@ -135,14 +142,13 @@ export default class Sessions extends Component {
                                         <View style={{flexDirection: 'row', marginBottom: 5}}>
                                             <Text style={{color: '#444', fontWeight: 'bold'}}>{item.topic}</Text>
                                             <Right style={{borderBottomWidth: 0, marginRight: 10}}>
-                                                <TouchableOpacity style={styles.touchable} onPress={() => messagingStore.joinConversation(item)}>
+                                                {/* <TouchableOpacity style={styles.touchable} onPress={() => messagingStore.joinConversation(item)}>
                                                     <Text style={{color: '#fff', textAlign: 'center'}}>Join</Text>
-                                                </TouchableOpacity>
+                                                </TouchableOpacity> */}
                                             </Right>
                                         </View>
-                                        <Text style={{color: '#777', marginTop: 10}}>It is a long established 
-                                        fact that a reader will be distracted 
-                                        by the readable content of a page when  
+                                        <Text style={{color: '#777', marginTop: 10}}>
+                                        {`Delegate: ${item.focus.user.name}`} 
                                         </Text>
                                         <View style={styles.icons}>
                                             <ListItem style={styles.listitem}>
@@ -150,8 +156,8 @@ export default class Sessions extends Component {
                                                 <Text style={{color: '#a6a6a6', fontSize: 14, marginLeft: 5}}>Ongoing</Text>
                                             </ListItem>
                                             <ListItem style={styles.listitem}>
-                                                <MaterialIcon name="message-text-outline" style={{color: '#a6a6a6', fontSize: 14}} />
-                                                <Text style={{color: '#a6a6a6', fontSize: 14, marginLeft: 5}}>150 Messages</Text>
+                                                <MaterialIcon name="map-marker" style={{color: '#a6a6a6', fontSize: 14}} />
+                                                <Text style={{color: '#a6a6a6', fontSize: 14, marginLeft: 5}}>{item.details.inclusion.state}</Text>
                                             </ListItem>
                                             <ListItem style={styles.listitem}>
                                                 <MaterialIcon name="account" style={{color: '#a6a6a6', fontSize: 14}} />

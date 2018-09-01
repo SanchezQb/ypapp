@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Animated, Dimensions, Text, StyleSheet, TouchableOpacity, StatusBar, View, Image, BackHandler, NativeModules, findNodeHandle } from "react-native";
 import {Body, Header, ScrollableTab, Tab, Icon, TabHeading, Tabs, StyleProvider, Left, Right, Button, Title} from "native-base";
 import UserPosts from './UserPosts'
+import UserEvents from './UserEvents'
 import { Actions } from 'react-native-router-flux'
 import accountStore from '../../stores/Account';
 import { observer } from 'mobx-react/native'
@@ -108,6 +109,7 @@ export default class Profile extends Component {
           followers: res.data.followers,
           following: res.data.friends
       })
+      accountStore.passFollows(res.data)
   })
   .catch(error => {
       ToastAndroid.show("There was an error fetching data", ToastAndroid.SHORT)
@@ -144,7 +146,7 @@ export default class Profile extends Component {
                     <Title>Profile</Title>
                 </Body>
                 <Right>
-                  <Button transparent  onPress={() => this.onMenuPressed(labels)}>
+                  {/* <Button transparent  onPress={() => this.onMenuPressed(labels)}>
                     <View style={{flexDirection: 'row'}}>
                         <View>
                           <View
@@ -161,7 +163,7 @@ export default class Profile extends Component {
                             />
                         </View>
                     </View>
-                  </Button>
+                  </Button> */}
                 </Right>
             </Header>
           </Animated.View>
@@ -206,7 +208,7 @@ export default class Profile extends Component {
                           <TouchableOpacity style={styles.touchable} onPress={() => Actions.following({data: this.state.following})}>
                               <Text style={{color: '#555', fontSize: 12, textAlign: 'center'}}>{`${this.state.following.length} Following`}</Text>
                           </TouchableOpacity>
-                          <TouchableOpacity style={styles.touchableMessage}>
+                          <TouchableOpacity  onPress={()=> Actions.editProfile()} style={styles.touchableMessage}>
                               <Text style={{color: '#fff', fontSize: 12, textAlign: 'center'}}>Edit Profile</Text>
                           </TouchableOpacity>
                       </View>
@@ -258,7 +260,7 @@ export default class Profile extends Component {
                 <UserPosts />
                 </Tab>
                 <Tab heading="My Events">
-                    <UserPosts />
+                    <UserEvents />
                 </Tab>
               </Tabs>
           </Animated.ScrollView>

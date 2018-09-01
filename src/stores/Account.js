@@ -24,10 +24,13 @@ class Account {
         membership_number: '',
         role: null,
         roles: null,
-        vin: null
+        vin: null,
+        followers: [],
+        friends: []
     }
     @observable disabled = false
     @observable color = '#F0BA00'
+    @observable notifications = true
 
     getUserDataFromStorage(data) {
         this.user = data
@@ -113,6 +116,10 @@ class Account {
         })
         .catch(err => console.log(err))
     }
+    passFollows(data) {
+        this.user.followers = data.followers
+        this.user.following = data.friends
+    }
     editProfile(data) {
         if(data.avatar) {
             RNCloudinary.UploadImage(data.avatar)
@@ -150,6 +157,7 @@ class Account {
                     this.user.vin = res.data.data.vin
                     this.user.bio = res.data.data.bio
                     ToastAndroid.show('profile updated', ToastAndroid.LONG)
+                    AsyncStorage.setItem('allUserData', JSON.stringify(this.user))
                 })
                 .catch(err => {
                     ToastAndroid.show('An error occured while updating your profile, Please try again', ToastAndroid.SHORT)
@@ -159,25 +167,43 @@ class Account {
             .catch(err => ToastAndroid.show('There was a problem uploading your photo, Please try again or try a different photo', ToastAndroid.SHORT))
         }
         else {
-            const request = {
+            const req = {
                 user: {
                    ...data,
                 }
             }
+            console.log(data)
             axios({
                 url: 'https://ypn-base-01.herokuapp.com/user', 
                 method: 'PUT', 
-                data: request,
+                data: req,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `${this.user.token}`
                 },
             })
-            .then(() => {
+            .then((res) => {
+                this.user.token = res.data.token
+                this.user.avatar = res.data.data.avatar
+                this.user.email =  res.data.data.email
+                this.user.id = res.data.data.id
+                this.user.firstname = res.data.data.firstname
+                this.user.lastname = res.data.data.lastname
+                this.user.phone = res.data.data.phone
+                this.user.state = res.data.data.state
+                this.user.lga = res.data.data.lga
+                this.user.ward = res.data.data.ward
+                this.user.username = res.data.data.username
+                this.user.membership_number = res.data.data.membership_number
+                this.user.role = res.data.data.role
+                this.user.roles = res.data.data.roles
+                this.user.vin = res.data.data.vin
+                this.user.bio = res.data.data.bio
                 ToastAndroid.show('profile updated', ToastAndroid.LONG)
+                AsyncStorage.setItem('allUserData', JSON.stringify(this.user))
             })
             .catch(err => {
-                ToastAndroid.show(err.response.data.errors, ToastAndroid.SHORT)
+                ToastAndroid.show('An error occurred', ToastAndroid.SHORT)
             })
         }
     }
@@ -192,10 +218,7 @@ class Account {
         axios({
             url: 'https://ypn-base-01.herokuapp.com/login', 
             method: 'POST', 
-            data: request,
-            headers: {
-                "Content-Type": "application/json"
-            },
+            data: request
         }).then(res => {
             this.disabled = false
             this.user.token = res.data.data.token

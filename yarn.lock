@@ -4886,11 +4886,11 @@ react-native-modalbox@^1.5.0:
     create-react-class "^15.6.0"
     prop-types "^15.5.10"
 
-react-native-optimized-flatlist@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-optimized-flatlist/-/react-native-optimized-flatlist-1.0.4.tgz#15c817ffb545e3c62e56a1b3c4654c1316414941"
+react-native-onesignal@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-3.2.6.tgz#b28f874451c39d421a824209512a113a7aa8f24e"
   dependencies:
-    prop-types "^15.6.0"
+    invariant "^2.2.2"
 
 react-native-parsed-text@^0.0.20:
   version "0.0.20"

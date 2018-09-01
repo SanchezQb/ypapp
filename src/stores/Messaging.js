@@ -34,16 +34,16 @@ class Messaging {
         })
     }
 
-    startPersonalConversation(users) {
+    startPersonalConversation(users, reference) {//add reference?
         // you want to check that the message already exists in state
         let target;
         const targets = users.map(item => item.id);
         targets.push(accountStore.user.id);
         const messages = this.logs;
-        if (!messages || !messages.length) return this.createNewConversation(users)
+        if (!messages || !messages.length) return this.createNewConversation(users, reference)//add reference?
         // you want to make sure the members are in the array;
         let filtered = messages.filter(item => item.type === 1 && item.members.length === targets.length);
-        if (!filtered.length) return this.createNewConversation(users)
+        if (!filtered.length) return this.createNewConversation(users, reference)//add reference?
         // return the item
         filtered = filtered.map((item) => {
             // concat & dedupe to check for unique guys
@@ -57,12 +57,12 @@ class Messaging {
         // dispatch the conversation;
         if (target) {
             target.members = users;
-            return Actions.chat({ data: target });
+            return Actions.chat({ data: target, reference });
         }
-        return this.createNewConversation(users) // check this for duplicate thing
+        return this.createNewConversation(users, reference) // check this for duplicate thing, add reference?
     }
 
-    createNewConversation(members) {
+    createNewConversation(members, reference) {//add reference?
         axios({
             url: `https://ypn-node.herokuapp.com/api/v1/convos?type=1`, 
             method: 'POST',
@@ -80,7 +80,7 @@ class Messaging {
             // obj[`${res.data.data._id}`] = res.data.data.messages
 
             // this.registry = {...this.registry, ...obj}
-            return Actions.chat({data: res.data.data})
+            return Actions.chat({data: res.data.data, reference})
         })
         .catch(err => {
             ToastAndroid.show('Something went wrong, try again', ToastAndroid.SHORT)
@@ -113,11 +113,9 @@ class Messaging {
             },
         })
         .then(res => {
-            console.log(res.data.data)
             return Actions.chat({data: res.data.data})
         })
         .catch(err => {
-            console.log(err.response.status)
             if(err.response.status && err.response.status === 401) {
                 ToastAndroid.show('Sorry, you are not allowed to join this conversation', ToastAndroid.SHORT)
             }

@@ -6,7 +6,7 @@ import {
     Body, 
     Right, 
     Button, 
-    Icon, Title, Thumbnail, Text } from 'native-base';
+    Icon, Title, Thumbnail, Text , Container} from 'native-base';
 import { StyleSheet, View, ScrollView,  ToastAndroid, Alert } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
@@ -110,7 +110,7 @@ export default class Event extends Component {
         const item = this.props.item
         return (
             <StyleProvider style={getTheme(material)}>
-                <View>
+                <Container>
                     <Header>
                         <Left>
                             <Button transparent onPress={() => Actions.pop()}>
@@ -123,7 +123,7 @@ export default class Event extends Component {
                         <Right>
                         </Right>
                     </Header>
-                    <ScrollView>
+                    <ScrollView sty>
                         <View style={styles.view}>
                             <View>
                                {this.userProfile(item.details.displayPicture)}
@@ -154,7 +154,7 @@ export default class Event extends Component {
                             </Button>
                         </View>
                     </ScrollView>
-                </View>
+                </Container>
             </StyleProvider>
         )
     }
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
        alignSelf: 'center'
     },
     buttonContainer: {
-        marginTop: 30,
+        marginVertical: 30,
         width: '93%',
         alignSelf: 'center',
     },

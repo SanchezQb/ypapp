@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ViewPropTypes, Image, TouchableOpacity, Alert, AsyncStorage,ScrollView  } from 'react-native';
+import { StyleSheet, Text, View, ViewPropTypes, Image, TouchableOpacity, Alert, AsyncStorage,ScrollView, Share  } from 'react-native';
 import { Container, Content, List, ListItem, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux'
 import accountStore from '../stores/Account'
+import { observer } from 'mobx-react/native'
 
-
+@observer
 export default class DrawerContent extends React.Component {
   static propTypes = {
     name: PropTypes.string,
@@ -32,6 +33,14 @@ export default class DrawerContent extends React.Component {
   logoutHandler = () => {
     AsyncStorage.removeItem('allUserData')
     Actions.main()
+  }
+
+  shareApp = () => {
+    Share.share({
+        message: "Join Youth Party in shaping the future.Download our mobile app for android here >> https://play.google.com/store/apps/details?id=com.youthparty"
+      })
+      .then((result) => console.log(result))
+      .catch(err => console.log(err))
   }
 
   userProfile = (avatar) => {
@@ -84,12 +93,18 @@ export default class DrawerContent extends React.Component {
             </View>
             <Content style={styles.content}>
                 <ScrollView>
-                <List>
+                <List>{accountStore.user.role == 1 ?
+                        <ListItem style={styles.listitem} onPress={() => Actions.partymember()}>
+                            <Icon name="md-star-outline" style={{color: '#000'}} />
+                            <Text style={styles.link}>Membership</Text>
+                        </ListItem>
+                    : 
                     <ListItem style={styles.listitem} onPress={() => Actions.benefits()}>
                         <Icon name="md-star-outline" style={{color: '#000'}} />
                         <Text style={styles.link}>Membership</Text>
                     </ListItem>
-                    <ListItem style={styles.listitem}>
+                    }
+                    <ListItem onPress={() => Actions.groups()} style={styles.listitem}>
                         <Icon name="md-people" style={{color: '#000'}} />
                         <Text style={styles.link}>Groups</Text>
                     </ListItem>
@@ -109,7 +124,11 @@ export default class DrawerContent extends React.Component {
                         <Icon name="md-mail" style={{color: '#000'}} />
                         <Text style={styles.link}>Contact Us</Text>
                     </ListItem>
-                    <ListItem style={styles.listitem}>
+                    <ListItem style={styles.listitem} onPress={() => this.shareApp()}>
+                        <Icon name="md-share" style={{color: '#000'}} />
+                        <Text style={styles.link}>Share App</Text>
+                    </ListItem>
+                    <ListItem style={styles.listitem} onPress={() => Actions.settings()}>
                         <Icon name="md-settings" style={{color: '#000'}} />
                         <Text style={styles.link}>Settings</Text>
                     </ListItem>
