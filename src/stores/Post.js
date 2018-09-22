@@ -1,6 +1,5 @@
 import { observable } from 'mobx'
-import accountStore from './Account'
-import axios from 'axios'
+
 
 class Post {
     @observable commentCount = 0

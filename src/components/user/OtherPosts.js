@@ -6,6 +6,7 @@ import accountStore from '../../stores/Account'
 import MediaHandler from '../feed/MediaHandler'
 import moment from 'moment'
 import { Actions } from 'react-native-router-flux'
+import Config from '../../config'
 
 const { width, height } = Dimensions.get('window')
 
@@ -25,7 +26,7 @@ export default class OtherPosts extends Component {
     }
     getPosts = async () => {
         await axios({
-          url: `https://ypn-node.herokuapp.com/api/v1/posts/all/${this.props.userId}`, 
+          url: `${Config.postUrl}/posts//all/${this.props.userId}`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",

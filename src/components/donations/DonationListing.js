@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux'
 import { observer } from 'mobx-react/native'
 import accountStore from '../../stores/Account'
 import axios from 'axios'
+import Config from '../../config'
 
 @observer
 export default class DonationListing extends Component {
@@ -37,7 +38,7 @@ export default class DonationListing extends Component {
 
     fetchAllDonations = async () => {
         await axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/donations`, 
+            url: `${Config.postUrl}/donations`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",

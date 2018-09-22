@@ -29,6 +29,8 @@ export default class Newsletter extends Component {
         this.setState({disabled: true})
         let authenticationString = btoa('youthparty:b0581a8215d7c08b6d44b8fd77efbe32-us17')
         authenticationString = "Basic " + authenticationString;
+
+        //axios doesn't work
         fetch('https://us17.api.mailchimp.com/3.0/lists/cffa00240d/members', {
             mode: 'no-cors',
             method: 'POST',
@@ -104,8 +106,7 @@ export default class Newsletter extends Component {
                             </Button>
                         </View>
                     </View>
-                    }
-                        
+                    }        
                     </View>
                 </Container>
             </StyleProvider>

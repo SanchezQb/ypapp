@@ -22,6 +22,7 @@ import Forgot from './src/components/auth/Forgot'
 import Register1 from './src/components/auth/Register1'
 import Register2 from './src/components/auth/Register2'
 import CandidateProfile from './src/components/candidates/CandidateProfile'
+import AspirantProfile from './src/components/candidates/AspirantProfile'
 import Donations from './src/components/donations/Donations'
 import DonationListing from './src/components/donations/DonationListing'
 import DonationDetail from './src/components/donations/DonationDetail'
@@ -52,13 +53,16 @@ import VoteDone from './src/components/elections/VoteDone'
 import Eligibility from './src/components/elections/Eligibility'
 import Elections from './src/components/elections/Elections'
 import SelectCandidate from './src/components/elections/SelectCandidate'
+import Results from './src/components/elections/Results'
 import PartyMember from './src/components/membership/PartyMember'
 import OtherProfile from './src/components/user/OtherProfile'
 import About from './src/components/about/About'
 import PdfView from './src/components/about/PdfView'
 import AddComment from './src/components/feed/AddComment'
+import Posts from './src/components/feed/Posts'
 import Post from './src/components/feed/Post'
 import ReactionList from './src/components/feed/ReactionList'
+import Search from './src/components/search/Search'
 import ImageSwiper from './src/components/feed/ImageSwiper'
 import Survey from './src/components/survey/Survey'
 import SelectChoice from './src/components/survey/SelectChoice'
@@ -71,6 +75,9 @@ import NewChat from './src/components/chat/NewChat'
 import OneSignal from 'react-native-onesignal'
 import Notifications from './src/components/feed/Notifications'
 import accountStore from './src/stores/Account'
+import notificationStore from './src/stores/Notifications'
+import SinglePost from './src/components/feed/SinglePost'
+import messagingStore from './src/stores/Messaging';
 
 const prefix = 'youthparty://app/'
 
@@ -82,10 +89,10 @@ export default class App extends Component<Props> {
   componentWillMount() {
     OneSignal.init("19c93878-1c4e-4fd7-b8ad-7ddf9eebc81d");
     OneSignal.addEventListener('ids', this.handleFetchIds)
+    OneSignal.addEventListener('received',this.onReceived);
+    OneSignal.addEventListener('opened', this.onOpened);
+    OneSignal.inFocusDisplaying(0)
     OneSignal.configure()
-    OneSignal.getPermissionSubscriptionState((value) => {
-      console.log(value)
-    })
   }
   componentDidMount() {
     SplashScreen.hide()
@@ -105,12 +112,23 @@ export default class App extends Component<Props> {
         Authorization: token
       }
     }).then((response) => {
-      console.log(response.data)
-      console.log(token)
       AsyncStorage.setItem('OnesignalPlayerId', response.data.data)
     }).catch((err) => {
       console.log(err.response)
     })
+  }
+
+  onReceived = (notification) => {
+    notificationStore.fetchNotifications()
+  }
+
+  onOpened = (notification) => {
+    if(notification.notification.payload.body.toLowerCase().match(/message/)) {
+      messagingStore.setIndex()
+    }
+    else {
+      Actions.notifications
+    }
   }
 
   getData = async () => {
@@ -151,6 +169,7 @@ export default class App extends Component<Props> {
                 contentComponent={DrawerContent}
                 drawerWidth={300}>
               <Scene key="home" component={Root} title="Home" hideNavBar />
+              <Scene key="posts" component={Posts} hideNavBar />
             </Drawer>
             <Scene key="allusers" component={AllUsers} title="All Users" hideNavBar />
             <Scene key="chat" component={Chat} title="Chat" path={'chat/:id'} hideNavBar />
@@ -163,6 +182,7 @@ export default class App extends Component<Props> {
             <Scene key="sponsored" component={SponsoredCandidates} title="Sponsored Candidates" hideNavBar />
             <Scene key="elected" component={ElectedOfficials} title="Elected Officials" hideNavBar />
             <Scene key="cp" component={CandidateProfile} title="Profile" hideNavBar />
+            <Scene key="ap" component={AspirantProfile} title="Profile" hideNavBar />
             <Scene key="excos" component={Excos} title="Excos" hideNavBar />
             <Scene key="gallery" component={Gallery} title="Gallery" hideNavBar />
             <Scene key="events" component={Events} title="Events" hideNavBar />
@@ -183,7 +203,6 @@ export default class App extends Component<Props> {
             <Scene key="selectCandidate" component={SelectCandidate} title="Select Candidate" hideNavBar />
             <Scene key="about" component={About} title="About" hideNavBar />
             <Scene key="pdfView" component={PdfView} title="View PDF" hideNavBar />
-            <Scene key="addComment" component={AddComment} title="Add Comment" hideNavBar />
             <Scene key="eligibility" component={Eligibility} title="Eligibility" hideNavBar />
             <Scene key="post" component={Post} title="Post" path={'post/:item'} hideNavBar />
             <Scene key="reactionList" component={ReactionList} title="Reaction List" hideNavBar />
@@ -198,6 +217,9 @@ export default class App extends Component<Props> {
             <Scene key="newsletter" component={Newsletter} hideNavBar />
             <Scene key="newChat" component={NewChat} hideNavBar />
             <Scene key="notifications" component={Notifications} hideNavBar />
+            <Scene key="singlePost" component={SinglePost} hideNavBar />
+            <Scene key="search" component={Search} hideNavBar />
+            <Scene key="results" component={Results} hideNavBar />
           </Scene>
         </Router>
     </View>

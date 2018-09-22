@@ -8,6 +8,7 @@ import { observer } from 'mobx-react/native'
 import { StateData } from '../../modules/StateData'
 import accountStore from '../../stores/Account';
 import axios from 'axios'
+import Config from '../../config'
 
 @observer
 export default class Eligibility extends Component {
@@ -36,7 +37,7 @@ export default class Eligibility extends Component {
         }
         this.setState({disabled: true})
         axios({
-            url: `https://ypn-election-02.herokuapp.com/api/verify`, 
+            url: `${Config.electionUrl}/verify`, 
             method: 'POST', 
             data: {
                 vin: data.vin,

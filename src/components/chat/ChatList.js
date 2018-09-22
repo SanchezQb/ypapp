@@ -7,7 +7,7 @@ import {
     Right, 
     Button,
     Title, 
-    List, ListItem, Thumbnail, Container, Icon, Text
+    ListItem, Thumbnail, Container, Icon, Text
 } from 'native-base';
 import { StyleSheet, UIManager, findNodeHandle, View, BackHandler, ScrollView, Alert, ActivityIndicator } from 'react-native'
 import { Actions } from 'react-native-router-flux'
@@ -68,7 +68,6 @@ export default class ChatList extends Component {
       userProfile = (data) => {
         if(data.type == 2) {
             return (
-                // <Thumbnail source={require('../microphone.png')}/>
                 <View style={{width: 60, height: 60, borderRadius: 30, backgroundColor: '#F2F3F4', justifyContent: 'center', alignItems: 'center'}}>
                     <Icon name="ios-microphone-outline" style={{fontSize: 32, color: '#82BE30', fontWeight: 'bold'}} />
                 </View>
@@ -117,15 +116,15 @@ export default class ChatList extends Component {
               
             )
         }
-        else if (messagingStore.logs.length == 0) {
-            return (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{color: '#444'}}>There are no chats to display</Text>
-                    <Text style={{color: '#444'}}>Click the button on the top right to start chat</Text>
-                    <Text></Text>
-                </View>
-            )
-        }
+        // else if (messagingStore.logs.length == 0) {
+        //     return (
+        //         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        //             <Text style={{color: '#444'}}>There are no chats to display</Text>
+        //             <Text style={{color: '#444'}}>Click the button on the top right to start chat</Text>
+        //             <Text></Text>
+        //         </View>
+        //     )
+        // }
         const { labels } = this.props;
         const logs = messagingStore.logs.map(data => {
             const title = data.topic ? data.topic : this.generateNameFromMembers(data.members.filter(item => item.id !== accountStore.user.id));
@@ -184,9 +183,17 @@ export default class ChatList extends Component {
                             </Button> 
                         </Right>
                     </Header>
+                    { messagingStore.logs.length == 0 ? 
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style={{color: '#444'}}>There are no chats to display</Text>
+                        <Text style={{color: '#444'}}>Click the button on the top right to start chat</Text>
+                        <Text></Text>
+                    </View>
+                    :
                     <ScrollView>
                         {logs} 
                     </ScrollView> 
+                    }
                 </Container>
             </StyleProvider>
         )

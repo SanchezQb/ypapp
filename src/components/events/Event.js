@@ -14,6 +14,7 @@ import { Actions } from 'react-native-router-flux'
 import accountStore from '../../stores/Account'
 import moment from 'moment'
 import axios from 'axios'
+import Config from '../../config'
 
 
 export default class Event extends Component {
@@ -58,7 +59,7 @@ export default class Event extends Component {
         this.setState({disabled: true})
         await axios.request({
            method: 'put',
-           url: `https://ypn-node.herokuapp.com/api/v1/events/join/${this.props.item._id}`,
+           url: `${Config.postUrl}/events/join/${this.props.item._id}`,
            headers: {
              Authorization: `${accountStore.user.token}`
            }
@@ -91,7 +92,7 @@ export default class Event extends Component {
         this.setState({disabled: true})
         await axios.request({
             method: 'put',
-            url: `https://ypn-node.herokuapp.com/api/v1/events/leave/${this.props.item._id}`,
+            url: `${Config.postUrl}/events/leave/${this.props.item._id}`,
             headers: {
               Authorization: `${accountStore.user.token}`
             }

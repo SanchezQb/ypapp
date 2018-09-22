@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { observer } from 'mobx-react'
 import {  Text, Thumbnail, Button } from 'native-base'
 import { View,  StyleSheet, FlatList, ActivityIndicator } from 'react-native'
 import { PostList } from '../feed/Posts'
 import accountStore from '../../stores/Account'
+import Config from '../../config'
 
 
+@observer
 export default class Userposts extends Component {
     constructor() {
         super()
@@ -22,7 +25,7 @@ export default class Userposts extends Component {
     }
     getPosts = async () => {
         await axios({
-          url: `https://ypn-node.herokuapp.com/api/v1/posts/all/${accountStore.user.id}`, 
+          url: `${Config.postUrl}/posts//all/${accountStore.user.id}`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",
@@ -48,19 +51,7 @@ export default class Userposts extends Component {
         this.setState(this.baseState)
         this.getPosts()
     }
-   
-    userProfile = (avatar) => {
-        if(avatar == null || avatar == '') {
-            return (
-                <Thumbnail source={require('../logo.png')} resizeMode="center"/>
-            )
-        }
-        else {
-            return (
-                <Thumbnail source={{uri: avatar}}/>
-            )
-        }
-    }
+
     render() {
         if (this.state.isLoading) {
             return (

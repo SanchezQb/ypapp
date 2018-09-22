@@ -6,6 +6,7 @@ import accountStore from '../../stores/Account'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import axios from 'axios'
+import Config from '../../config'
 
 export default class Survey extends Component {
 
@@ -29,7 +30,7 @@ export default class Survey extends Component {
     
     fetchAllQuestions = async () =>  {
         await axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/questions?type=1`, 
+            url: `${Config.postUrl}/questions?type=1`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",

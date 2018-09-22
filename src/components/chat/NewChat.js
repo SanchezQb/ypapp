@@ -17,11 +17,11 @@ import { Actions } from 'react-native-router-flux'
 import messagingStore from '../../stores/Messaging';
 import accountStore from '../../stores/Account'
 
-export default class NewGroup extends Component {
+export default class NewChat extends Component {
     constructor() {
         super()
         this.state = {
-            followers: accountStore.user.followers,
+            followers: accountStore.user.followers.filter(item => item !== null),
             members: [],
             selected: false
         }
@@ -79,7 +79,7 @@ export default class NewGroup extends Component {
       }
 
     render() {
-        console.log(this.state)
+        console.log(this.state.followers)
         return (
             <StyleProvider style={getTheme(material)}>
                 <View>

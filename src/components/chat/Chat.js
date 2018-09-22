@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { StyleProvider, Container, Header, Left, Right, Body, Title, Button, Icon, Subtitle } from 'native-base';
-import { View, Text, BackHandler, ActivityIndicator, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
+import { StyleProvider, Container, Header, Left, Right, Body, Title, Button, Icon,} from 'native-base';
+import { View, Text, BackHandler, ActivityIndicator, TouchableOpacity, StyleSheet, AsyncStorage, ToastAndroid, Dimensions } from 'react-native'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
@@ -11,6 +11,7 @@ window.navigator.userAgent = 'react-native'
 const io = require('react-native-socket.io-client/socket.io');
 const uuidv3 = require('uuid/v3');
 import axios from 'axios'
+import Config from '../../config'
 
 
 
@@ -21,7 +22,7 @@ export default class Chat extends Component {
       messages: [],
       content: ''
     }
-    this.socket = io(`https://yon-notification.herokuapp.com/conversation`, { query: { convoID: this.props.data._id } });
+    this.socket = io(`${Config.realTimeUrl}/conversation`, { query: { convoID: this.props.data._id } });
     this.registerEvents();
   }
  
@@ -34,6 +35,7 @@ export default class Chat extends Component {
  
   componentWillUnmount () {
       messagingStore.fetchAllConversations()
+      this.persistChat()
       BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
 
@@ -42,15 +44,32 @@ export default class Chat extends Component {
       return true;
   }
 
-  componentWillMount() {
-    this.updateConversation(this.props.data._id)
+  persistChat = () => {
+    AsyncStorage.setItem(this.props.data._id, JSON.stringify(this.state.messages))
   }
+
+   async componentWillMount() {
+    try {
+      let chat = await AsyncStorage.getItem(this.props.data._id)
+      let parsed = JSON.parse(chat)
+      if(chat !== null) {
+         this.setState({messages: parsed})
+      }
+      else {
+         this.setState({messages: []})
+      }   
+    }
+    catch(error) {
+      ToastAndroid.show('Error fetching messages', ToastAndroid.SHORT)
+    }   
+   }
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    this.updateConversation(this.props.data._id)
   }
-  updateConversation(id) {
+  updateConversation = async (id) => {
     axios({
-        url: `https://ypn-node.herokuapp.com/api/v1/convos/${id}`, 
+        url: `${Config.postUrl}/convos/${id}`, 
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
@@ -58,7 +77,6 @@ export default class Chat extends Component {
         },
     })
     .then(response => {
-      console.log(response.data.data.messages)
       const res = [];
       response.data.data.messages.map((message, index) => {
       const obj = {
@@ -72,10 +90,8 @@ export default class Chat extends Component {
           }
         };
       res.unshift(obj)
-      this.setState((previousState) => ({
-        messages: GiftedChat.append(previousState.messages, obj)
-      }))
       })
+      this.setState({messages: res})
       if(this.props.reference) {
         this.handleReference(this.props.reference)
       }
@@ -135,7 +151,6 @@ export default class Chat extends Component {
         }
       }
       res.unshift(obj)
-      console.log(res)
       this.setState((previousState) => {
         return {
           messages: GiftedChat.append(previousState.messages, res),
@@ -147,6 +162,7 @@ export default class Chat extends Component {
   onSend(messages = []) {
     let data = this.formatMessage(messages)
     messagingStore.sendMessage({...data, token: accountStore.user.token}, this.socket)
+    messagingStore.fetchAllConversations()
     this._storeMessages(messages);
   }
 
@@ -204,7 +220,6 @@ export default class Chat extends Component {
   }
 
   renderChatFooter(props) {
-    console.log(props)
     if(props.currentMessage.reference) {
       return (
         <TouchableOpacity onPress={() => Actions.post({item: props.currentMessage.reference})} style={{backgroundColor: '#edf5e0', minHeight: 40, borderWidth: 2,  borderColor: '#ccc'}}>
@@ -220,7 +235,7 @@ export default class Chat extends Component {
     if (props.isSameUser(props.currentMessage, props.previousMessage)
      && props.isSameDay(props.currentMessage, props.previousMessage)) {
       return (
-        <View style={{marginVertical: 7}}> 
+        <View style={{marginVertical: 4}}> 
           <Bubble
             {...props} 
             wrapperStyle={{
@@ -240,7 +255,7 @@ export default class Chat extends Component {
     }
     else if(this.props.data.focus && ( props.currentMessage.user._id === this.props.data.focus.user.id)) {
       return (
-        <View style={{marginVertical: 7}}> 
+        <View style={{marginVertical: 4}}> 
           <Text 
             style={{ 
               color: '#F0BA00',
@@ -268,7 +283,7 @@ export default class Chat extends Component {
       )
     }
     return ( 
-      <View style={{marginVertical: 7}}>
+      <View style={{marginVertical: 4}}>
         {props.currentMessage.user._id === props.user._id ? 
         <Text></Text>
          : 
@@ -298,6 +313,14 @@ export default class Chat extends Component {
       </View>
       )
     }
+
+    onLoad() {
+      return (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color="#82BE30"/>
+        </View>
+      )
+    }
  
   render() {
     const title = this.props.data.topic ? this.props.data.topic : this.generateNameFromMembers(this.props.data.members.filter(item => item.id !== accountStore.user.id));
@@ -318,7 +341,7 @@ export default class Chat extends Component {
             </Header>
             <View style={{flex: 1}}>
               <View style={{backgroundColor: '#444'}}>
-                { this.props.data.type == 3 ? <Text style={styles.topicTitle}><Text style={{color: '#F0BA00'}}>Delegate:</Text> {this.props.data.focus.user.name}</Text> : null }
+                { this.props.data.type == 3 ? <Text style={styles.topicTitle}><Text style={{color: '#F0BA00'}}>Focus:</Text> {this.props.data.focus.user.name}</Text> : null }
               </View>
               <GiftedChat
                   renderAvatar={null}
@@ -332,6 +355,7 @@ export default class Chat extends Component {
                     style: {backgroundColor: '#fff', width: '90%'}
                   }}
                   isAnimated
+                  renderLoading={this.onLoad.bind(this)}
                   renderBubble={this.renderBubble.bind(this)}
                   renderCustomView={this.renderChatFooter.bind(this)}
               />

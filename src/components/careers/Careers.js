@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { StyleProvider, Header, Left, Body, Right, Button, Icon, Title} from 'native-base';
 import ScrollableTabView from 'react-native-scrollable-tab-view'
 import Vacancies from './Vacancies'
+import Voluntaries from './Voluntaries'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -46,7 +47,7 @@ export default class Careers extends Component {
                         tabBarTextStyle={{fontSize: 15}}
                         >
                         <Vacancies tabLabel="Vacancies" />
-                        <Vacancies tabLabel="Volunteer" />
+                        <Voluntaries tabLabel="Volunteer" />
                     </ScrollableTabView>
                 </React.Fragment>
             </StyleProvider>

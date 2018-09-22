@@ -3,6 +3,7 @@ import { Actions} from 'react-native-router-flux'
 import { ToastAndroid } from 'react-native'
 import accountStore from './Account'
 import axios from 'axios'
+import Config from '../config'
 
 
 class Donations {
@@ -24,7 +25,7 @@ class Donations {
             date: Date.now()
         }
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/donations/donate/${id}`, 
+            url: `${Config.postUrl}/donations/donate/${id}`, 
             method: 'PUT', 
             data: request,
             headers: {

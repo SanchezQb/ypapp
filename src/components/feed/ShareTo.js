@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Icon, Text, Left, Body, Right, Header, Title, StyleProvider, Container, ListItem, Thumbnail } from 'native-base'
-import { View, StyleSheet, BackHandler, FlatList, ScrollView, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, BackHandler, ScrollView,} from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
@@ -12,12 +12,11 @@ export default class ShareTo extends Component {
 
     state = {
         chatLogs: messagingStore.logs,
-        followers: accountStore.user.followers
+        followers: accountStore.user.followers.filter(item => item !== null)
     }
 
 
     componentDidMount() {
-        console.log(this.props.data)
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
     componentWillUnmount () {

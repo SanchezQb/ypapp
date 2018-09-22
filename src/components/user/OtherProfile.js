@@ -9,6 +9,7 @@ import OtherEvents from './OtherEvents'
 import axios from 'axios'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
+import Config from '../../config'
 
 const UIManager = NativeModules.UIManager;
 const {width: SCREEN_WIDTH} = Dimensions.get("window");
@@ -99,7 +100,7 @@ export default class OtherProfile extends Component {
   };
   getUserProfile = async () => {
     await axios({
-      url: `https://ypn-base-01.herokuapp.com/profile/${this.props.data}`, 
+      url: `${Config.baseUrl}/profile/${this.props.data}`, 
       method: 'GET', 
       headers: {
           "Content-Type": "application/json",
@@ -111,8 +112,10 @@ export default class OtherProfile extends Component {
           user: res.data,
           isLoading: false
       })
-  }).then(() => this.checkFollows())
-  .then(() => this.checkFollowing())
+  }).then(() => {
+    this.checkFollows()
+    this.checkFollowing()
+  })
   .catch(error => {
       console.log(error.response.data)
       this.setState({
@@ -123,8 +126,8 @@ export default class OtherProfile extends Component {
 }
 
 checkFollowing = () => {
-  if(this.state.user.followers.map(item => item.id).includes(accountStore.user.id)) {
-    this.setState({text: 'Following'})
+  if(this.state.user.followers.filter(item => item !== null).map(item => item.id).includes(accountStore.user.id)) {
+    this.setState({text: 'following'})
   }
 }
 
@@ -133,6 +136,7 @@ checkFollows = () => {
     this.setState({isAFollower: true})
   }
 }
+
 reset = () => {
     this.setState(this.baseState)
     this.getUserProfile()
@@ -208,7 +212,7 @@ follow = (user) => {
                     <Title>Profile</Title>
                 </Body>
                 <Right>
-                  <Button transparent  onPress={() => this.onMenuPressed(labels)}>
+                  {/* <Button transparent  onPress={() => this.onMenuPressed(labels)}>
                     <View style={{flexDirection: 'row'}}>
                         <View>
                           <View
@@ -225,7 +229,7 @@ follow = (user) => {
                             />
                         </View>
                     </View>
-                  </Button>
+                  </Button> */}
                 </Right>
             </Header>
           </Animated.View>
@@ -248,6 +252,9 @@ follow = (user) => {
                       <View style={styles.profile}>
                             <Text style={{fontWeight: 'bold', fontSize: 16, color: '#fff'}}>
                                 {`${this.state.user.data.firstname} ${this.state.user.data.lastname}`}
+                            </Text>
+                            <Text style={{ fontSize: 14, color: '#f2f3f4'}}>
+                              {`@${this.state.user.data.username}`}
                             </Text>
                             <Text style={{fontSize: 16, color: '#fff'}}>
                                 {`Ward ${this.state.user.data.ward} | ${this.state.user.data.lga} LGA`}

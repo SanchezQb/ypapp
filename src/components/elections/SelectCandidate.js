@@ -6,6 +6,7 @@ import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import accountStore from '../../stores/Account'
 import axios from 'axios'
+import Config from '../../config'
 
 const { height } = Dimensions.get('window')
 
@@ -67,7 +68,6 @@ export default class SelectCandidate extends Component {
         ref['0'] = target
         const response = [ref]
         this.setState({ responses: response })
-        console.log(this.state)
     }
 
       
@@ -78,7 +78,7 @@ export default class SelectCandidate extends Component {
         }
         this.setState({disabled: true})
         axios({
-            url: `https://ypn-election-02.herokuapp.com/api/check/${id}`, 
+            url: `${Config.electionUrl}/check/${id}`, 
             method: 'POST', 
             headers: {
                 "Content-Type": "application/json",
@@ -96,7 +96,7 @@ export default class SelectCandidate extends Component {
     voteHandler = (data) => {
         this.setState({disabled: true})
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/questions/respond`, 
+            url: `${Config.postUrl}/questions/respond`, 
             method: 'PUT', 
             data,
             headers: {
@@ -114,16 +114,6 @@ export default class SelectCandidate extends Component {
             this.results()
             ToastAndroid.show(error.response.data.error, ToastAndroid.SHORT)
         })
-    }
-    results = () => {
-        axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/questions/${this.state.id}`, 
-            method: 'GET', 
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `${accountStore.user.token}`
-            },
-        }).then(res => console.log(res))
     }
 
     render() {
@@ -162,6 +152,9 @@ export default class SelectCandidate extends Component {
                             <Title>Elections</Title>
                         </Body>
                         <Right>
+                            <Button onPress={() => Actions.results({data: this.state.id})} transparent>
+                               <Text>View Results</Text>
+                            </Button>
                         </Right>
                     </Header>
                     <View style={styles.container}>

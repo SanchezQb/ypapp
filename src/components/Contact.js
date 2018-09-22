@@ -32,13 +32,13 @@ export default class Contact extends Component {
 
 
     telephone = () => {
-        Linking.openURL('tel:08032345678').catch(err => console.error('An error occurred', err));
+        Linking.openURL('tel:08069216186').catch(err => console.error('An error occurred', err));
     }
     mail = () => {
         Linking.openURL('mailto:info@youthpartyng.com').catch(err => console.error('An error occurred', err));
     }
     geo = () => {
-        Linking.openURL('geo:37.484847,-122.148386').catch(err => console.error('An error occurred', err));
+        Linking.openURL('geo:9.053448,7.459499').catch(err => console.error('An error occurred', err));
     }
 
     openLink = (url) => {
@@ -89,17 +89,6 @@ export default class Contact extends Component {
                             </ListItem>
                         </List>
                     </View>
-                    <View style={styles.textarea}>
-                        <Form>
-                            <Textarea 
-                                rowSpan={5} 
-                                placeholderTextColor="#a6a6a6" 
-                                placeholder="Send a Message" />
-                        </Form>
-                    </View>
-                        <Button block style={{ width: '95%', alignSelf: 'center'}}>
-                            <Text style={{color: '#fff'}}>SEND</Text>
-                        </Button>
                     <View style={styles.social}>
                         <Text style={{textAlign: 'center', fontSize: 15}}>Follow us @YouthPartyNg</Text>
                         <View style={styles.icons}>

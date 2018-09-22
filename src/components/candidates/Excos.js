@@ -16,6 +16,7 @@ import material from '../../../native-base-theme/variables/material'
 import accountStore from '../../stores/Account'
 import { StateData } from '../../modules/StateData'
 import axios from 'axios'
+import Config from '../../config'
 
 
 export default class Excos extends Component {
@@ -51,7 +52,7 @@ export default class Excos extends Component {
 
     fetchExcos = async () => {
         await axios({
-            url: 'https://ypn-election-02.herokuapp.com/api/excos', 
+            url: `${Config.electionUrl}/excos`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -142,7 +143,7 @@ export default class Excos extends Component {
     }
     
     render() {
-        console.log(this.state.items)
+        console.log(this.state)
         if (this.state.isLoading) {
             return (
               <View style={{flex: 1, justifyContent: 'center'}}>
@@ -216,7 +217,7 @@ export default class Excos extends Component {
                                 selectedValue={this.state.state}
                                 onValueChange={(state) => {
                                     this.setState({state}, () => {
-                                        this.setLGAs()
+                                        // this.setLGAs()
                                         this.filterList(state)
                                     })
                                 }}
@@ -238,7 +239,7 @@ export default class Excos extends Component {
                                     onValueChange={(state) => {
                                         this.setState({state}, () => {
                                             this.setLGAs()
-                                            this.filterList(state)
+                                            // this.filterList(state)
                                         })
                                     }}
                                     mode='dialog'>
@@ -253,11 +254,12 @@ export default class Excos extends Component {
                                     style={styles.picker}
                                     selectedValue={this.state.lga}
                                     onValueChange={(lga) => {
-                                        this.setState({lga})
-                                        this.filterList2(lga)
+                                        this.setState({lga}, () => {
+                                            this.filterList2(lga)
+                                        })
                                     }}
                                     mode='dialog'>
-                                    <Picker.Item  label="Select LGA" />
+                                    <Picker.Item  value="Select LGA" label="Select LGA" />
                                     {this.state.selectedLGAs}
                                 </Picker>
                             </View> 
@@ -265,15 +267,15 @@ export default class Excos extends Component {
                             null
                         }
                     </View>
-                    <View style={{paddingBottom: 100}}>
+                    <View>
                     {
                         this.state.items.length == 0 ?
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>
                             <Text style={{fontSize: 18}}>No excos to display</Text>
                         </View>
                         :
+                        <View style={{paddingBottom: 150}}>
                         <FlatList
-                            style={{ marginBottom: 80 }} 
                             legacyImplementation
                             initialNumToRender={10}
                             data={this.state.items}
@@ -289,9 +291,6 @@ export default class Excos extends Component {
                                             <Text style={{color: '#82BE30'}}>{item.position}</Text>
                                         </Body>
                                         <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                            <TouchableOpacity style={styles.touchable}>
-                                                <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                            </TouchableOpacity>
                                             <View style={{width: 60, marginTop: 10}}>
                                                 {this.renderLocation(item)}
                                             </View>
@@ -301,6 +300,7 @@ export default class Excos extends Component {
                             }
                             keyExtractor={item => item.value.id.toString()}
                         />
+                        </View>
                     }
                     </View>
                     </View>   

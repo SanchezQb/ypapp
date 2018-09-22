@@ -32,6 +32,7 @@ export default class DrawerContent extends React.Component {
 
   logoutHandler = () => {
     AsyncStorage.removeItem('allUserData')
+    AsyncStorage.removeItem('OnesignalPlayerId')
     Actions.main()
   }
 

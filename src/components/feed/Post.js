@@ -1,14 +1,19 @@
 import React from 'react'
-import { View, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator, BackHandler, FlatList } from 'react-native'
+import { View, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator, BackHandler, FlatList, Dimensions, ToastAndroid } from 'react-native'
 import { Actions } from 'react-native-router-flux'
-import { Button, Thumbnail, Icon, Text, Left, Body, Right, Header, Title, StyleProvider, ListItem } from 'native-base'
+import { Button, Thumbnail, Icon, Text, Left, Body, Right, Header, Title, StyleProvider, ListItem, Container } from 'native-base'
 import getTheme from '../../../native-base-theme/components';
 import accountStore from '../../stores/Account'
+import postStore from '../../stores/Post'
 import MediaHandler from './MediaHandler'
+import AddCommentSingle from './AddCommentSingle'
+import { observer } from 'mobx-react'
 import moment from 'moment'
 import material from '../../../native-base-theme/variables/material'
 import axios from 'axios'
+import Config from '../../config'
 
+const { height } = Dimensions.get('window')
 
 export default class Post extends React.Component {
     state = {
@@ -33,18 +38,52 @@ export default class Post extends React.Component {
         return true
     }
 
-    userProfile = (avatar) => {
-        if(avatar == null || avatar == '') {
+    userProfile = (origin) => {
+        if(origin.id == accountStore.user.id) {
+            return (
+                <Thumbnail source={{uri: accountStore.user.avatar}}/>
+            )
+        }
+        else if(origin.avatar == null || origin.avatar == '') {
             return (
                 <Thumbnail source={require('../logo.png')} resizeMode="center"/>
             )
         }
         else {
             return (
-                <Thumbnail source={{uri: avatar}}/>
+                <Thumbnail source={{uri: origin. avatar}}/>
             )
         }
     }
+    deleteHandler = (post) => {
+        Alert.alert(
+          'Delete',
+          'Are you sure you want to delete this post? This cannot be undone?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'YES', onPress: () => this.delete(post)},
+          ],
+          { cancelable: false }
+        )
+      }
+    
+      delete = (post) => {
+        axios({
+            url: `${Config.postUrl}/posts/${post._id}`, 
+            method: 'DELETE', 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${accountStore.user.token}`
+            },
+        }).then((res) => {
+            this.props.refresh()
+            ToastAndroid.show("Post deleted successfully", ToastAndroid.SHORT)
+            Actions.pop()
+        }).catch(err => {
+            console.log(err.response)
+            ToastAndroid.show("Could not delete post, please try again", ToastAndroid.SHORT)
+        })
+      }
     fetchComments = () => {
         axios({
             url: `https://ypn-node.herokuapp.com/api/v1/posts/${this.props.item._id}`, 
@@ -55,7 +94,7 @@ export default class Post extends React.Component {
             },
         }).then(res => {
            this.setState({
-               comments: res.data.data.comments, 
+               comments: res.data.data.comments.filter(item => item.type == 1), 
                isLoading: false
             })
         }).catch(() => {
@@ -78,27 +117,27 @@ export default class Post extends React.Component {
     }
     likePost = (id, key) => {
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/posts/like/${id}?type=${key}`, 
+            url: `${Config.postUrl}/posts/like/${id}?type=${key}`, 
             method: 'PUT', 
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `${accountStore.user.token}`
             },
         }).then(res => {
+            console.log(res.data.data)
             if(key === 0) {
                 ToastAndroid.show('Liked', ToastAndroid.SHORT)
             }
             else {
                 ToastAndroid.show('Unliked', ToastAndroid.SHORT)
             }
-        })
+        }).catch(err => console.log(err))
     }
     render() {
         const item = this.props.item
-        console.log(this.props.item.origin.role)
         return (
             <StyleProvider style={getTheme(material)}>
-                <View>
+                <Container>
                     <Header noShadow>
                         <Left>
                             <Button onPress={() => Actions.pop()} transparent>
@@ -108,26 +147,33 @@ export default class Post extends React.Component {
                         <Body>
                             <Title>{`Post by ${item.origin.username}`}</Title>
                         </Body>
-                        <Right> 
+                        <Right>
+                            {/* <Button onPress={() => postStore.openCommentModal(item)} transparent>
+                                <Icon name="arrow-back" style={{ color: '#fff'}}/>
+                            </Button>  */}
                         </Right>
                     </Header>
                     <ScrollView>
                         <View style={{borderBottomWidth: 1, borderColor: '#ddd', paddingVertical: 10}}>
-                            <ListItem avatar onPress={() => Actions.post({item: item})}>
+                            <ListItem avatar>
                                 <Left style={{height: '80%'}}>
                                     <TouchableOpacity onPress={() => Actions.otherprofile({data: item.origin.id})}>
-                                        {this.userProfile(item.origin.avatar)}
+                                        {this.userProfile(item.origin)}
                                     </TouchableOpacity>
                                 </Left>
                                 <Body style={{borderBottomWidth: 0}}>
                                     <View style={{flexDirection: 'row', marginBottom: 5}}>
+                                    {item.origin.id == accountStore.user.id ? 
+                                        <Text style={{color: '#444', fontWeight: 'bold'}}>
+                                            {`${accountStore.user.firstname} ${accountStore.user.lastname}`}
+                                        </Text>
+                                            : 
                                         <Text style={{color: '#444', fontWeight: 'bold'}}>
                                             {`${item.origin.firstname} ${item.origin.lastname}`}
-                                        </Text>
+                                        </Text> 
+                                        }
                                         {item.origin.role === 5 ? 
-                                            <View style={{borderWidth: 1,marginLeft: '2%', borderColor: '#82BE30', padding: '2%'}}>
-                                                <Text note style={{color: '#82BE30', textAlign: 'center'}}>Verified</Text>
-                                            </View> 
+                                            <Text note style={{color: '#82BE30'}}>Verified</Text>
                                         : null}
                                         <Right style={{marginRight: 18}}>
                                             <Text style={{fontSize: 14, color: '#555'}}>{moment(new Date(item.createdAt)).fromNow()}</Text>
@@ -137,8 +183,34 @@ export default class Post extends React.Component {
                                     </Text>
                                     <MediaHandler data={item} />
                                     <View style={styles.icons}>
+                                        <ListItem onPress={() => this.handleLike()}style={styles.listitem}>
+                                            <Icon name="md-thumbs-up" style={{color: this.state.likeColor, fontSize: height * 0.028}} />
+                                            <Text style={{color: this.state.likeColor, fontSize: height * 0.02, marginLeft: 5}}>
+                                            { `${this.state.likeCount} ${this.state.likeCount === 1 ? 'Like' : 'Likes'}`}
+                                            </Text>
+                                        </ListItem>
+                                        <ListItem onPress={() => postStore.openCommentModal(item)} style={styles.listitem}>
+                                            <Icon name="md-text" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
+                                            <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>
+                                                { `${item.commentCount} ${item.commentCount === 1 ? 'Comment' : 'Comments'}`}
+                                            </Text>
+                                        </ListItem>
+                                        <ListItem style={styles.listitem} onPress={() => Actions.shareTo({data: item})}>
+                                            <Icon name="md-share-alt" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
+                                            <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>Share</Text>
+                                        </ListItem>
+                                        {item.origin.id === accountStore.user.id || accountStore.user.role === 5 ?
+                                        <ListItem style={styles.listitem} onPress={() => this.deleteHandler(item)}>
+                                            <Icon name="ios-trash-outline" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
+                                            <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>Delete</Text>
+                                        </ListItem>
+                                        :
+                                        null
+                                        }
+                                    </View>
+                                    <View style={styles.icons}>
                                     <TouchableOpacity onPress={() => Actions.reactionList({data: item.likes.data})}>
-                                        <Text style={{fontWeight: 'bold'}}>{ `${item.likes.count} ${item.likes.count === 1 ? 'Like' : 'Likes'}`}</Text>
+                                        <Text style={{fontWeight: 'bold'}}>{ `${this.state.likeCount} ${this.state.likeCount === 1 ? 'Like' : 'Likes'}`}</Text>
                                     </TouchableOpacity>
                                     </View>
                                 </Body>
@@ -158,7 +230,7 @@ export default class Post extends React.Component {
                                 <ListItem avatar onPress={() => Actions.post({item: item})}>
                                     <Left style={{height: '80%'}}>
                                         <TouchableOpacity onPress={() => Actions.otherprofile({data: item.origin.id})}>
-                                            {this.userProfile(item.origin.avatar)}
+                                            {this.userProfile(item.origin)}
                                         </TouchableOpacity>
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
@@ -181,7 +253,8 @@ export default class Post extends React.Component {
                         </View>
                         }  
                     </ScrollView>
-                </View>
+                    <AddCommentSingle refresh={this.fetchComments} />
+                </Container>
             </StyleProvider>
         )
     }
@@ -189,7 +262,10 @@ export default class Post extends React.Component {
 
 const styles = StyleSheet.create({
     icons: {
-       marginVertical: 25
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginRight: 30,
+        padding: 5
     },
     listitem: {
         marginLeft: 0,

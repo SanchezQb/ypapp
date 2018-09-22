@@ -6,6 +6,7 @@ import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import accountStore from '../../stores/Account'
 import axios from 'axios'
+import Config from '../../config'
 
 export default class AllUsers extends Component {
     constructor() {
@@ -32,7 +33,7 @@ export default class AllUsers extends Component {
     }
     fetchFollowsforUser = async () => {
        await axios({
-            url: `https://ypn-base-01.herokuapp.com/users`, 
+            url: `${Config.baseUrl}/users`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -60,7 +61,7 @@ export default class AllUsers extends Component {
     userProfile = (avatar) => {
         if(avatar == null || avatar == '') {
             return (
-                <Thumbnail source={require('../logo.png')}/>
+                <Thumbnail source={require('../logo.png')} resizeMode="center"/>
             )
         }
         else {

@@ -16,6 +16,7 @@ import material from '../../../native-base-theme/variables/material'
 import accountStore from '../../stores/Account'
 import { StateData } from '../../modules/StateData'
 import axios from 'axios'
+import Config from '../../config'
 
 export default class SponsoredCandidates extends Component {
     constructor() {
@@ -48,7 +49,7 @@ export default class SponsoredCandidates extends Component {
     }
     fetchSponsored = async () => {
         await axios({
-            url: 'https://ypn-election-02.herokuapp.com/api/candidates', 
+            url: `${Config.electionUrl}/candidates`,  
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",

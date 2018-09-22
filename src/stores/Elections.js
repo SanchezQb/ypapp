@@ -1,6 +1,7 @@
 import { observable } from 'mobx'
 import axios from 'axios'
 import accountStore from './Account'
+import Config from '../config'
 
 class Elections {
     @observable candidates = []
@@ -9,7 +10,7 @@ class Elections {
     
     vote(data) {
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/questions/respond`, 
+            url: `${Config.postUrl}/questions/respond`, 
             method: 'PUT', 
             data,
             headers: {
@@ -32,7 +33,7 @@ class Elections {
             return items.length ? items[0].state.id : ''
         }
         axios({
-            url: `https://ypn-election-02.herokuapp.com/api/verify`, 
+            url: `${Config.electionUrl}/verify`,
             method: 'POST', 
             data: {
                 vin: data.vin,

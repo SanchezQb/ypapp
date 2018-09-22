@@ -8,6 +8,7 @@ import accountStore from '../../stores/Account'
 import { StateData } from '../../modules/StateData'
 import axios from 'axios'
 import moment from 'moment'
+import Config from '../../config'
 
 
 export default class Events extends Component {
@@ -49,7 +50,7 @@ export default class Events extends Component {
     }
     fetchEvents = async () => {
        await axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/events`, 
+            url: `${Config.postUrl}/events`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -58,6 +59,7 @@ export default class Events extends Component {
         }).then(res => {
             console.log(res.data.data)
             this.setState({
+                isLoading: false,
                 events: res.data.data,
             })
         }).then(() => {
@@ -77,6 +79,13 @@ export default class Events extends Component {
     filterList = (text) => {
         if(text == "All") {
             return this.setState({items: this.state.events})
+        }
+        else if(text == 'Federal') {
+            let updatedList = this.state.events
+            updatedList = updatedList.filter(v => {
+                return v.details.level.toLowerCase().search(
+                    text.toLowerCase()) !== -1;
+            })
         }
         let updatedList = this.state.events
         updatedList = updatedList.filter(v => {
@@ -195,9 +204,7 @@ export default class Events extends Component {
                                             <Text note>{moment(new Date(item.startDate)).format('LLLL')}</Text>
                                         </Body>
                                         <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                            <TouchableOpacity style={styles.touchable} onPress={() => Actions.event({item, fetch: this.fetchEvents})}>
-                                                <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                            </TouchableOpacity>
+                                           
                                         </Right>
                                     </ListItem>
                                 </View>

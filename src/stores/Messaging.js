@@ -3,6 +3,7 @@ import accountStore from './Account'
 import { ToastAndroid } from 'react-native'
 import axios from 'axios'
 import { Actions } from 'react-native-router-flux'
+import Config from '../config'
 
 class Messaging {
     @observable messages = []
@@ -10,10 +11,15 @@ class Messaging {
     @observable registry = {}
     @observable isLoading = true
     @observable error = false
+    @observable index = 0
+
+    setIndex () {
+        this.index = 1
+    }
 
     fetchAllConversations() {
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/convos`, 
+            url: `${Config.postUrl}/convos`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -34,16 +40,16 @@ class Messaging {
         })
     }
 
-    startPersonalConversation(users, reference) {//add reference?
+    startPersonalConversation(users, reference, topic) {//add reference?
         // you want to check that the message already exists in state
         let target;
         const targets = users.map(item => item.id);
         targets.push(accountStore.user.id);
         const messages = this.logs;
-        if (!messages || !messages.length) return this.createNewConversation(users, reference)//add reference?
+        if (!messages || !messages.length) return this.createNewConversation(users, reference, topic)//add reference?
         // you want to make sure the members are in the array;
         let filtered = messages.filter(item => item.type === 1 && item.members.length === targets.length);
-        if (!filtered.length) return this.createNewConversation(users, reference)//add reference?
+        if (!filtered.length) return this.createNewConversation(users, reference, topic)//add reference?
         // return the item
         filtered = filtered.map((item) => {
             // concat & dedupe to check for unique guys
@@ -59,14 +65,18 @@ class Messaging {
             target.members = users;
             return Actions.chat({ data: target, reference });
         }
-        return this.createNewConversation(users, reference) // check this for duplicate thing, add reference?
+        return this.createNewConversation(users, reference, topic) // check this for duplicate thing, add reference?
     }
 
-    createNewConversation(members, reference) {//add reference?
+    createNewConversation(members, reference, topic) {//add reference?
+        const data = { members }
+        if(topic) {
+            data.topic = topic
+        }
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/convos?type=1`, 
+            url: `${Config.postUrl}/convos?type=1`,
             method: 'POST',
-            data: { members }, 
+            data,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `${accountStore.user.token}`
@@ -106,7 +116,7 @@ class Messaging {
     joinConversation(item) {
         return axios({
             method: 'PUT',
-            url: `https://ypn-node.herokuapp.com/api/v1/convos/join/${item._id}`,
+            url: `${Config.postUrl}/convos/join/${item._id}`,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `${accountStore.user.token}`
@@ -122,6 +132,9 @@ class Messaging {
             else if(err.response.status && err.response.status === 409) {
                 Actions.chat({data: item})
             }
+            else {
+                console.log(err.response)
+            }
         })
     }
 
@@ -130,7 +143,7 @@ class Messaging {
         currentLogs = currentLogs.filter(item => item.id !== id)
         this.logs = currentLogs
         return axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/convos/leave/${id}`, 
+            url: `${Config.postUrl}/convos/leave/${id}`,
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",

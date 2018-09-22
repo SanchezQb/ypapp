@@ -5,6 +5,7 @@ import { View,  StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from
 import moment from 'moment'
 import { Actions } from 'react-native-router-flux' 
 import accountStore from '../../stores/Account'
+import Config from '../../config'
 
 
 export default class Userposts extends Component {
@@ -23,7 +24,7 @@ export default class Userposts extends Component {
     }
     getEvents = async () => {
         await axios({
-          url: `https://ypn-node.herokuapp.com/api/v1/events/user/${accountStore.user.id}`, 
+          url: `${Config.postUrl}/events/user/${accountStore.user.id}`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",
@@ -35,7 +36,6 @@ export default class Userposts extends Component {
               events: res.data.data,
               isLoading: false
           })
-          console.log(res.data.data)
       })
       .catch(error => {
           this.setState({

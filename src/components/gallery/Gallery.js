@@ -15,6 +15,8 @@ import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
 import Modal from 'react-native-modalbox'
 import axios from 'axios'
+import accountStore from '../../stores/Account'
+import Config from '../../config'
 
 export default class Gallery extends Component {
     constructor() {
@@ -22,31 +24,14 @@ export default class Gallery extends Component {
         this.state = {
             isLoading: true,
             error: false,
-            isOpen: false,
-            isDisabled: false,
-            swipeToClose: true,
-            images: [],
-            imageToOpen: null
+            media: []
         }
         this.baseState = this.state
     }
     
-    // onMenuPressed = (labels) => {
-    //     const { onPress } = this.props;
-    //     UIManager.showPopupMenu (
-    //         findNodeHandle(this.menu),
-    //         ["Item1", "Item2", "Item3"],
-    //         () => {},
-    //         (result, index) => {
-    //         if (index == 0) {
-    //           Actions.drawerOpen()
-    //         }
-    //       },
-    //     );
-    //   };
 
     componentDidMount() {
-        this.getImages()
+        this.getMedia()
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
     componentWillUnmount () {
@@ -57,12 +42,19 @@ export default class Gallery extends Component {
         Actions.pop()
         return true;
     }
-    getImages = () => {
-        axios.get('https://paperstack.ml/posts')
+    getMedia = async () => {
+        await axios({
+            url: `${Config.postUrl}/media`, 
+            method: 'GET', 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${accountStore.user.token}`
+            },
+        })
         .then(res => {
             this.setState({
                 isLoading: false,
-                images: res.data.posts.slice(0,10)
+                media: res.data.data
             })
         })
         .catch(error => {
@@ -74,7 +66,7 @@ export default class Gallery extends Component {
     }
     reset = () => {
         this.setState(this.baseState)
-        this.getPosts()
+        this.getMedia()
       }
 
     render() {
@@ -99,26 +91,7 @@ export default class Gallery extends Component {
             )
         }
         const { labels } = this.props;
-        const gallery = this.state.images.map(image => {
-            return (
-                <View key={image._id}>
-                    <TouchableOpacity onPress={() => {
-                        this.setState({
-                            imageToOpen: image.thumbnail,
-                            isOpen: true
-                        })
-                    }}>
-                        <View style={styles.image}>
-                            <Image
-                                resizeMode="cover"
-                                source={{uri: image.thumbnail}}
-                                style={{width: 300, height: 300}} 
-                            />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            )
-        })
+    
         return (
             <StyleProvider style={getTheme(material)}>
                 <Container>
@@ -132,53 +105,42 @@ export default class Gallery extends Component {
                             <Title>Gallery</Title>
                         </Body>
                         <Right>
-                            {/* <Button transparent  onPress={() => this.onMenuPressed(labels)}>
-                                <View style={{flexDirection: 'row'}}>
-                                    <View>
-                                        <View
-                                            ref={c => this.menu = c}
-                                            style={{
-                                                backgroundColor: 'transparent',
-                                                width: 1,
-                                                height: StyleSheet.hairlineWidth,
-                                            }}
-                                        />
-                                        <Icon
-                                            name="md-search"
-                                            style={{color: 'white', fontSize: 28 }}
-                                        />
-                                    </View>
-                                </View>
-                            </Button>  */}
                         </Right>
                     </Header>
                     <ScrollView>
                         <View style={styles.stamp}>
-                            <Text style={{fontSize: 24, fontWeight: 'bold', color: '#444'}}>Recent</Text>
-                            <Text style={{fontSize: 14,}}>March 2018</Text>
+                            <Text style={{fontSize: 24, fontWeight: 'bold', color: '#444'}}>Recent Images</Text>
                         </View>
-                        <View>
-                            <View style={styles.gallery}>
-                                <Text style={{fontSize: 16, color: '#777'}}>Capacity Building Workshop</Text>
-                            </View>
-                            <View style={styles.galleryContainer}>
-                                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                                    {gallery}
-                                </ScrollView>
-                            </View>  
-                        </View>
-                        <View>
-                            <View style={styles.gallery}>
-                                <Text style={{fontSize: 16, color: '#777'}}>Capacity Building Workshop</Text>
-                            </View>
-                            <View style={styles.galleryContainer}>
-                                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                                   {gallery}
-                                </ScrollView>
-                            </View>    
-                        </View>
+                        {this.state.media.map(gallery => {
+                            return (
+                                <View key={gallery._id}>
+                                    <View style={styles.gallery}>
+                                        <Text style={{fontSize: 16, color: '#777'}}>{gallery.title}</Text>
+                                    </View>
+                                    <View style={styles.galleryContainer}>
+                                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                                            {gallery.images.map((image, i) => {
+                                                return (
+                                                    <View key={i}>
+                                                        <TouchableOpacity onPress={() =>Actions.imageSwiper({data: gallery.images, index: i})}>
+                                                            <View style={styles.image}>
+                                                                <Image
+                                                                    resizeMode="cover"
+                                                                    source={{uri: image}}
+                                                                    style={{width: 300, height: 300}} 
+                                                                />
+                                                            </View>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                )
+                                            })}
+                                        </ScrollView>
+                                    </View> 
+                                </View>
+                            )
+                        })}
                         </ScrollView>
-                        <Modal
+                        {/* <Modal
                             isOpen={this.state.isOpen} 
                             onClosed={() => this.setState({isOpen: false})} 
                             style={[styles.modal, styles.modal3]} 
@@ -189,7 +151,7 @@ export default class Gallery extends Component {
                                 resizeMode="cover"
                                 source={{uri: this.state.imageToOpen}}
                                 style={{width: 300, height: 300}} />
-                        </Modal>
+                        </Modal> */}
                 </Container>
             </StyleProvider>
         )

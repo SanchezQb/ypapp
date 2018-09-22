@@ -8,7 +8,7 @@ import {
     Icon, 
     Button,
     Title,
-    Thumbnail, Text, View, ListItem
+    Thumbnail, Text, View, ListItem, Input
 } from 'native-base';
 import { StyleSheet, BackHandler, ScrollView, ToastAndroid} from 'react-native'
 import getTheme from '../../../native-base-theme/components'
@@ -21,9 +21,10 @@ export default class NewGroup extends Component {
     constructor() {
         super()
         this.state = {
-            followers: accountStore.user.followers,
+            followers: accountStore.user.followers.filter(item => item !== null),
             members: [],
-            selected: false
+            selected: false,
+            topic: ''
         }
         this.baseState = this.state
     }
@@ -86,7 +87,9 @@ export default class NewGroup extends Component {
         }
         if (!this.state.members.length) ToastAndroid.show('Please select users', ToastAndroid.SHORT);
 
-        messagingStore.startPersonalConversation(this.state.members)
+        if(this.state.members === 1) return messagingStore.startPersonalConversation(this.state.members)
+
+        messagingStore.startPersonalConversation(this.state.members, null, this.state.topic)
     }
     
     _members = () => (this.state.members.length ? this.state.members.map(item => item.id) : []);
@@ -126,6 +129,14 @@ export default class NewGroup extends Component {
                             </Button>
                         </Right>
                     </Header>
+                    <ListItem>
+                        <Input
+                            style={{borderColor: '#444', borderBottomWidth: 1, marginVertical: '3%'}}
+                            onChangeText={(topic) => this.setState({topic})}
+                            placeholder="Enter Group Title"
+                            placeholderTextColor="#777"
+                        />
+                    </ListItem>
                     <View style={{paddingBottom: 100}}>
                     {this.state.followers.length ? this.renderItems(): null}
                     </View>

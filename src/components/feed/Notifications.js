@@ -1,25 +1,27 @@
 import React, { Component } from 'react'
 import { Button, Icon, Text, Left, Body, Right, Header, Title, StyleProvider, Container, Content, ListItem, Switch } from 'native-base'
-import { StyleSheet, BackHandler, ToastAndroid, Image, TouchableOpacity, View} from 'react-native'
+import { StyleSheet, BackHandler, ToastAndroid, FlatList, Image, TouchableOpacity, View, AsyncStorage} from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
-import accountStore from '../../stores/Account'
 import material from '../../../native-base-theme/variables/material'
 import { observer } from 'mobx-react/native'
+import notificationStore from '../../stores/Notifications'
+import moment from 'moment'
 
 @observer
 export default class Notifications extends Component {
-
-    state = {
-        type: 1
-    }
-
+    
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+        notificationStore.clearNotficationCount()
     }
     componentWillUnmount () {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+        if(notificationStore.notifications && notificationStore.notifications.length) {
+            notificationStore.updateLastSeenCount(notificationStore.notifications[0].count)
+            AsyncStorage.setItem('lastNotificationCount', notificationStore.notifications[0].count.toString())
+        }
     }
 
     onBackPress () {
@@ -28,35 +30,53 @@ export default class Notifications extends Component {
     }
 
     renderNotifications = () => {
-        if(this.state.type == 0) {
-            //this is a follow notification
-            return (
-                <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 15, borderColor: '#a6a6a6', borderBottomWidth: 1}}>
+        return (
+            <View style={{flex: 1}}>
+            <FlatList
+                legacyImplementation
+                initialNumToRender={10}
+                data={notificationStore.notifications.slice()}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) =>
+                <TouchableOpacity 
+                    onPress={() => this.handlePress(item)}
+                    style={{
+                        backgroundColor: item.count > notificationStore.lastSeenCount ? '#edf5e0': '#fff',
+                        flexDirection: 'row', 
+                        alignItems: 'center', 
+                        paddingVertical: 15, 
+                        borderColor: '#f2f3f4', 
+                        borderBottomWidth: 1}}>
                     <View style={{alignSelf: 'flex-start', width: 50, height: 50, marginHorizontal: 20}}>
-                        <Image source={require('../logo.png')} resizeMode="center" style={{alignSelf: 'flex-start', width: 50, height: 50, borderRadius: 25}}/> 
+                    {item.origin ? 
+                        <Image source={{uri: item.origin.avatar}} resizeMode="center" style={{alignSelf: 'flex-start', width: 50, height: 50, borderRadius: 25}}/> 
+                    :
+                        <Image source={require('../logo.png')} resizeMode="center" style={{alignSelf: 'flex-start', width: 50, height: 50, borderRadius: 25}}/>
+                    } 
                     </View>
                     <View>
-                        <Text>Baysix followed you</Text>
-                    </View>
-                    <View></View>
-                </TouchableOpacity>
-            )
-        }
-        else if(this.state.type == 1) {
-            return (
-                <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 15, borderColor: '#a6a6a6', borderBottomWidth: 1}}>
-                    <View style={{alignSelf: 'flex-start', width: 50, height: 50, marginHorizontal: 20}}>
-                        <Image source={require('../logo.png')} resizeMode="center" style={{alignSelf: 'flex-start', width: 50, height: 50, borderRadius: 25}}/> 
+                        <Text>{item.message}</Text>
+                        <Text style={{fontSize: 14, color: '#444'}}>{moment(new Date(item.time.notification.time)).fromNow()}</Text>
                     </View>
                     <View>
-                        <Text>Baysix liked your post</Text>
                     </View>
-                    <View></View>
                 </TouchableOpacity>
-            )
+                }
+                keyExtractor={(item, index) => index}
+            />
+            </View>
+        )
+    }
+
+    handlePress = (data) => {
+        if(!data) return 
+        if(!data.target) {
+           return Actions.otherProfile({data: data.origin.id})
         }
+        Actions.singlePost({item: data.target.id})
     }
     render() {
+        console.log(notificationStore.notifications.slice())
         return (
             <StyleProvider style={getTheme(material)}>
                 <Container>
@@ -72,51 +92,12 @@ export default class Notifications extends Component {
                         <Right>
                         </Right>
                     </Header>
-                    <Content>
-                        {/* <ListItem icon>
-                            <Left>
-                                <Button style={{ backgroundColor: "#82BE30" }}>
-                                    <Icon active name="ios-notifications-outline" />
-                                </Button>
-                            </Left>
-                            <Body>
-                                <Text>Notifications</Text>
-                                </Body>
-                            <Right>
-                                <Switch
-                                    onTintColor="#F0BA00" 
-                                    onValueChange={(value) => this.handleSwtich(value)}
-                                    value={accountStore.notifications} />
-                            </Right>
-                        </ListItem>
-                        <ListItem icon onPress={() => Actions.forgot()}>
-                            <Left>
-                                <Button style={{ backgroundColor: "#82BE30" }}>
-                                    <Icon active name="md-lock" />
-                                </Button>
-                            </Left>
-                            <Body>
-                                <Text>Change Password</Text>
-                            </Body>
-                            <Right>
-                                <Icon active name="arrow-forward" />
-                            </Right>
-                        </ListItem>
-                        <ListItem icon onPress={() => Actions.newsletter()}>
-                            <Left>
-                                <Button style={{ backgroundColor: "#82BE30" }}>
-                                    <Icon active name="md-mail" />
-                                </Button>
-                            </Left>
-                            <Body>
-                                <Text>Subscribe to our Newsletter</Text>
-                            </Body>
-                            <Right>
-                                <Icon active name="arrow-forward" />
-                            </Right>
-                        </ListItem> */}
-                        {this.renderNotifications()}
-                    </Content>
+                        {notificationStore.notifications && notificationStore.notifications.length ? this.renderNotifications()
+                        :
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                            <Text>You have no new notifications</Text>
+                        </View>
+                        }
                 </Container>
             </StyleProvider>
         )

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleProvider, Header, Left, Body, Right, Button, Icon, Title, Text, } from 'native-base';
+import { StyleProvider, Header, Left, Body, Right, Button, Icon, Title, Text, Container } from 'native-base';
 import { View, StyleSheet, BackHandler, ScrollView } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
@@ -67,7 +67,7 @@ export default class Donations extends Component {
     render() {
         return (
             <StyleProvider style={getTheme(material)}>
-                <View>
+                <Container>
                     <Header>
                         <Left>
                             <Button transparent onPress={() => Actions.pop()}>
@@ -116,7 +116,7 @@ export default class Donations extends Component {
                             </Button>
                         </View>
                     </ScrollView>
-                </View>
+                </Container>
             </StyleProvider>
         )
     }

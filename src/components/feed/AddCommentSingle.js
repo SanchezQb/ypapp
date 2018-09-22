@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get('window')
 
 
 @observer
-export default class AddComment extends Component {
+export default class AddCommentSingle extends Component {
     state = {
         content: '',
         disabled: false
@@ -48,14 +48,13 @@ export default class AddComment extends Component {
             ToastAndroid.show('Unable to post comment', ToastAndroid.SHORT)
         })
     }
-
     renderAvatar = (post) => {
         if(post.origin.id == accountStore.user.id) {
             return (
                 <Image source={{uri: accountStore.user.avatar}}style={{width: 50, height: 50, borderRadius: 25}} />
             )
         }
-        else if(post.origin.avatar == null || post.origin.avatar == '') {
+        else if(post.origin.avatar == null || origin.avatar == '') {
             return (
                 <Image source={require('../logo.png')} resizeMode="center" style={{width: 50, height: 50, borderRadius: 25}} />
             )
@@ -82,7 +81,7 @@ export default class AddComment extends Component {
                 <View style={{width: '90%', height: '90%'}}>
                     <View style={{backgroundColor: '#fff', paddingVertical: 20, paddingHorizontal: 15, marginTop: '10%', borderRadius: 4}}>
                     {postStore.postToComment.origin.id == accountStore.user.id ? 
-                        <Text style={{color: '#444', fontWeight: 'bold'}}>
+                        <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 16}}>
                             {`Replying to ${accountStore.user.firstname} ${accountStore.user.lastname}`}
                         </Text>
                             : 
@@ -91,8 +90,8 @@ export default class AddComment extends Component {
                         </Text>
                         }
                         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
-                            {this.renderAvatar(postStore.postToComment)}
-                           <Text style={{marginHorizontal: 10, fontWeight: 'bold'}}>{postStore.postToComment.origin.username}</Text>
+                        {this.renderAvatar(postStore.postToComment)}
+                           <Text style={{marginHorizontal: 10, fontWeight: 'bold'}}>{postStore.postToComment.origin.firstname}</Text>
                         </View>
                         <TextInput 
                             underlineColorAndroid="rgba(0,0,0,0)"

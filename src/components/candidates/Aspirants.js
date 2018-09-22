@@ -16,6 +16,7 @@ import material from '../../../native-base-theme/variables/material'
 import accountStore from '../../stores/Account'
 import { StateData } from '../../modules/StateData'
 import axios from 'axios'
+import Config from '../../config'
 
 export default class Aspirants extends Component {
     constructor() {
@@ -48,7 +49,7 @@ export default class Aspirants extends Component {
 
     fetchAspirants = async () => {
         await axios({
-            url: 'https://ypn-election-02.herokuapp.com/api/candidates', 
+            url: `${Config.electionUrl}/candidates`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -94,16 +95,20 @@ export default class Aspirants extends Component {
         }
         let updatedList = this.state.aspirants
         updatedList = updatedList.filter(v => {
-            return v.location.toLowerCase().search(
-                text.toLowerCase()) !== -1;
+            return v.location.includes(text)
         })
         this.setState({
             items: updatedList
         })
     }
 
+    // filterList2 = (text) => {
+
+    // }
+
     
     render() {
+
         if (this.state.isLoading) {
             return (
               <View style={{flex: 1, justifyContent: 'center'}}>
@@ -227,18 +232,15 @@ export default class Aspirants extends Component {
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
                             <View style={styles.listitem}>
-                                <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
+                                <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => Actions.ap({data:item})}>
                                     <Left>
-                                        <Thumbnail source={require('../logo.png')} />
+                                        {item.avatar ? <Thumbnail source={item.avatar} /> : <Thumbnail source={require('../logo.png')} resizeMode="center" />}
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
-                                        <Text>{`${item.firstname} ${item.lastname}`}</Text>
+                                        <Text>{`${item.name.split(" ")[0]} ${item.name.split(" ")[1]}`}</Text>
                                         <Text style={{color: '#82BE30'}}>{item.position}</Text>
                                     </Body>
                                     <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                        <TouchableOpacity style={styles.touchable}>
-                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                        </TouchableOpacity>
                                         <View style={{width: 60, marginTop: 10}}>
                                             <Text note>{item.location}</Text>
                                         </View>

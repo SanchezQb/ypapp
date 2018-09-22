@@ -12,27 +12,27 @@ import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
 
-export default class CandidateProfile extends Component {
+export default class AspirantProfile extends Component {
 
-    renderLocation = () => {
-        const loc = this.props.data
-        if(loc.value.level == 'Federal') {
-            return <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>Federal</Text>
-        }
-        else if(loc.value.level == 'state') {
-            return (
-                <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.state} State</Text>
-            )
-        }
-        else {
-            return (
-                <React.Fragment>
-                     <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.local} LGA</Text>
-                    <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.state} State</Text>
-                </React.Fragment>
-            )
-        }
-    }
+    // renderLocation = () => {
+    //     const loc = this.props.data
+    //     if(loc.value.level == 'Federal') {
+    //         return <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>Federal</Text>
+    //     }
+    //     else if(loc.value.level == 'state') {
+    //         return (
+    //             <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.state} State</Text>
+    //         )
+    //     }
+    //     else {
+    //         return (
+    //             <React.Fragment>
+    //                  <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.local} LGA</Text>
+    //                 <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.state} State</Text>
+    //             </React.Fragment>
+    //         )
+    //     }
+    // }
 
     
 
@@ -48,7 +48,7 @@ export default class CandidateProfile extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title>{item.value.firstname} {item.value.lastname}</Title>
+                            <Title>{`${item.name.split(" ")[0]} ${item.name.split(" ")[1]}`}</Title>
                         </Body>
                         <Right>
                         </Right>
@@ -56,19 +56,19 @@ export default class CandidateProfile extends Component {
                     <ScrollView>
                         <View style={styles.view}>
                             <View>
-                                {item.value.avatar ? 
-                                    <Thumbnail large source={item.value.avatar} resizeMode="center" style={{alignSelf: 'center'}} />
+                                {item.avatar ? 
+                                    <Thumbnail large source={item.avatar} resizeMode="center" style={{alignSelf: 'center'}} />
                                 :
                                     <Thumbnail large source={require('../logo.png')} resizeMode="center" style={{alignSelf: 'center'}} />
                                 }
                                 <Text style={{color: '#777', fontSize: 18, textAlign: 'center', marginTop: 10}}>{item.position}</Text>
-                                {this.renderLocation()}
+                                <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{item.location}</Text>
                             </View>
                         </View>
                         <View style={{width: '93%', alignSelf: 'center', marginTop: 30}}>
-                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#555', marginVertical: 10}}>{item.value.firstname} {item.value.lastname}'s Bio:</Text>
+                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#555', marginVertical: 10}}>{item.name.split(" ")[0]} {item.name.split(" ")[1]}'s Bio:</Text>
                             <Text style={{fontSize: 16, color: '#555'}}>
-                           {item.value.bio}
+                           {item.bio}
                             </Text>
                         </View>
                     </ScrollView>

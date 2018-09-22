@@ -15,6 +15,7 @@ import accountStore from '../../stores/Account'
 import moment from 'moment'
 import axios from 'axios'
 import { Actions } from 'react-native-router-flux'
+import Config from '../../config'
 
 
 export default class Vacancy extends Component {
@@ -91,7 +92,7 @@ export default class Vacancy extends Component {
     apply(id) {
         this.setState({disabled: true})
         axios({
-            url: `https://ypn-base-01.herokuapp.com/careers/apply/${id}`, 
+            url: `${Config.baseUrl}/careers/apply/${id}`, 
             method: 'POST', 
             headers: {
                 "Content-Type": "application/json",

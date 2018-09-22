@@ -7,6 +7,7 @@ import material from '../../../native-base-theme/variables/material'
 import accountStore from '../../stores/Account'
 import axios from 'axios'
 import { DisplayRadios } from './Mixins'
+import Config from '../../config'
 
 const { height, width } = Dimensions.get('window')
 
@@ -112,7 +113,7 @@ export default class SelectChoice extends Component {
     voteHandler = (data) => {
         this.setState({disabled: true})
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/questions/respond`, 
+            url: `${Config.postUrl}/questions/respond`, 
             method: 'PUT', 
             data,
             headers: {

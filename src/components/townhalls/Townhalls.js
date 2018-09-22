@@ -18,6 +18,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import messagingStore from '../../stores/Messaging';
 import accountStore from '../../stores/Account'
 import axios from 'axios'
+import Config from '../../config'
 
 export default class TownHalls extends Component {
     constructor() {
@@ -44,7 +45,7 @@ export default class TownHalls extends Component {
     }
     getTownhalls = async () => {
         await axios({
-          url: `https://ypn-node.herokuapp.com/api/v1/convos/type/3`, 
+          url: `${Config.postUrl}/convos/type/3`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",
@@ -52,13 +53,14 @@ export default class TownHalls extends Component {
           },
       })
       .then(res => {
-          console.log(res)
+          const userLocationArray = ["Federal", accountStore.user.state, accountStore.user.lga.toUpperCase()]
           this.setState({
-              townhalls: res.data.data.reverse(),
+              townhalls: res.data.data.reverse().filter(item => item.details.location.some(loc => userLocationArray.includes(loc))),
               isLoading: false
           })
       })
       .catch(error => {
+          console.log(error)
           this.setState({
               isLoading: false,
               error: true
@@ -100,6 +102,19 @@ export default class TownHalls extends Component {
               
             )
         }
+        else if (this.state.townhalls.length == 0) {
+            return (
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: '#444'}}>There are no current Town Halls :(</Text>
+                <Text></Text>
+                <Text></Text>
+                <Button style={{backgroundColor: '#82BE30', alignSelf: 'center'}}onPress={() => {this.reset()}}>
+                    <Text>Retry</Text>
+                </Button>
+              </View>
+              
+            )
+        }
         return (
             <StyleProvider style={getTheme(material)}>
                 <View>
@@ -113,13 +128,7 @@ export default class TownHalls extends Component {
                             <Title>Town Hall</Title>
                         </Body>
                         <Right>
-                            <Button transparent>
-                                <Icon name="ios-search" style={{color: '#fff'}}/>
-                            </Button>
-                            <Button badge transparent>
-                                <Icon name="ios-notifications-outline" style={{color: '#fff'}}/>
-                                <Badge style={{width: 12, height: 12, backgroundColor: '#F0BA00'}}><Text></Text></Badge>
-                            </Button>
+                           
                         </Right>
                     </Header>
                     <View style={{paddingBottom: 100}}>
@@ -140,7 +149,7 @@ export default class TownHalls extends Component {
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
                                         <View style={{flexDirection: 'row', marginBottom: 5}}>
-                                            <Text style={{color: '#444', fontWeight: 'bold'}}>{item.topic}</Text>
+                                            <Text style={{color: '#444', fontWeight: 'bold'}}>{item.details.topic}</Text>
                                             <Right style={{borderBottomWidth: 0, marginRight: 10}}>
                                                 {/* <TouchableOpacity style={styles.touchable} onPress={() => messagingStore.joinConversation(item)}>
                                                     <Text style={{color: '#fff', textAlign: 'center'}}>Join</Text>
@@ -148,16 +157,12 @@ export default class TownHalls extends Component {
                                             </Right>
                                         </View>
                                         <Text style={{color: '#777', marginTop: 10}}>
-                                        {`Delegate: ${item.focus.user.name}`} 
+                                        {item.details.description} 
                                         </Text>
                                         <View style={styles.icons}>
                                             <ListItem style={styles.listitem}>
                                                 <MaterialIcon name="circle" style={{color: '#82BE30', fontSize: 14}} />
                                                 <Text style={{color: '#a6a6a6', fontSize: 14, marginLeft: 5}}>Ongoing</Text>
-                                            </ListItem>
-                                            <ListItem style={styles.listitem}>
-                                                <MaterialIcon name="map-marker" style={{color: '#a6a6a6', fontSize: 14}} />
-                                                <Text style={{color: '#a6a6a6', fontSize: 14, marginLeft: 5}}>{item.details.inclusion.state}</Text>
                                             </ListItem>
                                             <ListItem style={styles.listitem}>
                                                 <MaterialIcon name="account" style={{color: '#a6a6a6', fontSize: 14}} />

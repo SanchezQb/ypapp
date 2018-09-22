@@ -54,6 +54,9 @@ export default class About extends Component {
                         <TouchableOpacity style={{marginVertical: 5, paddingHorizontal: 20}}  onPress={() => Actions.pdfView({data: 'Manifesto'})}>
                             <Text style={{color: '#82BE30', fontSize: 18}}>> Manifesto</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity style={{marginVertical: 5, paddingHorizontal: 20}}  onPress={() => Actions.pdfView({data: 'Guidelines'})}>
+                            <Text style={{color: '#82BE30', fontSize: 18}}>> Guidelines for Primaries</Text>
+                        </TouchableOpacity>
                     </View>
                 </Container>
             </StyleProvider>

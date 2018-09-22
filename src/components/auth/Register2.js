@@ -3,7 +3,7 @@ import {
     StyleSheet,  
     TouchableOpacity, 
     Image, 
-    ScrollView, View, ToastAndroid, BackHandler
+    ScrollView, View, ToastAndroid, BackHandler, ActivityIndicator
 } from 'react-native'
 import { 
     StyleProvider,   
@@ -18,6 +18,7 @@ import material from '../../../native-base-theme/variables/material'
 import accountStore from '../../stores/Account'
 import { observer } from 'mobx-react/native'
 import { Actions } from 'react-native-router-flux'
+import Dialog from "react-native-dialog";
 
 
 @observer
@@ -131,6 +132,12 @@ export default class Register2 extends Component {
                                 Already a member? Click to <Text onPress={() => Actions.login()}style={styles.loginLink}>Log In</Text>
                             </Text>
                         </View>
+                        <Dialog.Container visible={accountStore.visible}>
+                            <Dialog.Title style={{textAlign: 'center'}}>Logging In</Dialog.Title>
+                            <View style={{marginVertical: '5%'}}>
+                                <ActivityIndicator />
+                            </View>
+                        </Dialog.Container> 
                     </ScrollView>
                 </React.Fragment>
             </StyleProvider>

@@ -4,6 +4,8 @@ import { View, StyleSheet, Picker, FlatList, ActivityIndicator, ToastAndroid, Ba
 import { Actions } from 'react-native-router-flux'
 import axios from 'axios'
 import accountStore from '../../stores/Account';
+import { StateData } from '../../modules/StateData'
+import Config from '../../config'
 
 
 export default class Vacancies extends Component {
@@ -12,8 +14,13 @@ export default class Vacancies extends Component {
         super()
         this.state = {
             careers: [],
+            items: [],
             isLoading: true,
-            error: false
+            error: false,
+            filterBy: 'All',
+            state: '',
+            lga: '',
+            selectedLGAs: [],
         }
         this.baseState = this.state
     }
@@ -45,7 +52,7 @@ export default class Vacancies extends Component {
 
     fetchAllCareers = async () => {
         await axios({
-            url: 'https://ypn-base-01.herokuapp.com/careers', 
+            url: `${Config.baseUrl}/careers`, 
             method: 'GET', 
             headers: {
                 "Content-Type": "application/json",
@@ -54,7 +61,10 @@ export default class Vacancies extends Component {
         })
         .then(res => {
             console.log(res.data.data)
-            this.setState({careers: res.data.data, isLoading: false})
+            this.setState({careers: res.data.data.filter(item => !item.meta.voluntary), isLoading: false})
+        })
+        .then(() => {
+            this.setState({items: this.state.careers, isLoading: false})
         })
         .catch(err => {
             this.setState({error: true, isLoading: false})
@@ -65,6 +75,47 @@ export default class Vacancies extends Component {
     reset = () => {
         this.setState(this.baseState)
         this.fetchAllCareers()
+    }
+    setLGAs = () => {						
+		let selectedLGAs = [];
+		StateData.map((v) => {
+            let state = v['state']['name'];
+			if(state == this.state.state){
+                let LGAS = v['state']['locals'];
+				LGAS.map((v,i) => {
+					selectedLGAs.push(<Picker.Item key={i} value={v['name']} label={v['name']} />);
+				});
+			}
+		});
+		this.setState({
+			selectedLGAs
+		});
+    }
+    filterList = (text) => {
+        if(text == "All") {
+            return this.setState({items: this.state.careers})
+        }
+        else if(text == 'Federal') {
+            return this.setState({items: this.state.careers.filter(item => item.meta.location == text)})
+        }
+        let updatedList = this.state.careers
+        updatedList = updatedList.filter(v => {
+            return v.meta.location.toLowerCase().search(
+                text.toLowerCase()) !== -1;
+        })
+        this.setState({
+            items: updatedList
+        })
+    }
+    filterList2 = (text) => {
+        let updatedList = this.state.careers
+        updatedList = updatedList.filter(v => {
+            return v.meta.location.toLowerCase().search(
+                text.toLowerCase()) !== -1;
+        })
+        this.setState({
+            items: updatedList
+        })
     }
 
     render() {
@@ -102,20 +153,90 @@ export default class Vacancies extends Component {
         }
         return (
             <View>
-                <View style={styles.pickerContainer}>
-                    <Picker
-                        style={styles.picker}
-                        mode='dropdown'>
-                        <Picker.Item label="Federal" value="federal" />
-                        <Picker.Item label="State" />
-                        <Picker.Item label="Local" />
-                    </Picker>
-                </View>
+                <View style={styles.pickerView}>
+                        <Picker
+                            selectedValue={this.state.filterBy}
+                            onValueChange={(value) => {
+                                this.setState({
+                                    filterBy: value,
+                                    state: 'Select State',
+                                    lga: 'Select LGA'
+                                })
+                                this.filterList(value)
+                            }}
+                            style={styles.picker}
+                            mode='dialog'>
+                            <Picker.Item label="All" value="All" />
+                            <Picker.Item label="Federal" value="Federal" />
+                            <Picker.Item label="State" value = "State" />
+                            <Picker.Item label="Local" value="Local" />
+                        </Picker>
+                        {this.state.filterBy == 'State'? 
+                            <Picker
+                                style={styles.picker}
+                                selectedValue={this.state.state}
+                                onValueChange={(state) => {
+                                    this.setState({state}, () => {
+                                        // this.setLGAs()
+                                        this.filterList(state)
+                                    })
+                                }}
+                                mode='dialog'>
+                            {
+                                    StateData.map((item, index) => {
+                                        let state = item['state']['name'];
+                                        return <Picker.Item key={index} value={state} label={state} />;
+                                    })
+                                }
+                            </Picker> :
+                            null
+                        }
+                        {this.state.filterBy == 'Local'?
+                            <View>
+                                <Picker
+                                    style={styles.picker}
+                                    selectedValue={this.state.state}
+                                    onValueChange={(state) => {
+                                        this.setState({state}, () => {
+                                            this.setLGAs()
+                                            // this.filterList(state)
+                                        })
+                                    }}
+                                    mode='dialog'>
+                                {
+                                        StateData.map((item, index) => {
+                                            let state = item['state']['name'];
+                                            return <Picker.Item key={index} value={state} label={state} />;
+                                        })
+                                    }
+                                </Picker>
+                                <Picker
+                                    style={styles.picker}
+                                    selectedValue={this.state.lga}
+                                    onValueChange={(lga) => {
+                                        this.setState({lga}, () => {
+                                            this.filterList2(lga)
+                                        })
+                                    }}
+                                    mode='dialog'>
+                                    <Picker.Item  value="Select LGA" label="Select LGA" />
+                                    {this.state.selectedLGAs}
+                                </Picker>
+                            </View> 
+                         :
+                            null
+                        }
+                    </View>
                 <View style={{paddingBottom: 100}}>
-                    <FlatList
+                        {this.state.items.length === 0 ? 
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{fontSize: 18}}>No careers to display</Text>
+                        </View> 
+                        :
+                        <FlatList
                         legacyImplementation
                         initialNumToRender={10}
-                        data={this.state.careers}
+                        data={this.state.items}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
                         <View style={styles.listContainer}>
@@ -135,6 +256,7 @@ export default class Vacancies extends Component {
                         }
                         keyExtractor={item => item.id.toString()}
                     />
+                    }
                 </View>
             </View>   
         )

@@ -9,8 +9,9 @@ import {
     Icon, 
     Title, 
     CardItem,
-    Thumbnail, Textarea, Text, View
+    Thumbnail, Text, View
 } from 'native-base';
+import { observer } from 'mobx-react/native'
 import { StyleSheet, ScrollView, ToastAndroid, BackHandler, TextInput } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
@@ -19,10 +20,12 @@ import ImagePicker from 'react-native-image-crop-picker';
 import accountStore from '../../stores/Account';
 import axios from 'axios'
 import * as RNCloudinary from 'react-native-cloudinary-x'
+import Config from '../../config'
 
+@observer
 export default class NewPost extends Component {
     state = {
-        content: '',
+        content: "",
         type: 1,
         disabled: false,
     }
@@ -63,7 +66,7 @@ export default class NewPost extends Component {
         }
         this.setState({disabled: true})
         axios({
-            url: 'https://ypn-node.herokuapp.com/api/v1/posts', 
+            url: `${Config.postUrl}/posts/`, 
             method: 'POST', 
             data: request,
             headers: {

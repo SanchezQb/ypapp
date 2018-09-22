@@ -14,7 +14,9 @@ export default class EditProfile extends Component {
 
     state = { 
         currentAvatar: accountStore.user.avatar,
-        disabled: false
+        disabled: false,
+        firstname: accountStore.user.firstname,
+        lastname: accountStore.user.lastname
     }
     
     componentDidMount() {
@@ -113,10 +115,19 @@ export default class EditProfile extends Component {
                     <ScrollView keyboardShouldPersistTaps="always">
                         <View style={styles.form}>
                             <Item stackedLabel style={styles.item}>
-                                <Label style={{color: '#444'}}>USERNAME</Label>
+                                <Label style={{color: '#444'}}>FIRSTNAME</Label>
                                 <Input
+                                    value={this.state.firstname}
                                     style={{ paddingVertical: 0}}  
-                                    onChangeText={(username) => this.setState({username})}
+                                    onChangeText={(firstname) => this.setState({firstname})}
+                                 />
+                            </Item>
+                            <Item stackedLabel style={styles.item}>
+                                <Label style={{color: '#444'}}>LASTNAME</Label>
+                                <Input
+                                    value={this.state.lastname}
+                                    style={{ paddingVertical: 0}}  
+                                    onChangeText={(lastname) => this.setState({lastname})}
                                  />
                             </Item>
                             <View style={styles.item}>

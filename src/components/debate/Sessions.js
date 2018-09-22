@@ -18,6 +18,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import messagingStore from '../../stores/Messaging';
 import accountStore from '../../stores/Account'
 import axios from 'axios'
+import Config from '../../config'
 
 export default class Sessions extends Component {
     constructor() {
@@ -44,7 +45,7 @@ export default class Sessions extends Component {
     }
     getDebates = async () => {
         await axios({
-          url: `https://ypn-node.herokuapp.com/api/v1/convos/type/2`, 
+          url: `${Config.postUrl}/convos/type/2`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",
@@ -52,6 +53,7 @@ export default class Sessions extends Component {
           },
       })
       .then(res => {
+          console.log(res.data.data)
           this.setState({
               debates: res.data.data.reverse(),
               isLoading: false
@@ -135,23 +137,13 @@ export default class Sessions extends Component {
                                         <View style={{flexDirection: 'row', marginBottom: 5}}>
                                             <Text style={{color: '#444', fontWeight: 'bold'}}>{item.topic}</Text>
                                             <Right style={{borderBottomWidth: 0, marginRight: 10}}>
-                                                <TouchableOpacity style={styles.touchable} onPress={() => messagingStore.joinConversation(item)}>
-                                                    <Text style={{color: '#fff', textAlign: 'center'}}>Join</Text>
-                                                </TouchableOpacity>
                                             </Right>
                                         </View>
-                                        <Text style={{color: '#777', marginTop: 10}}>It is a long established 
-                                        fact that a reader will be distracted 
-                                        by the readable content of a page when  
-                                        </Text>
+                                        {item.details ? <Text style={{color: '#777', marginTop: 10}}>{item.details.description}</Text> : <Text></Text> }
                                         <View style={styles.icons}>
                                             <ListItem style={styles.listitem}>
                                                 <MaterialIcon name="circle" style={{color: '#82BE30', fontSize: 14}} />
                                                 <Text style={{color: '#a6a6a6', fontSize: 14, marginLeft: 5}}>Ongoing</Text>
-                                            </ListItem>
-                                            <ListItem style={styles.listitem}>
-                                                <MaterialIcon name="message-text-outline" style={{color: '#a6a6a6', fontSize: 14}} />
-                                                <Text style={{color: '#a6a6a6', fontSize: 14, marginLeft: 5}}>150 Messages</Text>
                                             </ListItem>
                                             <ListItem style={styles.listitem}>
                                                 <MaterialIcon name="account" style={{color: '#a6a6a6', fontSize: 14}} />

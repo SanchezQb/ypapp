@@ -6,6 +6,7 @@ import {
   StyleSheet, StatusBar, Dimensions, Text
 } from 'react-native';
 import { TabViewAnimated, SceneMap } from 'react-native-tab-view';
+import messagingStore from '../stores/Messaging'
 import { Icon } from 'native-base'
 import Posts from './feed/Posts'
 import ChatList from './chat/ChatList'
@@ -36,7 +37,7 @@ export default class TopBarIconExample extends React.Component<*, State> {
   static statusBarStyle = 'dark-content';
 
   state = {
-    index: 0,
+    index: messagingStore.index,
     show: false,
     routes: [
       { key: 'home', title: 'Home', icon: 'ios-home-outline' },

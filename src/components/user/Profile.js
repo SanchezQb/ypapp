@@ -9,6 +9,7 @@ import { observer } from 'mobx-react/native'
 import axios from 'axios'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
+import Config from '../../config'
 
 const UIManager = NativeModules.UIManager;
 const {width: SCREEN_WIDTH} = Dimensions.get("window");
@@ -81,22 +82,10 @@ export default class Profile extends Component {
   onBackPress () {
       BackHandler.exitApp()
   }
-  onMenuPressed = (labels) => {
-    const { onPress } = this.props;
-    UIManager.showPopupMenu (
-        findNodeHandle(this.menu),
-        ["Edit Profile"],
-        () => {},
-        (result, index) => {
-        if (index == 0) {
-          Actions.editProfile()
-        }
-      },
-    );
-  };
+  
   getUserProfile = async () => {
     await axios({
-      url: `https://ypn-base-01.herokuapp.com/profile/${accountStore.user.id}`, 
+      url: `${Config.baseUrl}/profile/${accountStore.user.id}`, 
       method: 'GET', 
       headers: {
           "Content-Type": "application/json",
@@ -106,7 +95,7 @@ export default class Profile extends Component {
   .then(res => {
       this.setState({
           user: res.data,
-          followers: res.data.followers,
+          followers: res.data.followers.filter(item => item !== null),
           following: res.data.friends
       })
       accountStore.passFollows(res.data)
@@ -180,12 +169,15 @@ export default class Profile extends Component {
                   style={{height: IMAGE_HEIGHT, width: "100%", opacity: this.imgOpacity}}>
                   <View style={{backgroundColor: '#fff', marginTop: 10, height: 300, borderColor: '#f2f2f2', borderBottomWidth: 2}}>
                     <View style={styles.dpView}>
-                      <TouchableOpacity onPress={() => Actions.editProfile()}style={styles.dpcont}>
+                      <TouchableOpacity onPress={() => Actions.editProfile()}>
                           {this.userProfile(accountStore.user.avatar)}
                       </TouchableOpacity>
                       <View style={styles.profile}>
                           <Text style={{fontWeight: 'bold', fontSize: 16, color: '#fff'}}>
                             {`${accountStore.user.firstname} ${accountStore.user.lastname}`}
+                          </Text>
+                          <Text style={{ fontSize: 14, color: '#f2f3f4'}}>
+                            {`@${accountStore.user.username}`}
                           </Text>
                           <Text style={{fontSize: 16, color: '#fff'}}>
                             {`Ward ${accountStore.user.ward} | ${accountStore.user.lga} LGA`}
@@ -222,8 +214,9 @@ export default class Profile extends Component {
                   this.setState({height: this.heights[i], activeTab: i})
                 }}
                 renderTabBar={(props) => <Animated.View
-                  style={{transform: [{translateY: this.tabY}], zIndex: 1, width: "100%", backgroundColor: "white"}}>
+                  style={{transform: [{translateY: this.tabY}], zIndex: 1, width: "100%", backgroundColor: "white",}}>
                   <ScrollableTab {...props}
+                    style={{ backgroundColor: "white" }}
                     renderTab={(name, page, active, onPress, onLayout) => (
                       <TouchableOpacity key={page}
                         onPress={() => onPress(page)}
@@ -237,9 +230,9 @@ export default class Profile extends Component {
                           }}>
                           <TabHeading
                             style={{
-                                  marginTop: 7,
-                              backgroundColor: "transparent",
-                              width: SCREEN_WIDTH / 2
+                                marginTop: 7,
+                                backgroundColor: "transparent",
+                                width: SCREEN_WIDTH / 2
                             }}
                             active={active}>
                             <Animated.Text style={{
@@ -301,16 +294,16 @@ const styles = StyleSheet.create({
       marginTop: 10,
       width: '90%',
       alignSelf: 'center',
+      paddingBottom: '5%'
   },
   CardItem: {
       width: '90%',
       alignSelf: 'center',
       flexDirection: 'row',
       flexWrap: 'nowrap',
-      justifyContent: 'space-between',
+      justifyContent: 'space-around',
       height: 50,
       marginTop: 10,
-      marginBottom: 5
   },
   touchable: {
       paddingVertical: 4,

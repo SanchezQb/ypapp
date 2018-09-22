@@ -5,6 +5,8 @@ import postStore from '../../stores/Post'
 import { observer } from 'mobx-react/native'
 import Modal from 'react-native-modalbox'
 import AddComment from './AddComment'
+import notificationStore from '../../stores/Notifications'
+import searchStore from '../../stores/Search'
 import { 
     StyleProvider, 
     Header, 
@@ -16,12 +18,13 @@ import {
     Title,
     Badge, Text, View,  ListItem, Thumbnail
 } from 'native-base';
-import { StyleSheet, TouchableOpacity, BackHandler, ActivityIndicator, RefreshControl, Dimensions, FlatList, Image, ToastAndroid } from 'react-native'
+import { StyleSheet, TouchableOpacity, BackHandler, ActivityIndicator, RefreshControl, Dimensions, FlatList, Alert, ToastAndroid } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
 import moment from 'moment'
 import MediaHandler from './MediaHandler'
+import Config from '../../config'
 const { width, height } = Dimensions.get('window')
 
 @observer
@@ -40,9 +43,11 @@ export default class Posts extends Component {
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
         this.getPosts()
+        notificationStore.fetchNotifications()
     }
     componentWillUnmount () {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+        console.log("Out of here")
     }
 
     onBackPress () {
@@ -51,7 +56,7 @@ export default class Posts extends Component {
 
     getPosts = async () => {
         await axios({
-          url: `https://ypn-node.herokuapp.com/api/v1/posts/`, 
+          url: `${Config.postUrl}/posts/`, 
           method: 'GET', 
           headers: {
               "Content-Type": "application/json",
@@ -65,7 +70,6 @@ export default class Posts extends Component {
           })
       })
       .catch(error => {
-          console.log(error.response.data)
           this.setState({
               isLoading: false,
               error: true
@@ -89,8 +93,15 @@ export default class Posts extends Component {
         Actions.allusers()
     }
 
-    renderSome = () => {
-        if (this.state.error) {
+    render() {
+        if (this.state.isLoading) {
+            return (
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <ActivityIndicator size="large" color="#82BE30"/>
+              </View>
+            );
+        }
+        else if (this.state.error) {
             return (
               <View style={{height, justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={{color: '#444'}}>Could not load Posts :(</Text>
@@ -99,8 +110,7 @@ export default class Posts extends Component {
                 <Button style={{backgroundColor: '#82BE30', alignSelf: 'center'}}onPress={() => {this.reset()}}>
                     <Text>Retry</Text>
                 </Button>
-              </View>
-              
+              </View>     
             )
         }
         else if (this.state.posts.length == 0) {
@@ -118,55 +128,6 @@ export default class Posts extends Component {
               </View>
             )
         }
-        else {
-            return (
-                <React.Fragment>
-                    <View style={{paddingBottom: 100}}>
-                    <FlatList
-                        legacyImplementation
-                        initialNumToRender={10}
-                        data={this.state.posts}
-                        showsVerticalScrollIndicator={false}
-                        refreshControl={
-                            <RefreshControl
-                              refreshing={this.state.refreshing}
-                              onRefresh={this._onRefresh.bind(this)}
-                              tintColor="#82BE30"
-                              />
-                            }
-                        renderItem={({item}) =>
-                        <PostList item={item} refresh={this.getPosts}/>
-                        }
-                        keyExtractor={item => item._id}
-                        />
-                    </View>
-                    <Modal
-                        isOpen={postStore.isOpen} 
-                        onClosed={() => postStore.close()} 
-                        style={{width: '100%', flex: 1, justifyContent: 'center',height: '100%', backgroundColor: 'transparent', alignItems: 'center'}}
-                        position={"center"} 
-                        entry="top"
-                        animationDuration={200}>
-                        <Image
-                            style={{width: 400, height: 400, alignSelf: 'center'}}
-                            source={{uri: postStore.imageToOpen}}
-                        />
-                    </Modal>
-                    <AddComment refresh={this.getPosts} />
-                </React.Fragment>
-            )
-        }
-    }
-       
-
-    render() {
-        if (this.state.isLoading) {
-            return (
-              <View style={{flex: 1, justifyContent: 'center'}}>
-                <ActivityIndicator size="large" color="#82BE30"/>
-              </View>
-            );
-        }
         return (
             <StyleProvider style={getTheme(material)}>
                 <View>
@@ -180,17 +141,41 @@ export default class Posts extends Component {
                             <Title>Home</Title>
                         </Body>
                         <Right>
-                            <Button transparent onPress={() => Actions.allusers()}>
+                            <Button transparent onPress={() => {
+                                Actions.search()
+                                searchStore.acceptPosts(this.state.posts)
+                                }}>
                                 <Icon name="ios-search" style={{color: '#fff'}}/>
                             </Button>
-                            <Button onPress={() => Actions.notifications()}badge transparent>
+                            <Button onPress={() => Actions.notifications()} badge transparent>
                                 <Icon name="ios-notifications-outline" style={{color: '#fff'}}/>
-                                <Badge style={{width: 12, height: 12, backgroundColor: '#F0BA00'}}><Text></Text></Badge>
+                                {notificationStore.unseenCount && notificationStore.unseenCount > 0 ? 
+                                    <Badge style={{width: 23, height: 23,backgroundColor: '#F0BA00'}}><Text>{notificationStore.unseenCount}</Text></Badge>
+                                :null}
                             </Button>
                         </Right>
                     </Header>
                     <React.Fragment>
-                    {this.renderSome()}
+                    <View style={{paddingBottom: 100}}>
+                        <FlatList
+                            legacyImplementation
+                            initialNumToRender={10}
+                            data={this.state.posts}
+                            showsVerticalScrollIndicator={false}
+                            refreshControl={
+                                <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                                tintColor="#82BE30"
+                                />
+                                }
+                            renderItem={({item}) =>
+                            <PostList item={item} refresh={this.getPosts} deleteFilter={(id) => this.filterOut(id)}/>
+                            }
+                            keyExtractor={item => item._id}
+                            />
+                        </View>   
+                        <AddComment refresh={this.getPosts} />
                     </React.Fragment>
                 </View>
             </StyleProvider>
@@ -208,15 +193,30 @@ export const PostList = class PostList extends React.Component {
     componentDidMount() {
         this.generateLike()
     }
-    userProfile = (avatar) => {
-        if(avatar == null || avatar == '') {
+    userProfile = (origin) => {
+        // if(avatar == null || avatar == '') {
+        //     return (
+        //         <Thumbnail source={require('../logo.png')} resizeMode="center"/>
+        //     )
+        // }
+        // else {
+        //     return (
+        //         <Thumbnail source={{uri: avatar}}/>
+        //     )
+        // }
+        if(origin.avatar == null || origin.avatar == '') {
             return (
                 <Thumbnail source={require('../logo.png')} resizeMode="center"/>
             )
         }
+        if(origin.id == accountStore.user.id) {
+            return (
+                <Thumbnail source={{uri: accountStore.user.avatar}}/>
+            )
+        }
         else {
             return (
-                <Thumbnail source={{uri: avatar}}/>
+                <Thumbnail source={{uri: origin.avatar}}/>
             )
         }
     }
@@ -235,7 +235,7 @@ export const PostList = class PostList extends React.Component {
     }
     likePost = (id, key) => {
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/posts/like/${id}?type=${key}`, 
+            url: `${Config.postUrl}/posts/like/${id}?type=${key}`, 
             method: 'PUT', 
             headers: {
                 "Content-Type": "application/json",
@@ -257,32 +257,64 @@ export const PostList = class PostList extends React.Component {
     closeModal = () => {
         this.setState({modalIsOpen: false})
     } 
+    deleteHandler = (post) => {
+        Alert.alert(
+          'Delete',
+          'Are you sure you want to delete this post? This cannot be undone?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'YES', onPress: () => this.delete(post)},
+          ],
+          { cancelable: false }
+        )
+      }
+    
+      delete = (post) => {
+        axios({
+            url: `${Config.postUrl}/posts/${post._id}`, 
+            method: 'DELETE', 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${accountStore.user.token}`
+            },
+        }).then((res) => {
+            ToastAndroid.show("Post deleted successfully", ToastAndroid.SHORT)
+            this.props.refresh()
+        }).catch(err => {
+            console.log(err.response)
+            ToastAndroid.show("Could not delete post, please try again", ToastAndroid.SHORT)
+        })
+      }
     render() {
         const item = this.props.item
         return (
             <View style={{borderBottomWidth: 1, borderColor: '#ddd'}}>
-                <ListItem avatar onPress={() => Actions.post({item: item})}>
+                <ListItem avatar onPress={() => Actions.post({item: item, refresh: this.props.refresh})}>
                     <Left style={{height: '80%'}}>
                         <TouchableOpacity onPress={() => Actions.otherprofile({data: item.origin.id})}>
-                            {this.userProfile(item.origin.avatar)}
+                            {this.userProfile(item.origin)}
                         </TouchableOpacity>
                     </Left>
                     <Body style={{borderBottomWidth: 0}}>
                         <View style={{flexDirection: 'row', marginBottom: 5}}>
-                            <Text style={{color: '#444', fontWeight: 'bold'}}>
-                                {`${item.origin.firstname} ${item.origin.lastname}`}
-                            </Text>
+                        {item.origin.id == accountStore.user.id ? 
+                        <Text style={{color: '#444', fontWeight: 'bold'}}>
+                            {`${accountStore.user.firstname} ${accountStore.user.lastname}`}
+                        </Text>
+                            : 
+                        <Text style={{color: '#444', fontWeight: 'bold'}}>
+                            {`${item.origin.firstname} ${item.origin.lastname}`}
+                        </Text> 
+                        }
+                    
                             {item.origin.role == 5 ? 
-                                <View style={{borderWidth: 1,marginLeft: '2%', borderColor: '#82BE30', padding: '0.5%'}}>
-                                    <Text note style={{color: '#82BE30'}}>Verified</Text>
-                                </View> 
+                                <Text note style={{color: '#82BE30', marginHorizontal: '3%'}}>Verified</Text>
                             : null}
-                            <Right style={{marginRight: 18}}>
-                                <Text style={{fontSize: 14, color: '#555'}}>{moment(new Date(item.createdAt)).fromNow()}</Text>
+                            <Right style={{marginRight: 5}}>
+                                <Text style={{color: '#555', fontSize: 14}}>{moment(new Date(item.createdAt)).fromNow()}</Text>
                             </Right>
                         </View>
-                        <Text style={{color: '#777'}}>{item.content}
-                        </Text>
+                        <Text style={{color: '#777'}}>{item.content}</Text>
                         {/* {this.renderLinks(item.links)} */}
                         <MediaHandler data={item} />
                         <View style={styles.icons}>
@@ -302,6 +334,14 @@ export const PostList = class PostList extends React.Component {
                                 <Icon name="md-share-alt" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
                                 <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>Share</Text>
                             </ListItem>
+                            {item.origin.id === accountStore.user.id || accountStore.user.role === 5 ?
+                             <ListItem style={styles.listitem} onPress={() => this.deleteHandler(item)}>
+                                <Icon name="ios-trash-outline" style={{color: '#a6a6a6', fontSize: height * 0.028}} />
+                                <Text style={{color: '#a6a6a6', fontSize: height * 0.02, marginLeft: 5}}>Delete</Text>
+                            </ListItem>
+                            :
+                            null
+                            }
                         </View>
                     </Body>
                 </ListItem>

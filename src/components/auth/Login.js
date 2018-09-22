@@ -5,13 +5,14 @@ import {
     Text, 
     Item, Input, Label,
 } from 'native-base';
-import { StyleSheet, ImageBackground, StatusBar, View, ScrollView, BackHandler } from 'react-native'
+import { StyleSheet, ImageBackground, StatusBar, View, ScrollView, BackHandler, ActivityIndicator } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import accountStore from '../../stores/Account';
 import { observer } from 'mobx-react/native'
 import { Actions } from 'react-native-router-flux'
+import Dialog from "react-native-dialog";
 
 
 @observer
@@ -86,6 +87,12 @@ export default class Login extends Component {
                         <Text style={styles.policyLink}>Terms of Service</Text>
                         </Text>
                     </View>
+                    <Dialog.Container visible={accountStore.visible}>
+                        <Dialog.Title style={{textAlign: 'center'}}>Logging In</Dialog.Title>
+                        <View style={{marginVertical: '5%'}}>
+                            <ActivityIndicator />
+                        </View>
+                    </Dialog.Container>     
                     </ScrollView>
                 </React.Fragment>
             </StyleProvider>
