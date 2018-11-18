@@ -115,7 +115,7 @@ export default class Results extends Component {
                                             width={10}
                                             fill={(item.votes / this.state.heatmap.reduce(function (a, b) {
                                                 return a.votes + b.votes // returns object with property x
-                                                })) * 100}
+                                                })) * 100 || 0}
                                             tintColor="#82BE30"
                                             backgroundColor="#F0BA00">
                                         </AnimatedCircularProgress>

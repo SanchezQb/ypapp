@@ -45,7 +45,7 @@ export default class TopBarIconExample extends React.Component<*, State> {
       { key: 'post', title: 'Post', icon: 'md-add-circle' },
       { key: 'profile', title: 'Profile', icon: 'ios-person-outline' },
     ],
-  };
+  };  
 
   _handleIndexChange = index =>
     this.setState({

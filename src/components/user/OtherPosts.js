@@ -8,7 +8,7 @@ import moment from 'moment'
 import { Actions } from 'react-native-router-flux'
 import Config from '../../config'
 
-const { width, height } = Dimensions.get('window')
+const { height } = Dimensions.get('window')
 
 export default class OtherPosts extends Component {
     constructor() {

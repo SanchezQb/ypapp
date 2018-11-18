@@ -8,9 +8,9 @@ import {
     Icon, 
     Button,
     Title,
-    Badge, Text, View, ListItem
+    Text, View, ListItem
 } from 'native-base';
-import { StyleSheet, TouchableOpacity, BackHandler, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
+import { StyleSheet, BackHandler, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -55,7 +55,7 @@ export default class TownHalls extends Component {
       .then(res => {
           const userLocationArray = ["Federal", accountStore.user.state, accountStore.user.lga.toUpperCase()]
           this.setState({
-              townhalls: res.data.data.reverse().filter(item => item.details.location.some(loc => userLocationArray.includes(loc))),
+              townhalls: res.data.data.reverse().filter(item => item.archived === false && item.details.location.some(loc => userLocationArray.includes(loc))),
               isLoading: false
           })
       })

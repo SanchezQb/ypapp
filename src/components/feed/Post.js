@@ -7,7 +7,6 @@ import accountStore from '../../stores/Account'
 import postStore from '../../stores/Post'
 import MediaHandler from './MediaHandler'
 import AddCommentSingle from './AddCommentSingle'
-import { observer } from 'mobx-react'
 import moment from 'moment'
 import material from '../../../native-base-theme/variables/material'
 import axios from 'axios'
@@ -86,7 +85,7 @@ export default class Post extends React.Component {
       }
     fetchComments = () => {
         axios({
-            url: `https://ypn-node.herokuapp.com/api/v1/posts/${this.props.item._id}`, 
+            url: `${Config.postUrl}/posts/${this.props.item._id}`, 
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

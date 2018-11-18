@@ -9,7 +9,7 @@ import {
     Title, 
     ListItem, Thumbnail, Container, Icon, Text
 } from 'native-base';
-import { StyleSheet, TouchableOpacity, View, Picker, FlatList, ActivityIndicator, ToastAndroid, BackHandler } from 'react-native'
+import { StyleSheet, View, Picker, FlatList, ActivityIndicator, ToastAndroid, BackHandler } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
@@ -58,7 +58,7 @@ export default class Aspirants extends Component {
         })
         .then(res => {
             console.log(res.data)
-            this.setState({aspirants: res.data.aspirants})
+            this.setState({aspirants: res.data.aspirants.filter(item => item.sponsored === false)})
         }).then(() => {
             this.setState({
                 isLoading: false,
@@ -92,6 +92,12 @@ export default class Aspirants extends Component {
     filterList = (text) => {
         if(text == "All") {
             return this.setState({items: this.state.aspirants})
+        }
+        if(text == "Senate") {
+            return this.setState({items: this.state.aspirants.filter(item => item.level == "Senate")})
+        }
+        if(text == "House of Reps") {
+            return this.setState({items: this.state.aspirants.filter(item => item.level == "House of Reps")})
         }
         let updatedList = this.state.aspirants
         updatedList = updatedList.filter(v => {
@@ -162,6 +168,8 @@ export default class Aspirants extends Component {
                             <Picker.Item label="Federal" value="Federal" />
                             <Picker.Item label="State" value = "State" />
                             <Picker.Item label="Local" value="Local" />
+                            <Picker.Item label="Senate" value="Senate" />
+                            <Picker.Item label="House of Representatives" value="House of Reps" />
                         </Picker>
                         {this.state.filterBy == 'State'? 
                             <Picker
@@ -227,6 +235,7 @@ export default class Aspirants extends Component {
                     :
                     <FlatList
                         legacyImplementation
+                        style={{marginBottom: 80}}
                         initialNumToRender={10}
                         data={this.state.items}
                         showsVerticalScrollIndicator={false}
@@ -234,15 +243,19 @@ export default class Aspirants extends Component {
                             <View style={styles.listitem}>
                                 <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => Actions.ap({data:item})}>
                                     <Left>
-                                        {item.avatar ? <Thumbnail source={item.avatar} /> : <Thumbnail source={require('../logo.png')} resizeMode="center" />}
+                                        {item.avatar ? <Thumbnail source={{uri:item.avatar}} /> : <Thumbnail source={require('../logo.png')} resizeMode="center" />}
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
                                         <Text>{`${item.name.split(" ")[0]} ${item.name.split(" ")[1]}`}</Text>
                                         <Text style={{color: '#82BE30'}}>{item.position}</Text>
                                     </Body>
                                     <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                        <View style={{width: 60, marginTop: 10}}>
-                                            <Text note>{item.location}</Text>
+                                        <View style={{marginTop: 10}}>
+                                            {item.constituencyIndex ? 
+                                                <Text note>{item.state} Constituency {item.constituencyIndex}</Text>
+                                                : <Text note>{item.location}</Text>
+                                            }
+                                            {/* <Text note>{item.location}</Text> */}
                                         </View>
                                     </Right>
                                 </ListItem>

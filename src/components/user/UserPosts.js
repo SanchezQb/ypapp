@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { observer } from 'mobx-react'
-import {  Text, Thumbnail, Button } from 'native-base'
+import {  Text, Button } from 'native-base'
 import { View,  StyleSheet, FlatList, ActivityIndicator } from 'react-native'
 import { PostList } from '../feed/Posts'
 import accountStore from '../../stores/Account'

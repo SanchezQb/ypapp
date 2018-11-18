@@ -91,12 +91,17 @@ export default class SponsoredCandidates extends Component {
     }
     filterList = (text) => {
         if(text == "All") {
-            return this.setState({items: this.state.aspirants})
+            return this.setState({items: this.state.sponsored})
+        }
+        if(text == "Senate") {
+            return this.setState({items: this.state.sponsored.filter(item => item.level == "Senate")})
+        }
+        if(text == "House of Reps") {
+            return this.setState({items: this.state.sponsored.filter(item => item.level == "House of Reps")})
         }
         let updatedList = this.state.sponsored
         updatedList = updatedList.filter(v => {
-            return v.location.toLowerCase().search(
-                text.toLowerCase()) !== -1;
+            return v.location.includes(text)
         })
         this.setState({
             items: updatedList
@@ -115,7 +120,7 @@ export default class SponsoredCandidates extends Component {
           else if (this.state.error) {
             return (
               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: '#444'}}>Could not load excos :(</Text>
+                <Text style={{color: '#444'}}>Could not load candidates :(</Text>
                 <Text></Text>
                 <Text></Text>
                 <Button style={{backgroundColor: '#82BE30', alignSelf: 'center'}}onPress={() => {this.reset()}}>
@@ -158,6 +163,8 @@ export default class SponsoredCandidates extends Component {
                             <Picker.Item label="Federal" value="Federal" />
                             <Picker.Item label="State" value = "State" />
                             <Picker.Item label="Local" value="Local" />
+                            <Picker.Item label="Senate" value="Senate" />
+                            <Picker.Item label="House of Representatives" value="House of Reps" />
                         </Picker>
                         {this.state.filterBy == 'State'? 
                             <Picker
@@ -228,20 +235,21 @@ export default class SponsoredCandidates extends Component {
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
                             <View style={styles.listitem}>
-                                <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => console.log("Pressed")}>
+                                <ListItem avatar style={{paddingVertical: 15, marginLeft: 15}} onPress={() => Actions.ap({data:item})}>
                                     <Left>
-                                        <Thumbnail source={require('../logo.png')} />
+                                        {item.avatar ? <Thumbnail source={{uri:item.avatar}} /> : <Thumbnail source={require('../logo.png')} resizeMode="center" />}
                                     </Left>
                                     <Body style={{borderBottomWidth: 0}}>
-                                        <Text>{`${item.firstname} ${item.lastname}`}</Text>
+                                        <Text>{item.name}</Text>
                                         <Text style={{color: '#82BE30'}}>{item.position}</Text>
                                     </Body>
                                     <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                        <TouchableOpacity style={styles.touchable}>
-                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                        </TouchableOpacity>
-                                        <View style={{width: 60, marginTop: 10}}>
-                                            <Text note>{item.location}</Text>
+                                        <View style={{marginTop: 10}}>
+                                            {item.constituencyIndex ? 
+                                                <Text note>{item.state} Constituency {item.constituencyIndex}</Text>
+                                                : <Text note>{item.location}</Text>
+                                            }
+                                            {/* <Text note>{item.location}</Text> */}
                                         </View>
                                     </Right>
                                 </ListItem>

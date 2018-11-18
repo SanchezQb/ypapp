@@ -10,7 +10,7 @@ import {
     Title,
     Badge, Text, View, ListItem
 } from 'native-base';
-import { StyleSheet, TouchableOpacity,  BackHandler, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
+import { StyleSheet, BackHandler, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -55,7 +55,7 @@ export default class Sessions extends Component {
       .then(res => {
           console.log(res.data.data)
           this.setState({
-              debates: res.data.data.reverse(),
+              debates: res.data.data.reverse().filter(item => item.archived === false),
               isLoading: false
           })
       })

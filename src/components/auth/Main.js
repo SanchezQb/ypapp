@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Image, ScrollView, BackHandler} from 'react-native'
+import { View, StyleSheet, Image, ScrollView, BackHandler, Linking} from 'react-native'
 import { Button, Text } from 'native-base'
 import { Actions } from 'react-native-router-flux'
 
@@ -7,12 +7,21 @@ export default class Main extends Component {
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     }
+    
     componentWillUnmount () {
         BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     }
 
     onBackPress () {
         BackHandler.exitApp()
+    }
+
+    openTerms = () => {
+        Linking.openURL('https://youthpartyng.com/wp-content/uploads/2015/10/YP-MOBILE-APP-TERMS-AND-CONDITIONS.pdf').catch(err => console.log(err))
+    }
+
+    openPrivacy = () => {
+        Linking.openURL('https://youthpartyng.com/wp-content/uploads/2015/10/Privacy-Policy-for-Youth-Party2.pdf').catch(err => console.log(err))
     }
 
     render() {
@@ -36,8 +45,8 @@ export default class Main extends Component {
                     </View>
                     <View style={styles.policy}>
                         <Text style={styles.policyText}>
-                        By logging in, you agree to our <Text style={styles.policyLink}>Privacy Policy</Text> & 
-                        <Text style={styles.policyLink}>Terms of Service</Text>
+                        By logging in, you agree to our <Text onPress={() => this.openPrivacy()} style={styles.policyLink}>Privacy Policy</Text> & 
+                        <Text  onPress={() => this.openTerms()} style={styles.policyLink}>Terms of Service</Text>
                         </Text>
                     </View>
                 </View>

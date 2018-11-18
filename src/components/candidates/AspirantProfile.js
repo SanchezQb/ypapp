@@ -13,27 +13,6 @@ import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
 
 export default class AspirantProfile extends Component {
-
-    // renderLocation = () => {
-    //     const loc = this.props.data
-    //     if(loc.value.level == 'Federal') {
-    //         return <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>Federal</Text>
-    //     }
-    //     else if(loc.value.level == 'state') {
-    //         return (
-    //             <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.state} State</Text>
-    //         )
-    //     }
-    //     else {
-    //         return (
-    //             <React.Fragment>
-    //                  <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.local} LGA</Text>
-    //                 <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{loc.value.state} State</Text>
-    //             </React.Fragment>
-    //         )
-    //     }
-    // }
-
     
 
     render() {
@@ -57,12 +36,13 @@ export default class AspirantProfile extends Component {
                         <View style={styles.view}>
                             <View>
                                 {item.avatar ? 
-                                    <Thumbnail large source={item.avatar} resizeMode="center" style={{alignSelf: 'center'}} />
+                                    <Thumbnail large source={{uri: item.avatar}} resizeMode="center" style={{alignSelf: 'center'}} />
                                 :
                                     <Thumbnail large source={require('../logo.png')} resizeMode="center" style={{alignSelf: 'center'}} />
                                 }
                                 <Text style={{color: '#777', fontSize: 18, textAlign: 'center', marginTop: 10}}>{item.position}</Text>
-                                <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{item.location}</Text>
+                                {item.constituencyIndex ? <Text style={{textAlign: 'center'}}>Constituency {item.constituencyIndex}</Text> : null}
+                                <Text style={{color: '#82BE30', fontSize: 18, textAlign: 'center'}}>{item.location.join(", ")}</Text>
                             </View>
                         </View>
                         <View style={{width: '93%', alignSelf: 'center', marginTop: 30}}>

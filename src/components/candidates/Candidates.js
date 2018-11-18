@@ -7,7 +7,7 @@ import {
     Right, 
     Button, 
     Icon, Title, List, ListItem, Text} from 'native-base';
-import { StyleSheet, View ,TouchableOpacity, BackHandler } from 'react-native'
+import { StyleSheet, View, BackHandler } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -50,12 +50,9 @@ export default class Candidates extends Component {
                                 <ListItem style={{ marginLeft: 0, }} onPress={() => Actions.aspirants()}>
                                     <Body>
                                     <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Aspirants</Text>
-                                    <Text note>Click to see approved Aspirants</Text>
                                     </Body>
                                     <Right>
-                                        <TouchableOpacity style={styles.touchable}>
-                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                        </TouchableOpacity>
+                                       
                                     </Right>
                                 </ListItem>
                             </View>
@@ -63,25 +60,19 @@ export default class Candidates extends Component {
                                 <ListItem style={{ marginLeft: 0}} onPress={() => Actions.sponsored()}>
                                     <Body>
                                     <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Sponsored Candidates</Text>
-                                    <Text note>Click to see all sponsored candidates</Text>
                                     </Body>
                                     <Right>
-                                        <TouchableOpacity style={styles.touchable}>
-                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                        </TouchableOpacity>
+                                       
                                     </Right>
                                 </ListItem>
                             </View>
                             <View style={{paddingTop: 20}}>
-                                <ListItem style={{ marginLeft: 0}} onPress={() => Actions.elected()}>
+                                <ListItem style={{ marginLeft: 0}} onPress={() => Actions.runforoffice()}>
                                     <Body>
-                                    <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Elected Officials</Text>
-                                    <Text note>Click to see all elected officials</Text>
+                                    <Text style={{fontSize: 18, fontWeight: 'bold', color: '#444'}}>Run For Office</Text>
                                     </Body>
                                     <Right>
-                                        <TouchableOpacity style={styles.touchable}>
-                                            <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                        </TouchableOpacity>
+                                        
                                     </Right>
                                 </ListItem>
                             </View>

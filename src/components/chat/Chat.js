@@ -22,7 +22,7 @@ export default class Chat extends Component {
       messages: [],
       content: ''
     }
-    this.socket = io(`${Config.realTimeUrl}/conversation`, { query: { convoID: this.props.data._id } });
+    this.socket = io(`https://yon-notification.herokuapp.com/conversation`, { query: { convoID: this.props.data._id } });
     this.registerEvents();
   }
  
@@ -95,6 +95,9 @@ export default class Chat extends Component {
       if(this.props.reference) {
         this.handleReference(this.props.reference)
       }
+      let regObj = {}
+      regObj[`${response.data.data.messages._id}`] = response.data.data.messages.reverse()
+      messagingStore.updateReg(regObj)
     })
     .catch(err => {
         ToastAndroid.show('Something went wrong, could not fetch messages', ToastAndroid.SHORT)

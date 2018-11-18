@@ -73,15 +73,15 @@ export default class Profile extends Component {
   };
   componentDidMount() {
     this.getUserProfile()
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    // BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   }
-  componentWillUnmount () {
-      BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
-  }
+  // componentWillUnmount () {
+  //     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  // }
 
-  onBackPress () {
-      BackHandler.exitApp()
-  }
+  // onBackPress () {
+  //     BackHandler.exitApp()
+  // }
   
   getUserProfile = async () => {
     await axios({

@@ -6,7 +6,6 @@ import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
 import { observer } from 'mobx-react/native'
 import RadioForm from 'react-native-simple-radio-button';
-import donationStore from '../../stores/Donations';
 
 const level_props = [
     {label: 'Federal', value: 'Federal' },

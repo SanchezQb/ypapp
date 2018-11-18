@@ -49,7 +49,7 @@ export default class DonationListing extends Component {
             this.setState({
                 isLoading: false,
                 donations: res.data.data.filter(donation => {
-                    return donation.type == this.props.data.type && donation.meta.level == this.props.data.level
+                    return donation.archived === false && donation.type == this.props.data.type && donation.meta.level == this.props.data.level
                 })
             })
         }).then(() => {

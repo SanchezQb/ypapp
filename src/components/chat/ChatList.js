@@ -9,7 +9,7 @@ import {
     Title, 
     ListItem, Thumbnail, Container, Icon, Text
 } from 'native-base';
-import { StyleSheet, UIManager, findNodeHandle, View, BackHandler, ScrollView, Alert, ActivityIndicator } from 'react-native'
+import { StyleSheet, UIManager, findNodeHandle, View, ScrollView, Alert, ActivityIndicator } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
@@ -22,15 +22,8 @@ export default class ChatList extends Component {
 
     componentDidMount() {
         messagingStore.fetchAllConversations()
-        BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
-    }
-    componentWillUnmount () {
-        BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
     }
 
-    onBackPress () {
-        BackHandler.exitApp()
-    }
     onMenuPressed = (labels) => {
         const { onPress } = this.props;
         UIManager.showPopupMenu (

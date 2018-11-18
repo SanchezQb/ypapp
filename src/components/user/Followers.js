@@ -9,7 +9,7 @@ import {
     Title, 
     List, ListItem, Thumbnail, Container, Icon, Text
 } from 'native-base';
-import { StyleSheet, TouchableOpacity, View, FlatList, BackHandler } from 'react-native'
+import { StyleSheet, View, FlatList, BackHandler } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';
 import material from '../../../native-base-theme/variables/material'
@@ -75,9 +75,6 @@ export default class Followers extends Component {
                                     <Text style={{color: '#82BE30'}}>{`${item.lga}, ${item.state} State`}</Text>
                                 </Body>
                                 <Right style={{borderBottomWidth: 0, marginRight: 0}}>
-                                    <TouchableOpacity style={styles.touchable} onPress={() =>  Actions.otherprofile({data: item.id})}>
-                                        <Text style={{color: '#fff', textAlign: 'center'}}>View</Text>
-                                    </TouchableOpacity>
                                     <View style={{width: 60, marginTop: 10}}>
                                     </View>
                                 </Right>

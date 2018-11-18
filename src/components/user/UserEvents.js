@@ -8,7 +8,7 @@ import accountStore from '../../stores/Account'
 import Config from '../../config'
 
 
-export default class Userposts extends Component {
+export default class UserEvents extends Component {
     constructor() {
         super()
         this.state = {

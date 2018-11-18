@@ -12,7 +12,7 @@ import {
     Thumbnail, Text, View
 } from 'native-base';
 import { observer } from 'mobx-react/native'
-import { StyleSheet, ScrollView, ToastAndroid, BackHandler, TextInput } from 'react-native'
+import { StyleSheet, ScrollView, ToastAndroid, TextInput } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -32,16 +32,16 @@ export default class NewPost extends Component {
 
 
 
-    componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
-    }
-    componentWillUnmount () {
-        BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
-    }
+    // componentDidMount() {
+    //     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    // }
+    // componentWillUnmount () {
+    //     BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+    // }
 
-    onBackPress () {
-        BackHandler.exitApp()
-    }
+    // onBackPress () {
+    //     BackHandler.exitApp()
+    // }
 
     selectImage = () => {
         ImagePicker.openPicker({
@@ -52,12 +52,16 @@ export default class NewPost extends Component {
                ToastAndroid.show('Maximum of 4 images', ToastAndroid.SHORT)
            }
            else {
+                ToastAndroid.show(`Images selected: ${images.length}`, ToastAndroid.SHORT)
               this.setState({images})
            }
           });
     }
 
     handlePost = () => {
+        if(this.state.content.length == 0) {
+            return ToastAndroid.show('Cannot send an empty post', ToastAndroid.SHORT)
+        }
         if(this.state.content.length == 0 && !this.state.images) {
             return ToastAndroid.show('Cannot send an empty post', ToastAndroid.SHORT)
         }
@@ -91,7 +95,7 @@ export default class NewPost extends Component {
         if(!this.state.images || !this.state.images.length) {
             return this.handlePost()
         }
-        else if(this.state.content.length > 500) {
+        else if(this.state.content.length > 350) {
             return ToastAndroid.show('Maximum number of characters exceeded', ToastAndroid.SHORT)
         }
         this.setState({disabled: true})
@@ -111,7 +115,7 @@ export default class NewPost extends Component {
     }
     SendToCloudinary = async (data, key) => {
         const images = [];
-        RNCloudinary.init('741854955822223','0Y6bxC5eCBKjXZLuyOJpm6tcJTM','ddjyel5tz')
+        RNCloudinary.init('396818972971315','lOgXSTjfh-IJLkQJD8G6MZ5d3ro','booktu')
         if (!key) return RNCloudinary.UploadImage(data.path);  
         for (let i = 0; i < data.length; i++) {
           const url = await RNCloudinary.UploadImage(data[i].path);
@@ -178,7 +182,7 @@ export default class NewPost extends Component {
                                 <Icon style={{color: '#82BE30'}} name='ios-camera-outline' />
                             </Button>
                             <Text style={{alignSelf: 'flex-end', color: this.state.content.length > 500 ? 'red': '#444'}}>
-                                {this.state.content.length} / 500
+                                {this.state.content.length} / 350
                             </Text>
                             <View style={{marginTop: 30, marginBottom: 20}}>
                                 <TextInput

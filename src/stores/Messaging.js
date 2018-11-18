@@ -3,12 +3,14 @@ import accountStore from './Account'
 import { ToastAndroid } from 'react-native'
 import axios from 'axios'
 import { Actions } from 'react-native-router-flux'
+import QueueOps from '../ops'
 import Config from '../config'
 
 class Messaging {
     @observable messages = []
     @observable logs = []
     @observable registry = {}
+    @observable activitymap = {}
     @observable isLoading = true
     @observable error = false
     @observable index = 0
@@ -28,11 +30,16 @@ class Messaging {
         }).then(res => {
             this.isLoading = false
             this.logs = res.data.data
-            // const registry = res.data.data.reduce((a, b) => {
-            //     a[`${b._id}`] = b.messages || [];
-            //     return a;
-            //   }, {});
-            // this.registry = registry
+            const registry = res.data.data.reduce((a, b) => {
+                a[`${b._id}`] = b.messages || [];
+                return a;
+              }, {});
+            const activitymap = res.data.data.reduce((a, b) => {
+                a[`${b._id}`] = 0;
+                return a;
+            }, {});
+            this.registry = registry
+            this.activitymap = activitymap
         })
         .catch(error => {
             this.error = true
@@ -102,15 +109,28 @@ class Messaging {
     // fetchConversation(target) {
     //     return this.registry[`${target.destination}`] || []
     // }
-    // incomingMessage(data) {
-    //     const registry = this.registry
-    //     registry[`${data.destination}`] = [...registry[`${data.destination}`], data];
-    //     this.registry = registry
-    // }
+    incomingMessage(data) {
+        const registry = this.registry
+        const activitymap = this.activitymap
+        registry[`${data.destination}`] = [data, ...registry[`${data.destination}`]]
+        activityMap[`${data.destination}`] += 1;
+        this.registry = registry
+        this.activitymap = activitymap
+    }
+
+    updateReg(reg) {
+        this.registry = {...this.registry, ...reg }
+    }
 
     sendMessage(body, socket) {
         // this.incomingMessage(body)
-        return socket.emit('new-message', body);
+        socket.emit('new-message', body);
+        setTimeout(async () => {
+            const activityMap = this.activityMap
+            activityMap[body.destination] = Date.now();
+            const queuer = await QueueOps()
+            queuer()({ target: activityMap, remove: true })
+        }, 5000)
     }
 
     joinConversation(item) {

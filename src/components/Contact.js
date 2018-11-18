@@ -8,7 +8,7 @@ import {
     Button, 
     Icon, 
     Title, 
-    View, List, ListItem, Form, Textarea
+    View, List, ListItem
 } from 'native-base';
 import { StyleSheet, ScrollView, Text, Linking, BackHandler } from 'react-native'
 import getTheme from '../../native-base-theme/components'

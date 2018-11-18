@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {Animated, Dimensions, Text, StyleSheet, TouchableOpacity, StatusBar, View, Image, ActivityIndicator, BackHandler,ToastAndroid, NativeModules, findNodeHandle } from "react-native";
-import {Body, Header, ScrollableTab, Tab, Icon, TabHeading, Tabs, StyleProvider, Left, Right, Button, Title, Fab} from "native-base";
+import {Animated, Dimensions, Text, StyleSheet, TouchableOpacity, StatusBar, View, Image, Alert, ActivityIndicator, BackHandler,ToastAndroid, NativeModules, findNodeHandle } from "react-native";
+import {Body, Header, ScrollableTab, Tab, Icon, TabHeading, Tabs, StyleProvider, Left, Right, Button, Title, Fab, Toast} from "native-base";
 import { Actions } from 'react-native-router-flux'
 import accountStore from '../../stores/Account';
 import messagingStore from '../../stores/Messaging'
@@ -153,10 +153,39 @@ userProfile = (avatar) => {
         )
     }
 }
+
+unfollow = (user) => {
+  Alert.alert(
+    'Unfollow',
+    `Are you sure you want to unfollow ${user.firstname}?`,
+    [
+      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+      {text: 'OK', onPress: () => this.unfollowHandler(user)},
+    ],
+    { cancelable: false }
+  )
+}
+
+unfollowHandler = (user) => {
+  this.setState({text: 'Follow'})
+  axios({
+    url: `${Config.baseUrl}/follow/${user.id}/?type=1`, 
+    method: 'POST', 
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `${accountStore.user.token}`
+    },
+  }).then(res => {
+    ToastAndroid.show('Unfollowed', ToastAndroid.SHORT)
+  })
+}
 follow = (user) => {
+  if(this.state.user.followers.filter(item => item !== null).map(item => item.id).includes(accountStore.user.id)) {
+    return this.unfollow(user)
+  }
     this.setState({text: 'Following'})
     axios({
-        url: `https://ypn-base-01.herokuapp.com/follow/${user.id}`, 
+        url: `${Config.baseUrl}/follow/${user.id}`, 
         method: 'POST', 
         headers: {
             "Content-Type": "application/json",
@@ -164,6 +193,7 @@ follow = (user) => {
         },
     })
     .then(response => {
+        console.log(response.data.data)
         this.setState({text: "Following"})
         ToastAndroid.show(`Now following ${user.firstname}`, ToastAndroid.SHORT)
     })

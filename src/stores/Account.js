@@ -5,7 +5,7 @@ import { AsyncStorage, ToastAndroid } from 'react-native'
 import * as RNCloudinary from 'react-native-cloudinary-x'
 import Config from '../config'
 
-RNCloudinary.init('741854955822223','0Y6bxC5eCBKjXZLuyOJpm6tcJTM','ddjyel5tz')
+RNCloudinary.init('396818972971315','lOgXSTjfh-IJLkQJD8G6MZ5d3ro','booktu')
 
 
 class Account {

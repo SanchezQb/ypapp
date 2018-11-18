@@ -12,7 +12,7 @@
       android:icon="@mipmap/ic_launcher"
       android:allowBackup="true"
       android:theme="@style/AppTheme">
-      <meta-data android:name="co.paystack.android.PublicKey" android:value="pk_test_0acd56572ac76ba6d5286dd94801dcad78d57e51"/>
+      <meta-data android:name="co.paystack.android.PublicKey" android:value="pk_live_e6fd9ec3c639d4a77bc4d8aba5815b53afca27ff"/>
       <activity
         android:name=".SplashActivity"
         android:theme="@style/SplashTheme"

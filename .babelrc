@@ -1,4 +1,9 @@
 {
   "presets": ["react-native"],
-  "plugins": ["transform-decorators-legacy", "transform-class-properties", "mobx-deep-action"]
+  "plugins": ["transform-decorators-legacy", "transform-class-properties", "mobx-deep-action"],
+  "env": {
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
 }

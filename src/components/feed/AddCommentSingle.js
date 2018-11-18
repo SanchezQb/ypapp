@@ -8,7 +8,7 @@ import Modal from 'react-native-modalbox'
 import axios from 'axios'
 import Config from '../../config'
 
-const { width, height } = Dimensions.get('window')
+const { height } = Dimensions.get('window')
 
 
 @observer

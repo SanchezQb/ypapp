@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Icon, Text, Left, Body, Right, Header, Title, StyleProvider, Container, Thumbnail, Item, Label, Input } from 'native-base'
+import { Button, Icon, Left, Body, Right, Header, Title, StyleProvider, Container, Thumbnail, Item, Label, Input } from 'native-base'
 import { View, StyleSheet, BackHandler, TouchableOpacity, ToastAndroid, ScrollView, TextInput } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import getTheme from '../../../native-base-theme/components';

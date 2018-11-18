@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, Dimensions, FlatList, Linking } from 'react-native'
 import LinkPreview from 'react-native-link-preview'
-import postStore from '../../stores/Post'
 import { observer } from 'mobx-react/native'
 import { YouTubeStandaloneAndroid } from 'react-native-youtube';
 import { Actions } from 'react-native-router-flux'

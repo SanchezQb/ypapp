@@ -60,7 +60,6 @@ export default class Vacancies extends Component {
             },
         })
         .then(res => {
-            console.log(res.data.data)
             this.setState({careers: res.data.data.filter(item => !item.meta.voluntary), isLoading: false})
         })
         .then(() => {

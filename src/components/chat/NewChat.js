@@ -10,7 +10,7 @@ import {
     Title,
     Thumbnail, Text, View, ListItem
 } from 'native-base';
-import { StyleSheet, BackHandler, ScrollView, ToastAndroid} from 'react-native'
+import { StyleSheet, BackHandler, ScrollView} from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -79,7 +79,6 @@ export default class NewChat extends Component {
       }
 
     render() {
-        console.log(this.state.followers)
         return (
             <StyleProvider style={getTheme(material)}>
                 <View>

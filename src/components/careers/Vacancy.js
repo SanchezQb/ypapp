@@ -6,7 +6,7 @@ import {
     Body, 
     Right, 
     Button, 
-    Icon, Title, List, ListItem, Thumbnail, Item, Input, Text } from 'native-base';
+    Icon, Title, List, ListItem, Thumbnail, Text } from 'native-base';
 import { StyleSheet, View, BackHandler, ScrollView, ToastAndroid, Linking, Alert } from 'react-native'
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import getTheme from '../../../native-base-theme/components'
@@ -111,9 +111,7 @@ export default class Vacancy extends Component {
     }
 
     render() {
-        console.log(this.props.item)
         const { item } = this.props
-        console.log(this.state)
         return (
             <StyleProvider style={getTheme(material)}>
                 <View>

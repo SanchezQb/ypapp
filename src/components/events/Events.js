@@ -57,10 +57,9 @@ export default class Events extends Component {
                 "Authorization": `${accountStore.user.token}`
             },
         }).then(res => {
-            console.log(res.data.data)
             this.setState({
                 isLoading: false,
-                events: res.data.data,
+                events: res.data.data.filter(item => item.archived === false),
             })
         }).then(() => {
             this.setState({items: this.state.events, isLoading: false})

@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import {
   View,
   StatusBar,
-  AsyncStorage
+  AsyncStorage,
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
 import { Router, Scene, Drawer, Actions } from 'react-native-router-flux'
@@ -22,6 +22,7 @@ import Forgot from './src/components/auth/Forgot'
 import Register1 from './src/components/auth/Register1'
 import Register2 from './src/components/auth/Register2'
 import CandidateProfile from './src/components/candidates/CandidateProfile'
+import RunForOffice from './src/components/candidates/RunForOffice'
 import AspirantProfile from './src/components/candidates/AspirantProfile'
 import Donations from './src/components/donations/Donations'
 import DonationListing from './src/components/donations/DonationListing'
@@ -58,7 +59,6 @@ import PartyMember from './src/components/membership/PartyMember'
 import OtherProfile from './src/components/user/OtherProfile'
 import About from './src/components/about/About'
 import PdfView from './src/components/about/PdfView'
-import AddComment from './src/components/feed/AddComment'
 import Posts from './src/components/feed/Posts'
 import Post from './src/components/feed/Post'
 import ReactionList from './src/components/feed/ReactionList'
@@ -78,6 +78,7 @@ import accountStore from './src/stores/Account'
 import notificationStore from './src/stores/Notifications'
 import SinglePost from './src/components/feed/SinglePost'
 import messagingStore from './src/stores/Messaging';
+import Config from './src/config'
 
 const prefix = 'youthparty://app/'
 
@@ -103,7 +104,7 @@ export default class App extends Component<Props> {
     if(!device.userId) return 
     const { token } = JSON.parse(await AsyncStorage.getItem('allUserData'));
      axios({
-      url: 'https://yon-notification.herokuapp.com/register',
+      url: `${Config.realTimeUrl}/register`,
       method: 'POST',
       data: {
         playerId: device.userId
@@ -114,7 +115,7 @@ export default class App extends Component<Props> {
     }).then((response) => {
       AsyncStorage.setItem('OnesignalPlayerId', response.data.data)
     }).catch((err) => {
-      console.log(err.response)
+      console.log(err.response.data)
     })
   }
 
@@ -157,12 +158,12 @@ export default class App extends Component<Props> {
         />
         <Router uriPrefix={prefix} wrapBy={observer} sceneStyle={{backgroundColor: '#fff'}}>
           <Scene key="root" transitionConfig={() => ({ screenInterpolator: CardStackStyleInterpolator.forFadeFromBottomAndroid })}>
-            <Scene key="loader" component={Loader} title="Loader" hideNavBar={true} />
-            <Scene key="main" component={Main} title="Main" hideNavBar />
-            <Scene key="login" component={Login} title="Login" hideNavBar />
-            <Scene key="register1" component={Register1} title="Register1" hideNavBar />
-            <Scene key="forgot" component={Forgot} title="Forgot" hideNavBar />
-            <Scene key="register2" component={Register2} title="Register2" hideNavBar />
+            <Scene key="loader" component={Loader} hideNavBar={true} />
+            <Scene key="main" component={Main} hideNavBar />
+            <Scene key="login" component={Login} hideNavBar />
+            <Scene key="register1" component={Register1} hideNavBar />
+            <Scene key="forgot" component={Forgot} hideNavBar />
+            <Scene key="register2" component={Register2} hideNavBar />
             <Drawer
                 hideNavBar
                 key="drawer"
@@ -171,48 +172,48 @@ export default class App extends Component<Props> {
               <Scene key="home" component={Root} title="Home" hideNavBar />
               <Scene key="posts" component={Posts} hideNavBar />
             </Drawer>
-            <Scene key="allusers" component={AllUsers} title="All Users" hideNavBar />
-            <Scene key="chat" component={Chat} title="Chat" path={'chat/:id'} hideNavBar />
-            <Scene key="followers" component={Followers} title="Followers" hideNavBar />
-            <Scene key="following" component={Following} title="Following" hideNavBar />
-            <Scene key="careers" component={Careers} title="Careers" hideNavBar />
-            <Scene key="vacancy" component={Vacancy} title="Vacancy" hideNavBar />
-            <Scene key="candidates" component={Candidates} title="Candidates" hideNavBar />
-            <Scene key="aspirants" component={Aspirants} title="Aspirants" hideNavBar />
-            <Scene key="sponsored" component={SponsoredCandidates} title="Sponsored Candidates" hideNavBar />
-            <Scene key="elected" component={ElectedOfficials} title="Elected Officials" hideNavBar />
-            <Scene key="cp" component={CandidateProfile} title="Profile" hideNavBar />
-            <Scene key="ap" component={AspirantProfile} title="Profile" hideNavBar />
-            <Scene key="excos" component={Excos} title="Excos" hideNavBar />
-            <Scene key="gallery" component={Gallery} title="Gallery" hideNavBar />
-            <Scene key="events" component={Events} title="Events" hideNavBar />
-            <Scene key="event" component={SingleEvent} title="Event" hideNavBar />
-            <Scene key="contact" component={Contact} title="Contact" hideNavBar />
-            <Scene key="subscribe" component={Subscribe} title="Subscribe" hideNavBar />
-            <Scene key="benefits" component={Benefits} title="Benefits" hideNavBar />
-            <Scene key="debate" component={Sessions} title="Debates" hideNavBar />
-            <Scene key="otherprofile" component={OtherProfile} title="User Profile" hideNavBar />
-            <Scene key="voteDone" component={VoteDone} title="User Profile" hideNavBar />
-            <Scene key="partymember" component={PartyMember} title="Party Member" hideNavBar />
-            <Scene key="donations" component={Donations} title="Donations" hideNavBar />
-            <Scene key="donationDetail" component={DonationDetail} title="Donation Detail" hideNavBar />
-            <Scene key="donationListing" component={DonationListing} title="Donation Listing" hideNavBar />
-            <Scene key="donate" component={Donate} title="Donate" hideNavBar />
-            <Scene key="accepted" component={Accepted} title="Accepted" hideNavBar />
-            <Scene key="elections" component={Elections} title="Elections" hideNavBar />
-            <Scene key="selectCandidate" component={SelectCandidate} title="Select Candidate" hideNavBar />
-            <Scene key="about" component={About} title="About" hideNavBar />
-            <Scene key="pdfView" component={PdfView} title="View PDF" hideNavBar />
-            <Scene key="eligibility" component={Eligibility} title="Eligibility" hideNavBar />
-            <Scene key="post" component={Post} title="Post" path={'post/:item'} hideNavBar />
-            <Scene key="reactionList" component={ReactionList} title="Reaction List" hideNavBar />
-            <Scene key="imageSwiper" component={ImageSwiper} title="Image Swiper" hideNavBar />
-            <Scene key="editProfile" component={EditProfile} title="Edit Profile" hideNavBar />
-            <Scene key="survey" component={Survey} title="Survey" hideNavBar />
-            <Scene key="selectChoice" component={SelectChoice} title="Select Choice" hideNavBar />
-            <Scene key="townhalls" component={Townhalls} title="Town Halls" hideNavBar />
-            <Scene key="groups" component={Groups} title="Groups" hideNavBar />
-            <Scene key="shareTo" component={ShareTo} title="Share To" hideNavBar />
+            <Scene key="allusers" component={AllUsers} hideNavBar />
+            <Scene key="chat" component={Chat} hideNavBar />
+            <Scene key="followers" component={Followers} hideNavBar />
+            <Scene key="following" component={Following} hideNavBar />
+            <Scene key="careers" component={Careers} hideNavBar />
+            <Scene key="vacancy" component={Vacancy} hideNavBar />
+            <Scene key="candidates" component={Candidates} hideNavBar />
+            <Scene key="aspirants" component={Aspirants} hideNavBar />
+            <Scene key="sponsored" component={SponsoredCandidates} hideNavBar />
+            <Scene key="elected" component={ElectedOfficials} hideNavBar />
+            <Scene key="cp" component={CandidateProfile} hideNavBar />
+            <Scene key="ap" component={AspirantProfile} hideNavBar />
+            <Scene key="excos" component={Excos} hideNavBar />
+            <Scene key="gallery" component={Gallery} hideNavBar />
+            <Scene key="events" component={Events} hideNavBar />
+            <Scene key="event" component={SingleEvent} hideNavBar />
+            <Scene key="contact" component={Contact} hideNavBar />
+            <Scene key="subscribe" component={Subscribe} hideNavBar />
+            <Scene key="benefits" component={Benefits} hideNavBar />
+            <Scene key="debate" component={Sessions} hideNavBar />
+            <Scene key="otherprofile" component={OtherProfile} hideNavBar />
+            <Scene key="voteDone" component={VoteDone} hideNavBar />
+            <Scene key="partymember" component={PartyMember} hideNavBar />
+            <Scene key="donations" component={Donations} hideNavBar />
+            <Scene key="donationDetail" component={DonationDetail} hideNavBar />
+            <Scene key="donationListing" component={DonationListing}hideNavBar />
+            <Scene key="donate" component={Donate} hideNavBar />
+            <Scene key="accepted" component={Accepted} hideNavBar />
+            <Scene key="elections" component={Elections} hideNavBar />
+            <Scene key="selectCandidate" component={SelectCandidate} hideNavBar />
+            <Scene key="about" component={About} hideNavBar />
+            <Scene key="pdfView" component={PdfView} hideNavBar />
+            <Scene key="eligibility" component={Eligibility} hideNavBar />
+            <Scene key="post" component={Post} hideNavBar />
+            <Scene key="reactionList" component={ReactionList} hideNavBar />
+            <Scene key="imageSwiper" component={ImageSwiper} hideNavBar />
+            <Scene key="editProfile" component={EditProfile} hideNavBar />
+            <Scene key="survey" component={Survey} hideNavBar />
+            <Scene key="selectChoice" component={SelectChoice} hideNavBar />
+            <Scene key="townhalls" component={Townhalls} hideNavBar />
+            <Scene key="groups" component={Groups} hideNavBar />
+            <Scene key="shareTo" component={ShareTo} hideNavBar />
             <Scene key="settings" component={Settings} hideNavBar />
             <Scene key="newsletter" component={Newsletter} hideNavBar />
             <Scene key="newChat" component={NewChat} hideNavBar />
@@ -220,6 +221,7 @@ export default class App extends Component<Props> {
             <Scene key="singlePost" component={SinglePost} hideNavBar />
             <Scene key="search" component={Search} hideNavBar />
             <Scene key="results" component={Results} hideNavBar />
+            <Scene key="runforoffice" component={RunForOffice} hideNavBar />
           </Scene>
         </Router>
     </View>

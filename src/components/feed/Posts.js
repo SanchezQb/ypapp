@@ -3,7 +3,6 @@ import axios from 'axios'
 import accountStore from '../../stores/Account';
 import postStore from '../../stores/Post'
 import { observer } from 'mobx-react/native'
-import Modal from 'react-native-modalbox'
 import AddComment from './AddComment'
 import notificationStore from '../../stores/Notifications'
 import searchStore from '../../stores/Search'
@@ -18,7 +17,7 @@ import {
     Title,
     Badge, Text, View,  ListItem, Thumbnail
 } from 'native-base';
-import { StyleSheet, TouchableOpacity, BackHandler, ActivityIndicator, RefreshControl, Dimensions, FlatList, Alert, ToastAndroid } from 'react-native'
+import { StyleSheet, TouchableOpacity, BackHandler, AsyncStorage, ActivityIndicator, RefreshControl, Dimensions, FlatList, Alert, ToastAndroid } from 'react-native'
 import getTheme from '../../../native-base-theme/components'
 import material from '../../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
@@ -40,18 +39,57 @@ export default class Posts extends Component {
         this.baseState = this.state
     }
 
+    async componentWillMount() {
+        try {
+          let posts = await AsyncStorage.getItem('timeline')
+          let parsed = JSON.parse(posts)
+          if(posts !== null) {
+             this.setState({isLoading: false, posts: parsed})
+          }
+          else {
+             this.setState({posts: []})
+          }   
+        }
+        catch(error) {
+          ToastAndroid.show('Error fetching messages', ToastAndroid.SHORT)
+        }
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            this.onBackPress()
+            return true
+        });   
+    }
+
+    componentWillUnmount () {
+        BackHandler.removeEventListener('hardwareBackPress', () => {});
+    }
+
+    onBackPress () {
+        this.exitAlert()
+    }
+
+    exitAlert = () => {
+        Alert.alert(
+          'Exit App',
+          'Are you sure you want exit?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: () => BackHandler.exitApp()},
+          ],
+          { cancelable: false }
+        )
+      }
+
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+        // BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
         this.getPosts()
         notificationStore.fetchNotifications()
     }
     componentWillUnmount () {
-        BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
-        console.log("Out of here")
+       this.persistPosts()
     }
 
-    onBackPress () {
-        BackHandler.exitApp()
+    persistPosts = () => {
+        AsyncStorage.setItem('timeline', JSON.stringify(this.state.posts))
     }
 
     getPosts = async () => {
