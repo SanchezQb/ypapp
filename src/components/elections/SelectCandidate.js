@@ -73,9 +73,9 @@ export default class SelectCandidate extends Component {
       
     checkUnique = (id, data) => {
         if(accountStore.user.role < 1) return ToastAndroid.show('You need to be a party member to participate', ToastAndroid.SHORT)
-        if(!accountStore.user.vin) {
-           return Actions.eligibility()
-        }
+        // if(!accountStore.user.vin) {
+        //    return Actions.eligibility()
+        // }
         this.setState({disabled: true})
         axios({
             url: `${Config.electionUrl}/check/${id}`, 

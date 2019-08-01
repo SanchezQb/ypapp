@@ -77,7 +77,7 @@ export default class Posts extends Component {
           ],
           { cancelable: false }
         )
-      }
+    }
 
     componentDidMount() {
         // BackHandler.addEventListener('hardwareBackPress', this.onBackPress);

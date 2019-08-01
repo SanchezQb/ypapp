@@ -261,7 +261,7 @@ export default class Chat extends Component {
         <View style={{marginVertical: 4}}> 
           <Text 
             style={{ 
-              color: '#F0BA00',
+              color: '#82BE30',
               fontWeight: 'bold', 
               alignSelf:'flex-start',
               marginBottom: 5

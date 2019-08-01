@@ -10,11 +10,13 @@ import {
     Title, 
     View, List, ListItem
 } from 'native-base';
-import { StyleSheet, ScrollView, Text, Linking, BackHandler } from 'react-native'
+import { StyleSheet, ScrollView, Text, Linking, BackHandler, Dimensions } from 'react-native'
 import getTheme from '../../native-base-theme/components'
 import material from '../../native-base-theme/variables/material'
 import { Actions } from 'react-native-router-flux'
 import MaterialIcon from 'react-native-vector-icons/Entypo'
+
+const { height } = Dimensions.get('window')
 
 export default class Contact extends Component {
 
@@ -64,11 +66,11 @@ export default class Contact extends Component {
                     <View style={styles.wrap}> 
                         <Button iconLeft transparent style={{width: '50%'}} onPress={() => this.geo()}>
                             <Icon name='md-pin' style={{color: '#82BE30', marginBottom: 10}} />
-                            <Text style={{color: '#222', marginLeft: 10, fontSize: 18 }}>Youth Party Nigeria, Wuse, Abuja</Text>
+                            <Text style={{color: '#222', marginLeft: 10, fontSize: height * 0.024 }}>Youth Party Nigeria, Wuse, Abuja</Text>
                         </Button>
-                        <Button transparent iconRight onPress={() => this.mail()}>
-                            <Text uppercase={false} style={{color: '#555', marginRight: 10,marginBottom: 10}}>info@youthpartyng.com</Text>
-                            <Icon name='md-mail' style={{color: '#82BE30', marginBottom: 10}} />
+                        <Button transparent iconLeftt onPress={() => this.mail()}>
+                            <Icon name='md-mail' style={{color: '#82BE30',}} />
+                            <Text uppercase={false} style={{color: '#555',}}>info@youthpartyng.com</Text>
                         </Button>
                     </View>
                     <View style={styles.phone}>
@@ -105,9 +107,7 @@ export default class Contact extends Component {
 }
 const styles = StyleSheet.create({
     wrap: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 30
+        marginTop: 30,
     },
     phone: {
         borderWidth: 1,

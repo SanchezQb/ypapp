@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ViewPropTypes, Image, TouchableOpacity, Alert, AsyncStorage,ScrollView, Share  } from 'react-native';
+import { StyleSheet, Text, View, ViewPropTypes, Image, TouchableOpacity, Alert, AsyncStorage,ScrollView, Linking, Share  } from 'react-native';
 import { Container, Content, List, ListItem, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux'
 import accountStore from '../stores/Account'
@@ -72,6 +72,9 @@ export default class DrawerContent extends React.Component {
             )
         }
     }
+    openManual = () => {
+        Linking.openURL('https://youthpartyng.com/wp-content/uploads/2015/10/YP-App-Manual.pdf').catch(err => console.log(err))
+    }
 
   render() {
     return (
@@ -120,6 +123,10 @@ export default class DrawerContent extends React.Component {
                     <ListItem onPress={() => Actions.about()} style={styles.listitem}>
                         <Icon name="md-information-circle" style={{color: '#000'}} />
                         <Text style={styles.link}>About Us</Text>
+                    </ListItem>
+                    <ListItem style={styles.listitem} onPress={() => this.openManual()}>
+                        <Icon name="ios-paper-outline" style={{color: '#000'}} />
+                        <Text style={styles.link}>App Manual</Text>
                     </ListItem>
                     <ListItem style={styles.listitem} onPress={() => Actions.contact()}>
                         <Icon name="md-mail" style={{color: '#000'}} />

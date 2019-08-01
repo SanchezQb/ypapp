@@ -23,6 +23,10 @@ export default class Main extends Component {
     openPrivacy = () => {
         Linking.openURL('https://youthpartyng.com/wp-content/uploads/2015/10/Privacy-Policy-for-Youth-Party2.pdf').catch(err => console.log(err))
     }
+    openManual = () => {
+        Linking.openURL('https://youthpartyng.com/wp-content/uploads/2015/10/YP-App-Manual.pdf').catch(err => console.log(err))
+    }
+
 
     render() {
         return (
@@ -47,6 +51,11 @@ export default class Main extends Component {
                         <Text style={styles.policyText}>
                         By logging in, you agree to our <Text onPress={() => this.openPrivacy()} style={styles.policyLink}>Privacy Policy</Text> & 
                         <Text  onPress={() => this.openTerms()} style={styles.policyLink}>Terms of Service</Text>
+                        </Text>
+                    </View>
+                    <View style={styles.policy2}>
+                        <Text style={styles.policyText}>
+                        Click <Text onPress={() => this.openManual()} style={styles.policyLink}>this link</Text> to get app manual
                         </Text>
                     </View>
                 </View>
@@ -95,6 +104,11 @@ const styles = StyleSheet.create({
         width: '85%',
         alignSelf: 'center',
         marginTop: 40
+    },
+    policy2: {
+        width: '85%',
+        alignSelf: 'center',
+        marginTop: 20
     },
     policyText: {
         textAlign: 'center',
